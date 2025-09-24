@@ -1,0 +1,15 @@
+services:
+  nextjs:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: development
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - '3000:3000'
