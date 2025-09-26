@@ -26,5 +26,5 @@ export default function ProtectedLayout({ children }: Children) {
   }
 
   // Render null while the redirect is in flight to prevent showing anything.
-  return null;
+  return <>here</>;
 }

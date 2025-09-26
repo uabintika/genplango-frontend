@@ -10,14 +10,14 @@ import { API_ROUTES } from "@/routes/api";
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
+  loading: true,
   setUser: () => {},
   mutateUser: async () => {},
   logout: async () => {},
-  loading: true,
 });
 
-export const userFetcher = async (url: string) => {
-  return await api.get(url).then((res) => res.data);
+export const userFetcher = (url: string) => {
+  return api.get(url).then((res) => res.data);
 };
 
 export function AuthProvider({ children }: Children) {
@@ -28,11 +28,6 @@ export function AuthProvider({ children }: Children) {
     error,
     mutate,
   } = useSWR(API_ROUTES.AUTH.CURRENT_USER, userFetcher, {
-    onError: (err) => {
-      if (err.response?.status === 401 || err.response?.status === 403) {
-        router.push(ROUTES.AUTH.LOGIN);
-      }
-    },
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });
@@ -54,10 +49,10 @@ export function AuthProvider({ children }: Children) {
     <AuthContext.Provider
       value={{
         user: user ?? null,
+        loading: loading,
         setUser: (newUser) => mutate<Nullable<User>>(newUser, false),
         mutateUser: mutate,
         logout: logout,
-        loading,
       }}
     >
       {children}

@@ -4,9 +4,7 @@ import useSWR from "swr";
 import api from "@/lib/axios";
 import { API_ROUTES } from "@/routes/api";
 import { apiURL } from "@/config";
-import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { ROUTES } from "@/routes";
 import LoginForm from "@/components/partials/auth/LoginForm";
 
 const csrfCookieFetcher = async (url: string) => await api.get(url);
@@ -32,20 +30,12 @@ export default function LoginPage() {
                 </div>
                 <div className="text-center 2xl:mb-10 mb-4">
                   <h4 className="font-medium">{t("heading")}</h4>
-                  <div className="text-default-500  text-base">
-                    Sign in to your account to start using Dashcode
-                  </div>
                 </div>
                 <LoginForm />
               </div>
             </div>
           </div>
-          <div
-            className="lg:block hidden flex-1 overflow-hidden text-[40px] leading-[48px] text-default-600  bg-cover bg-no-repeat bg-center"
-            style={{
-              backgroundImage: `url(/images/all-img/login-bg.png)`,
-            }}
-          >
+          <div className="lg:block hidden flex-1 overflow-hidden text-[40px] leading-[48px] text-default-600  bg-cover bg-no-repeat bg-center bg-slate-500">
             <div className="flex flex-col h-full justify-center">
               <div className="flex-1 flex flex-col justify-center items-center">
                 LOGO WHITE

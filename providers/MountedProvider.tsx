@@ -1,10 +1,10 @@
 "use client";
 
-import Loader from "@/components/Loader";
+import FullPageLoader from "@/components/FullPageLoader";
 import { useMounted } from "@/hooks/useMounted";
 
 export default function MountedProvider({ children }: Children) {
   const mounted = useMounted();
-  if (!mounted) return <Loader />;
+  if (!mounted) return <FullPageLoader />;
   return children;
 }

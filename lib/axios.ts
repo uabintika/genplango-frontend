@@ -18,7 +18,8 @@ api.interceptors.response.use(
   function onRejected(error) {
     if (error.status === 401) {
       // redirect to login
-      return Promise.reject();
+      
+      return Promise.reject(error);
     }
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error

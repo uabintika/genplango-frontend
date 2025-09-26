@@ -1,6 +1,9 @@
 {
   "LoginPage": {
-    "heading": "Prisijungti",
+    "heading": "Prisijungimas",
     "project_name": "GenPlanGo"
+  },
+  "Misc": {
+    "loading": "Kraunama"
   }
 }
