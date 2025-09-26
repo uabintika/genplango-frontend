@@ -1,4 +1,3 @@
-// Create this new file: app/admin/ProtectedLayout.tsx
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";

@@ -12,6 +12,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   setUser: () => {},
   mutateUser: async () => {},
+  logout: async () => {},
   loading: true,
 });
 
@@ -36,6 +37,17 @@ export function AuthProvider({ children }: Children) {
     revalidateOnFocus: false,
   });
 
+  const logout = () => {
+    return api
+      .post(API_ROUTES.AUTH.LOGOUT)
+      .then(() => {
+        router.push(ROUTES.AUTH.LOGIN);
+      })
+      .catch(() => {
+        // error
+      });
+  };
+
   const loading = !user && !error;
 
   return (
@@ -44,6 +56,7 @@ export function AuthProvider({ children }: Children) {
         user: user ?? null,
         setUser: (newUser) => mutate<Nullable<User>>(newUser, false),
         mutateUser: mutate,
+        logout: logout,
         loading,
       }}
     >

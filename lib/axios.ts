@@ -1,11 +1,14 @@
 import { baseURL } from "@/config";
 import axios, { AxiosResponse } from "axios";
 
-const api = axios;
-
-api.defaults.withCredentials = true;
-api.defaults.withXSRFToken = true;
-api.defaults.baseURL = baseURL;
+const api = axios.create({
+  baseURL: baseURL,
+  headers: {
+    "X-Requested-With": "XMLHttpRequest",
+  },
+  withCredentials: true,
+  withXSRFToken: true,
+});
 
 // Add a response interceptor
 api.interceptors.response.use(
@@ -15,6 +18,7 @@ api.interceptors.response.use(
   function onRejected(error) {
     if (error.status === 401) {
       // redirect to login
+      return Promise.reject();
     }
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
