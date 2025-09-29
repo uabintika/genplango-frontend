@@ -1,5 +1,9 @@
 "use client";
 
-export default function Dashboard({ children }: Children) {
-  return children;
+import { useAuth } from "@/contexts/auth-context";
+
+export default function Dashboard() {
+  const { user } = useAuth();
+
+  return <>{user?.firstName + " " + user?.lastLame}</>;
 }

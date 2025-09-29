@@ -12,7 +12,7 @@ export default function ProtectedLayout({ children }: Children) {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.replace(ROUTES.AUTH.LOGIN);
+      router.push(ROUTES.AUTH.LOGIN);
     }
   }, [user, loading, router]);
 

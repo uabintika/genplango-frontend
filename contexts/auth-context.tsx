@@ -10,6 +10,9 @@ import { API_ROUTES } from "@/routes/api";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
+const userFetcher = async (url: string) =>
+  api.post(url).then((res) => res.data.user);
+
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
@@ -25,7 +28,7 @@ export function AuthProvider({ children }: Children) {
     data: user,
     error,
     mutate,
-  } = useSWR<Nullable<User>>(API_ROUTES.AUTH.CURRENT_USER, {
+  } = useSWR<Nullable<User>>(API_ROUTES.AUTH.CURRENT_USER, userFetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });
