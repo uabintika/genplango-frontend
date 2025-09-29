@@ -1,9 +1,15 @@
 {
   "LoginPage": {
     "heading": "Prisijungimas",
-    "project_name": "GenPlanGo"
+    "project_name": "GenPlanGo",
+    "login_success": "Sėkmingai prisijungėte",
+    "messages": {
+      "login_success": "Sėkmingai prisijungėte",
+      "invalid_credentials": "Neteisingi prisijungimo duomenys"
+    }
   },
   "Misc": {
-    "loading": "Kraunama"
+    "loading": "Kraunama",
+    "uncaught_error": "Įvyko nenumatyta klaida"
   }
 }

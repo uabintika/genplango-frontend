@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "../contexts/auth-context";
-import { ThemeProvider } from "@/providers/ThemeProvider";
-import MountedProvider from "@/providers/MountedProvider";
+import { ThemeProvider } from "@/providers/theme-provider";
+import MountedProvider from "@/providers/mounted-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { cookies } from "next/headers";
-import { AxiosInterceptor } from "@/lib/axios";
+import { Toaster } from "@/components/ui/sonner";
+import BaseSWRConfig from "@/providers/swr-provider";
 
 export const metadata: Metadata = {
   title: "GenPlanGo",
@@ -26,8 +27,8 @@ export default async function RootLayout({
       <head></head>
       <body>
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <AuthProvider>
-            <AxiosInterceptor>
+          <BaseSWRConfig>
+            <AuthProvider>
               <ThemeProvider
                 attribute="class"
                 defaultTheme="system"
@@ -35,9 +36,10 @@ export default async function RootLayout({
                 disableTransitionOnChange
               >
                 <MountedProvider>{children}</MountedProvider>
+                <Toaster />
               </ThemeProvider>
-            </AxiosInterceptor>
-          </AuthProvider>
+            </AuthProvider>
+          </BaseSWRConfig>
         </NextIntlClientProvider>
       </body>
     </html>

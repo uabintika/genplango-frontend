@@ -16,10 +16,6 @@ const AuthContext = createContext<AuthContextType>({
   logout: async () => {},
 });
 
-export const userFetcher = (url: string) => {
-  return api.get(url).then((res) => res.data);
-};
-
 export function AuthProvider({ children }: Children) {
   const router = useRouter();
 
@@ -27,7 +23,7 @@ export function AuthProvider({ children }: Children) {
     data: user,
     error,
     mutate,
-  } = useSWR(API_ROUTES.AUTH.CURRENT_USER, userFetcher, {
+  } = useSWR(API_ROUTES.AUTH.CURRENT_USER, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });
