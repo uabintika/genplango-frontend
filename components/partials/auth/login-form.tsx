@@ -19,8 +19,8 @@ import { toast } from "sonner";
 import z from "zod";
 
 const schema = z.object({
-  email: z.email(),
-  password: z.string().min(4),
+  email: z.email({ message: "invalid_email" }),
+  password: z.string().min(1, { message: "required" }),
 });
 
 export default function LoginForm() {
@@ -71,7 +71,7 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="mt-5 2xl:mt-7 space-y-4">
       <div className="space-y-2">
         <Label htmlFor="email" className="font-medium text-default-600">
-          Email{" "}
+          {t("LoginPage.form.fields.email") + " "}
         </Label>
         <Input
           size="lg"
@@ -87,13 +87,13 @@ export default function LoginForm() {
       </div>
       {errors.email && (
         <div className="text-destructive mt-2 text-sm">
-          {errors.email.message}
+          {t(`LoginPage.form.validation_messages.${errors.email.message}`)}
         </div>
       )}
 
       <div className="mt-3.5 space-y-2">
         <Label htmlFor="password" className="mb-2 font-medium text-default-600">
-          Password{" "}
+          {t("LoginPage.form.fields.password") + " "}
         </Label>
         <div className="relative">
           <Input
@@ -119,22 +119,14 @@ export default function LoginForm() {
         </div>
       </div>
       {errors.password && (
-        <div className=" text-destructive mt-2 text-sm">
-          {errors.password.message}
+        <div className="text-destructive mt-2 text-sm">
+          {t(`LoginPage.form.validation_messages.${errors.password.message}`)}
         </div>
       )}
 
-      {/* <div className="flex justify-between">
-        <Link
-          href="/auth/forgot-password"
-          className="text-sm text-default-800 dark:text-default-400 leading-6 font-medium"
-        >
-          Forgot Password?
-        </Link>
-      </div> */}
       <Button fullWidth={true} disabled={isPending}>
         {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {isPending ? "Loading..." : "Sign In"}
+        {isPending ? `${t("Misc.loading")}...` : t("LoginPage.button_text")}
       </Button>
     </form>
   );

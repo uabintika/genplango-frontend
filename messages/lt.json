@@ -3,13 +3,26 @@
     "heading": "Prisijungimas",
     "project_name": "GenPlanGo",
     "login_success": "Sėkmingai prisijungėte",
+    "form": {
+      "fields": {
+        "email": "El. paštas",
+        "password": "Slaptažodis"
+      },
+      "validation_messages": {
+        "invalid_email": "Neteisingas el. pašto formatas",
+        "required": "Įveskite slaptažodį"
+      }
+    },
     "messages": {
       "login_success": "Sėkmingai prisijungėte",
       "invalid_credentials": "Neteisingi prisijungimo duomenys"
-    }
+    },
+    "button_text": "Prisijungti"
   },
   "Misc": {
     "loading": "Kraunama",
-    "uncaught_error": "Įvyko nenumatyta klaida"
+    "uncaught_error": "Įvyko nenumatyta klaida",
+    "logout_success": "Sėkimngai atsijungėte",
+    "logout_error": "Nepavyko atsijungti. Pabandykite dar kartą"
   }
 }
