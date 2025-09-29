@@ -12,6 +12,6 @@ export type AuthContextType = {
   user: Nullable<User>;
   loading: boolean;
   setUser: React.Dispatch<React.SetStateAction<Nullable<User>>>;
-  mutateUser: () => Promise<any>;
+  mutateUser: () => Promise<Nullable<User>>;
   logout: () => Promise<void>;
 };

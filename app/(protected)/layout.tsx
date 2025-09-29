@@ -1,10 +1,10 @@
 "use client";
 
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth-context";
 import { ROUTES } from "@/routes";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import FullPageLoader from "@/components/FullPageLoader";
+import FullPageLoader from "@/components/full-page-loader";
 
 export default function ProtectedLayout({ children }: Children) {
   const { user, loading } = useAuth();
@@ -12,7 +12,7 @@ export default function ProtectedLayout({ children }: Children) {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push(ROUTES.AUTH.LOGIN);
+      router.replace(ROUTES.AUTH.LOGIN);
     }
   }, [user, loading, router]);
 
@@ -20,11 +20,11 @@ export default function ProtectedLayout({ children }: Children) {
     return <FullPageLoader />;
   }
 
-  // If the user is authenticated, render the actual page content.
   if (user) {
     return <>{children}</>;
   }
 
   // Render null while the redirect is in flight to prevent showing anything.
-  return <>here</>;
+  // redirect(ROUTES.AUTH.LOGIN);
+  return <></>;
 }

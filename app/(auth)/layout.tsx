@@ -1,7 +1,7 @@
 "use client";
 
-import FullPageLoader from "@/components/FullPageLoader";
-import { useAuth } from "@/contexts/AuthContext";
+import FullPageLoader from "@/components/full-page-loader";
+import { useAuth } from "@/contexts/auth-context";
 import { ROUTES } from "@/routes";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

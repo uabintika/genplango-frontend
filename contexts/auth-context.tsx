@@ -12,7 +12,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   setUser: () => {},
-  mutateUser: async () => {},
+  mutateUser: async () => null,
   logout: async () => {},
 });
 
@@ -32,15 +32,16 @@ export function AuthProvider({ children }: Children) {
     revalidateOnFocus: false,
   });
 
-  const logout = () => {
-    return api
-      .post(API_ROUTES.AUTH.LOGOUT)
-      .then(() => {
+  const logout = async () => {
+    try {
+      const response = await api.post(API_ROUTES.AUTH.LOGOUT);
+
+      if (response.status === 200) {
         router.push(ROUTES.AUTH.LOGIN);
-      })
-      .catch(() => {
-        // error
-      });
+      }
+    } catch (error) {
+      //
+    }
   };
 
   const loading = !user && !error;

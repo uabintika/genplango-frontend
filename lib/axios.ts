@@ -1,7 +1,12 @@
-import { baseURL } from "@/config";
-import axios, { AxiosResponse } from "axios";
+"use client";
 
-const api = axios.create({
+import { baseURL } from "@/config";
+import { ROUTES } from "@/routes";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+const instance = axios.create({
   baseURL: baseURL,
   headers: {
     "X-Requested-With": "XMLHttpRequest",
@@ -10,21 +15,33 @@ const api = axios.create({
   withXSRFToken: true,
 });
 
-// Add a response interceptor
-api.interceptors.response.use(
-  function onFulfilled(response: AxiosResponse): AxiosResponse {
-    return response;
-  },
-  function onRejected(error) {
-    if (error.status === 401) {
-      // redirect to login
-      
-      return Promise.reject(error);
-    }
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    return Promise.reject(error);
-  }
-);
+const AxiosInterceptor = ({ children }: Children) => {
+  const router = useRouter();
 
-export default api;
+  useEffect(() => {
+    const resInterceptor = (response: AxiosResponse) => {
+      return response;
+    };
+
+    const errInterceptor = (error: AxiosError) => {
+      console.log(error);
+      if (error?.response?.status === 401) {
+        router.replace(ROUTES.AUTH.LOGIN);
+      }
+
+      return Promise.reject(error);
+    };
+
+    const interceptor = instance.interceptors.response.use(
+      resInterceptor,
+      errInterceptor
+    );
+
+    return instance.interceptors.response.eject(interceptor);
+  }, [router]);
+
+  return children;
+};
+
+export default instance;
+export { AxiosInterceptor };

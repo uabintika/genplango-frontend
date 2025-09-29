@@ -1,6 +1,6 @@
 "use client";
 
-import { useMounted } from "@/hooks/useMounted";
+import { useMounted } from "@/hooks/use-mounted";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 

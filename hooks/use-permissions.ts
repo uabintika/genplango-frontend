@@ -1,6 +1,6 @@
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/auth-context";
 
-export function usePermission() {
+export function usePermissions() {
   const { user } = useAuth();
 
   const can = (resource: string, action: string): boolean => {
