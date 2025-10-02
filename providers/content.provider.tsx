@@ -13,7 +13,7 @@ const LayoutContentProvider = ({ children }: { children: React.ReactNode }) => {
         className={cn(
           "flex-1 xl:ml-[248px] bg-default-100 dark:bg-background",
           {
-            "xl:ms-[72px]": config.collapsed,
+            "xl:ml-[72px]": config.collapsed,
           }
         )}
       >
