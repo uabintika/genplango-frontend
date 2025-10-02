@@ -24,7 +24,6 @@ const AxiosInterceptor = ({ children }: Children) => {
     };
 
     const errInterceptor = (error: AxiosError) => {
-      console.log(error);
       if (error?.response?.status === 401) {
         router.replace(ROUTES.AUTH.LOGIN);
       }
