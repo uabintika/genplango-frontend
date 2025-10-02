@@ -74,6 +74,8 @@ const SheetContent = ({
       className={cn(sheetVariants({ side }), className)}
       {...rest}
     >
+      <SheetTitle />
+      <SheetDescription />
       {children}
       <SheetPrimitive.Close className="absolute  end-4 rtl:start-2.5 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary cursor-pointer">
         <X className="h-4 w-4" />
