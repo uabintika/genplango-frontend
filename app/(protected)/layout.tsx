@@ -5,6 +5,10 @@ import { ROUTES } from "@/routes";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import FullPageLoader from "@/components/full-page-loader";
+import LayoutContentProvider from "@/providers/content.provider";
+import Sidebar from "@/components/partials/sidebar";
+import Footer from "@/components/partials/footer";
+import Header from "@/components/partials/header";
 
 export default function ProtectedLayout({ children }: Children) {
   const { user, loading } = useAuth();
@@ -26,7 +30,10 @@ export default function ProtectedLayout({ children }: Children) {
 
   return (
     <div className="flex min-h-svh w-full flex-col bg-default-100 dark:bg-background">
-      {children}
+      <Header />
+      <Sidebar />
+      <LayoutContentProvider>{children}</LayoutContentProvider>
+      <Footer />
     </div>
   );
 }

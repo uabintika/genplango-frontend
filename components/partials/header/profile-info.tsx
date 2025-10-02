@@ -13,7 +13,7 @@ import { ROUTES } from "@/routes";
 import { Link } from "@/components/navigation";
 import { useTranslations } from "next-intl";
 
-const ProfileInfo = async () => {
+const ProfileInfo = () => {
   const { user, logout } = useAuth();
   const t = useTranslations("Header.ProfileDropdown");
 

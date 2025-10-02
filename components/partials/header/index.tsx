@@ -5,7 +5,7 @@ import ThemeSwitcher from "./theme-switcher";
 import { SheetMenu } from "@/components/partials/sidebar/menu/sheet-menu";
 import HeaderLogo from "./header-logo";
 
-const DashCodeHeader = async () => {
+const Header = () => {
   return (
     <>
       <HeaderContent>
@@ -24,4 +24,4 @@ const DashCodeHeader = async () => {
   );
 };
 
-export default DashCodeHeader;
+export default Header;
