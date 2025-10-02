@@ -1,7 +1,7 @@
 export type User = {
   id: number;
   firstName: string;
-  lastLame: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
   duty: Nullable<string>;

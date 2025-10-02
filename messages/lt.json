@@ -20,9 +20,37 @@
     "button_text": "Prisijungti"
   },
   "Misc": {
+    "project_name": "GenPlanGo",
     "loading": "Kraunama",
     "uncaught_error": "Įvyko nenumatyta klaida",
     "logout_success": "Sėkimngai atsijungėte",
     "logout_error": "Nepavyko atsijungti. Pabandykite dar kartą"
+  },
+  "NotFoundPage": {
+    "header": "Puslapis nerastas",
+    "body": "Puslapio kurio ieškote yra nerastas",
+    "go_back": "Grįžti atgal"
+  },
+  "ErrorPage": {
+    "something_went_wrong": "Kažkas nepavyko",
+    "try_again": "Bandykite dar kartą"
+  },
+  "HeaderPartial": {
+    "ProfileDropdown": {
+      "profile": "Profilis",
+      "logout": "Atsijungti"
+    },
+    "ThemeSwitcher": {
+      "change_theme": "Pakeisti temą",
+      "light": "Šviesi",
+      "dark": "Tamsi"
+    },
+    "LocaleSwitcher": {
+      "LT": "LT",
+      "EN": "EN"
+    }
+  },
+  "Menu": {
+    "dashboard": "Pagrindinis"
   }
 }

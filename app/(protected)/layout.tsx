@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/contexts/auth-context";
 import { ROUTES } from "@/routes";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import FullPageLoader from "@/components/full-page-loader";
 
@@ -20,11 +20,13 @@ export default function ProtectedLayout({ children }: Children) {
     return <FullPageLoader />;
   }
 
-  if (user) {
-    return <>{children}</>;
+  if (!user) {
+    redirect(ROUTES.AUTH.LOGIN);
   }
 
-  // Render null while the redirect is in flight to prevent showing anything.
-  // redirect(ROUTES.AUTH.LOGIN);
-  return <></>;
+  return (
+    <div className="flex min-h-svh w-full flex-col bg-default-100 dark:bg-background">
+      {children}
+    </div>
+  );
 }
