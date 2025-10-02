@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Home } from "lucide-react";
 import { useMobileMenuConfig } from "@/hooks/use-mobile-menu";
 import { useMenuHoverConfig } from "@/hooks/use-menu-hover";
-import { Link } from "@/components/navigation";
+import Link from "next/link";
 
 interface MenuItemProps {
   id: string;

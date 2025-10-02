@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Link, usePathname } from "@/components/navigation";
+import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown, HouseHeart } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -35,6 +35,7 @@ import { Submenu } from "@/lib/menus";
 
 import { useMobileMenuConfig } from "@/hooks/use-mobile-menu";
 import { useMenuHoverConfig } from "@/hooks/use-menu-hover";
+import { usePathname } from "next/navigation";
 
 interface CollapseMenuButtonProps {
   icon: string;

@@ -11,7 +11,7 @@ import { Menu } from "./index";
 import { useMobileMenuConfig } from "@/hooks/use-mobile-menu";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useConfig } from "@/hooks/use-config";
-import { Link } from "@/components/navigation";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import GPGLogo from "@/components/gpg-logo";
 import { ROUTES } from "@/routes";

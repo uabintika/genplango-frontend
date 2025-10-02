@@ -10,12 +10,12 @@ import {
 import { useAuth } from "@/contexts/auth-context";
 import { ChevronDown, Power } from "lucide-react";
 import { ROUTES } from "@/routes";
-import { Link } from "@/components/navigation";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 const ProfileInfo = () => {
   const { user, logout } = useAuth();
-  const t = useTranslations("Header.ProfileDropdown");
+  const t = useTranslations("HeaderPartial.ProfileDropdown");
 
   return (
     <div className="md:block hidden">

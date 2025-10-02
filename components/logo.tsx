@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { Link } from "@/components/navigation";
 import { useTranslations } from "next-intl";
 import { ROUTES } from "@/routes";
 import GPGLogo from "./gpg-logo";
+import Link from "next/link";
 
 const Logo = () => {
   const t = useTranslations("Misc");
