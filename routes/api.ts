@@ -5,4 +5,7 @@ export const API_ROUTES = {
     LOGOUT: "/logout",
     CURRENT_USER: "/users/me",
   },
+  SERVICE_RECIPIENTS: {
+    INDEX: "/service-recipients",
+  },
 };
