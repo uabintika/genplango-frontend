@@ -52,5 +52,22 @@
   },
   "Menu": {
     "dashboard": "Pagrindinis"
+  },
+  "ServiceRecipients": {
+    "Table": {
+      "no_results": "Nera rezultatų",
+      "Header": {
+        "fullName": "Vardas/Pavardė",
+        "birthDate": "Gimimo data",
+        "gender": "Lytis",
+        "status": "Statusas",
+        "actions": "Veiksmai"
+      }
+    }
+  },
+  "TableActions": {
+    "create": "Pridėti",
+    "edit": "Redaguoti",
+    "delete": "Šalinti"
   }
 }

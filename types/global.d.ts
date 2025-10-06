@@ -3,7 +3,25 @@ declare global {
     children: React.ReactNode;
   }>;
 
-  type Nullable<T> = T | null;
+  type ListMeta = {
+    prevCursor: string | null;
+    nextCursor: string | null;
+    path: string;
+    perPage: number;
+  };
+
+  type ListLinks = {
+    first: string | null;
+    last: string | null;
+    prev: string | null;
+    next: string | null;
+  };
+
+  type InfinityScrollData<T> = {
+    data: Array<T>;
+    links: ListLinks;
+    meta: ListMeta;
+  };
 }
 
 export {};

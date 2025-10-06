@@ -4,13 +4,13 @@ export type User = {
   lastName: string;
   email: string;
   phoneNumber: string;
-  duty: Nullable<string>;
+  duty: string | null;
   permissions: Array<string>;
 };
 
 export type AuthContextType = {
-  user: Nullable<User>;
+  user: User | null;
   loading: boolean;
-  setUser: (newUser: Nullable<User>) => Promise<Nullable<User> | undefined>;
+  setUser: (newUser: User | null) => Promise<User | null | undefined>;
   logout: () => Promise<void>;
 };

@@ -28,13 +28,12 @@ export function AuthProvider({ children }: Children) {
     data: user,
     error,
     mutate,
-  } = useSWR<Nullable<User>>(API_ROUTES.AUTH.CURRENT_USER, userFetcher, {
+  } = useSWR<User | null>(API_ROUTES.AUTH.CURRENT_USER, userFetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });
 
-  const setUser = async (newUser: Nullable<User>) =>
-    await mutate(newUser, false);
+  const setUser = async (newUser: User | null) => await mutate(newUser, false);
 
   const logout = async () => {
     try {
