@@ -22,6 +22,18 @@ declare global {
     links: ListLinks;
     meta: ListMeta;
   };
+
+  enum Gender {
+    Male,
+    Female,
+  }
+
+  enum ServiceRecipientStatus {
+    Active,
+    Inactive,
+    Suspended,
+    Pending,
+  }
 }
 
 export {};

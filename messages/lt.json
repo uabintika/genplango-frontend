@@ -55,7 +55,6 @@
   },
   "ServiceRecipients": {
     "Table": {
-      "no_results": "Nera rezultatų",
       "Header": {
         "fullName": "Vardas/Pavardė",
         "birthDate": "Gimimo data",
@@ -69,5 +68,20 @@
     "create": "Pridėti",
     "edit": "Redaguoti",
     "delete": "Šalinti"
+  },
+  "Table": {
+    "no_results": "Nera rezultatų"
+  },
+  "Enums": {
+    "Gender": {
+      "1": "Vyras",
+      "2": "Moteris"
+    },
+    "ServiceRecipientStatus": {
+      "1": "Teikiama",
+      "2": "Neteikiama",
+      "3": "Sustabdyta",
+      "4": "Laukia eilėje"
+    }
   }
 }

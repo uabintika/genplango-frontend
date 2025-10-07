@@ -19,6 +19,7 @@ import { useTranslations } from "next-intl";
 export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRecipient>[] {
   const t = useTranslations("ServiceRecipients.Table.Header");
   const actionsT = useTranslations("TableActions");
+  const enumsT = useTranslations("Enums");
 
   return React.useMemo<ColumnDef<ServiceRecipient>[]>(
     () => [
@@ -65,24 +66,24 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRec
         accessorKey: "gender",
         header: t("gender"),
         cell: ({ row }) => {
-          return <span>{row.getValue("gender")}</span>;
+          return <span>{enumsT(`Gender.${row.getValue("gender")}`)}</span>;
         },
       },
       {
         accessorKey: "status",
         header: t("status"),
         cell: ({ row }) => {
-          const statusColors: Record<string, string> = {
-            active: "bg-success/20 text-success",
-            suspended: "bg-warning/20 text-warning",
-            inactive: "bg-destructive/20 text-destructive",
-            pending: "bg-default/20 text-default",
+          const statusColors: Record<number, string> = {
+            1: "bg-success/20 text-success",
+            2: "bg-destructive/20 text-destructive",
+            3: "bg-default/20 text-default",
+            4: "bg-warning/20 text-warning",
           };
-          const status = row.getValue<string>("status");
+          const status = row.getValue<number>("status");
           const statusStyles = statusColors[status] || "default";
           return (
             <Badge className={cn("rounded-full px-5", statusStyles)}>
-              {status}{" "}
+              {enumsT(`ServiceRecipientStatus.${status}`)}
             </Badge>
           );
         },
