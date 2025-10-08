@@ -49,10 +49,10 @@ export default function useInfiniteScroll<T>(
   );
 
   React.useEffect(() => {
-    if (!isLoading && !isValidating && size >= 1) {
-      // mutate();
+    if (!isLoading && !isValidating && size > 1) {
+      setSize(1);
     }
-  }, [filters, size, isLoading, isValidating]);
+  }, [filters]);
 
   const table = useReactTable<T>({
     data: flatData,
