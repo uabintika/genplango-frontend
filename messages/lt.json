@@ -51,7 +51,8 @@
     }
   },
   "Menu": {
-    "dashboard": "Pagrindinis"
+    "dashboard": "Pagrindinis",
+    "service_recipients": "Klientai"
   },
   "ServiceRecipients": {
     "Table": {

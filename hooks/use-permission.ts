@@ -10,3 +10,17 @@ export function usePermission() {
 
   return { can };
 }
+
+export const RESOURCES = {
+  Users: "users",
+  Workers: "workers",
+  Institutions: "institutions",
+  KinshipRelations: "kinshipRelations",
+  ServiceRecipients: "serviceRecipients",
+  ServiceRecipientNotes: "serviceRecipientNotes",
+  ServiceRecipientContacts: "serviceRecipientContacts",
+  ServiceRecipientMethodologyAreas: "serviceRecipientMethodologyAreas",
+  ServiceRecipientMethodologyAreaPlans: "serviceRecipientMethodologyAreaPlans",
+  Municipalities: "municipalities",
+  MethodologyAreas: "methodologyAreas",
+};

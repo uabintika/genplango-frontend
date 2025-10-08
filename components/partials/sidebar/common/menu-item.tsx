@@ -11,7 +11,7 @@ interface MenuItemProps {
   id: string;
   href: string;
   label: string;
-  icon: string;
+  icon: React.JSX.Element | null;
   active: boolean;
   collapsed: boolean;
 }
@@ -45,11 +45,12 @@ const MenuItem = ({
       size={collapsed && !hovered ? "icon" : "default"}
     >
       <Link href={href}>
-        <Home
-          className={cn("h-5 w-5 ", {
-            "me-2": !collapsed || hovered,
-          })}
-        />
+        {icon &&
+          React.cloneElement(icon, {
+            className: cn("h-5 w-5 ", {
+              "me-2": !collapsed || hovered,
+            }),
+          })} 
         {(!collapsed || hovered) && (
           <p className={cn("max-w-[200px] truncate")}>{label}</p>
         )}
