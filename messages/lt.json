@@ -63,6 +63,33 @@
         "status": "Statusas",
         "actions": "Veiksmai"
       }
+    },
+    "GeneralInfoForm": {
+      "firstName": "Vardas",
+      "lastName": "Pavardė",
+      "birthDate": "Gimimo data",
+      "gender": "Lytis",
+      "address": "Adresas",
+      "houseNr": "Namo Nr.",
+      "appartmentNr": "Buto Nr.",
+      "municipalityId": "Savivaldybė",
+      "coordLat": "Koordinatės (platuma)",
+      "coordLng": "Koordinatės (ilguma)",
+      "status": "Statusas",
+      "coordinator": "Koordinatorius",
+      "ipd": "IPD",
+      "methodologyStartDate": "Metodologijos darbo pradžia",
+      "methodologyUpdatedAt": "Paskutinį kartą pildyta metodika",
+      "receivesAmbulatoryServices": "Ar gauna ambulatorine paslaugas?",
+      "agreementNr": "Sutarties Nr.",
+      "agreementDate": "Sutarties data",
+      "decisionNr": "Sprendimo Nr.",
+      "decisionDate": "Sprendimo data",
+      "relativeKinshipRelationId": "Susijusio asmens ryšys su klientu",
+      "relativeServiceRecipientId": "Susijes asmuo",
+      "loading_municipalities": "Kraunamos savivaldybės...",
+      "loading_relative_kinship_relations": "Kraunami ryšiai...",
+      "loading_relative_service_recipients": "Kraunami susiję asmenys..."
     }
   },
   "TableActions": {
@@ -77,7 +104,8 @@
   "Enums": {
     "Gender": {
       "1": "Vyras",
-      "2": "Moteris"
+      "2": "Moteris",
+      "3": "Kita"
     },
     "ServiceRecipientStatus": {
       "1": "Teikiama",

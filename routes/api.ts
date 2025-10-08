@@ -7,5 +7,14 @@ export const API_ROUTES = {
   },
   SERVICE_RECIPIENTS: {
     INDEX: "/service-recipients",
+    RELATIVES: "/service-recipients/relatives",
+  },
+  MUNICIPALITIES: {
+    INDEX: "/municipalities",
+    ALLOWED: "/municipalities/allowed",
+  },
+  KINSHIP_RELATIONS: {
+    INDEX: "/kinship-relations",
+    ALLOWED: "/kinship-relations/allowed",
   },
 };

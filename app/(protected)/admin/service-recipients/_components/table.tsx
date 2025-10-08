@@ -19,6 +19,7 @@ import {
 import useServiceRecipientsTableColumns from "./table-columns";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import ServiceRecipientTableFilters from "./table-filter";
+import { Gender, ServiceRecipientStatus } from "@/types/global";
 
 export type ServiceRecipient = {
   id: number;
