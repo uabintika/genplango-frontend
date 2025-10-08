@@ -37,11 +37,12 @@ export default function useInfiniteScroll<T>(
     [filters]
   );
 
-  const { data, isLoading, isValidating, size, setSize, mutate } =
-    useSWRInfinite<InfinityScrollData<T>>(getKey, fetcher, {
-      revalidateFirstPage: false,
-      ...swrConfig,
-    });
+  const { data, isLoading, isValidating, size, setSize } = useSWRInfinite<
+    InfinityScrollData<T>
+  >(getKey, fetcher, {
+    revalidateFirstPage: false,
+    ...swrConfig,
+  });
 
   const flatData = React.useMemo(
     () => data?.flatMap((page) => page.data) ?? [],
