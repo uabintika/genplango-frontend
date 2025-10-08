@@ -9,18 +9,18 @@ export const inputVariants = cva(
     variants: {
       color: {
         default:
-          "border-default-200 text-default-500 focus:outline-hidden focus:border-default dark:focus:border-default-500 disabled:bg-default-200  dark:disabled:bg-default-500  placeholder:text-accent-foreground/50",
+          "border-default-200 text-default-500 focus:outline-hidden focus:border-default dark:focus:border-default-500 disabled:bg-default-200 dark:disabled:bg-default-500 placeholder:text-accent-foreground/50",
         primary:
-          "border-primary/50 text-primary focus:border-primary disabled:bg-primary/30 disabled:placeholder:text-primary  placeholder:text-primary/70",
+          "border-primary/50 text-primary focus:border-primary disabled:bg-primary/30 disabled:placeholder:text-primary placeholder:text-primary/70",
         secondary:
-          "border-default-300 text-default-700  focus:border-secondary  disabled:bg-secondary/30 disabled:placeholder:text-secondary  placeholder:text-default-600",
-        info: "border-info/50 text-info focus:border-info  disabled:bg-info/30 disabled:placeholder:text-info  placeholder:text-info/70",
+          "border-default-300 text-default-700 focus:border-secondary  disabled:bg-secondary/30 disabled:placeholder:text-secondary placeholder:text-default-600",
+        info: "border-info/50 text-info focus:border-info  disabled:bg-info/30 disabled:placeholder:text-info placeholder:text-info/70",
         warning:
-          "border-warning/50 text-warning  focus:border-warning disabled:bg-warning/30 disabled:placeholder:text-info  placeholder:text-warning/70",
+          "border-warning/50 text-warning focus:border-warning disabled:bg-warning/30 disabled:placeholder:text-info placeholder:text-warning/70",
         success:
-          "border-success/50 text-success focus:border-success   disabled:bg-success/30 disabled:placeholder:text-info  placeholder:text-success/70",
+          "border-success/50 text-success focus:border-success disabled:bg-success/30 disabled:placeholder:text-info placeholder:text-success/70",
         destructive:
-          "border-destructive/50 text-destructive focus:border-destructive  disabled:bg-destructive/30 disabled:placeholder:text-destructive  placeholder:text-destructive/70",
+          "border-destructive/50 text-destructive focus:border-destructive disabled:bg-destructive/30 disabled:placeholder:text-destructive placeholder:text-destructive/70",
       },
 
       size: {

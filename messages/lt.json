@@ -71,7 +71,8 @@
     "delete": "Šalinti"
   },
   "Table": {
-    "no_results": "Nera rezultatų"
+    "no_results": "Nera rezultatų",
+    "search": "Ieškoti"
   },
   "Enums": {
     "Gender": {

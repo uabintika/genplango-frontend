@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/table";
 import useServiceRecipientsTableColumns from "./table-columns";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
+import ServiceRecipientTableFilters from "./table-filter";
 
 export type ServiceRecipient = {
   id: number;
@@ -28,29 +29,39 @@ export type ServiceRecipient = {
   relative: ServiceRecipient | null;
 };
 
+export type TableFilters = {
+  search: string | null;
+};
+
 const serviceRecipientsFetcher = async (url: string) => {
   try {
     const res = await api.get(url);
     return res.data;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
 export default function ServiceRecipientsTable() {
   const columns = useServiceRecipientsTableColumns();
   const tableContainerRef = React.useRef<HTMLTableElement>(null);
+  const [filters, setFilters] = React.useState<TableFilters>({ search: null });
   const { table, isLoading, isValidating } =
     useInfiniteScroll<ServiceRecipient>(
       API_ROUTES.SERVICE_RECIPIENTS.INDEX,
       tableContainerRef,
       serviceRecipientsFetcher,
-      columns
+      columns,
+      filters
     );
 
   return (
     <>
-      {/* insert filter here */}
+      <ServiceRecipientTableFilters
+        isLoading={isLoading}
+        isValidating={isValidating}
+        setFilters={setFilters}
+      />
       <Table ref={tableContainerRef}>
         <TableHeader className="bg-default-200">
           {table.getHeaderGroups().map((headerGroup) => (

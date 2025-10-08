@@ -15,6 +15,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { ROUTES } from "@/routes";
 
 export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRecipient>[] {
   const t = useTranslations("ServiceRecipients.Table.Header");
@@ -98,14 +100,20 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRec
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="w-7 h-7 ring-offset-transparent border-default-200 dark:border-default-300 text-default-400"
-                      color="secondary"
+                    <Link
+                      href={ROUTES.ADMIN.SERVICE_RECIPIENTS.EDIT(
+                        row.original.id
+                      )}
                     >
-                      <SquarePen className="w-3 h-3" />
-                    </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="w-7 h-7 ring-offset-transparent border-default-200 dark:border-default-300 text-default-400"
+                        color="secondary"
+                      >
+                        <SquarePen className="w-3 h-3" />
+                      </Button>
+                    </Link>
                   </TooltipTrigger>
                   <TooltipContent side="top">
                     <p>{actionsT("edit")}</p>

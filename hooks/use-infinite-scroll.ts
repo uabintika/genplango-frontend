@@ -7,12 +7,14 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { TableFilters } from "@/app/(protected)/admin/service-recipients/_components/table";
 
 export default function useInfiniteScroll<T>(
   apiRoute: string,
   tableContainerRef: React.RefObject<HTMLTableElement | null>,
   fetcher: (url: string) => Promise<any>,
   columns: ColumnDef<T>[],
+  filters: TableFilters | null = null,
   swrConfig: SWRInfiniteConfiguration = {},
   pageSize: number = 15
 ) {
@@ -20,24 +22,37 @@ export default function useInfiniteScroll<T>(
     (pageIndex: number, previousPageData: InfinityScrollData<T> | null) => {
       if (previousPageData && previousPageData.data.length === 0) return null;
 
-      if (pageIndex === 0) return apiRoute;
+      const queryString = new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(filters || {}).filter(
+            ([, value]) => value !== null && value !== undefined && value !== ""
+          )
+        ) as Record<string, string>
+      ).toString();
 
-      return `${apiRoute}?cursor=${previousPageData?.meta?.nextCursor}`;
+      if (pageIndex === 0) return `${apiRoute}?${queryString}`;
+
+      return `${apiRoute}?cursor=${previousPageData?.meta?.nextCursor}&${queryString}`;
     },
-    []
+    [filters]
   );
 
-  const { data, isLoading, isValidating, setSize } = useSWRInfinite<
-    InfinityScrollData<T>
-  >(getKey, fetcher, {
-    revalidateFirstPage: false,
-    ...swrConfig,
-  });
+  const { data, isLoading, isValidating, size, setSize, mutate } =
+    useSWRInfinite<InfinityScrollData<T>>(getKey, fetcher, {
+      revalidateFirstPage: false,
+      ...swrConfig,
+    });
 
   const flatData = React.useMemo(
     () => data?.flatMap((page) => page.data) ?? [],
     [data]
   );
+
+  React.useEffect(() => {
+    if (!isLoading && !isValidating && size >= 1) {
+      // mutate();
+    }
+  }, [filters, size, isLoading, isValidating]);
 
   const table = useReactTable<T>({
     data: flatData,
