@@ -2,18 +2,42 @@
 
 import * as React from "react";
 
-export type RegisterStepType = {
+export type RegisterStepType<T = any> = {
   id: number | string;
   validate: () => Promise<boolean> | boolean;
-  getData: () => Promise<any> | any;
+  getData: () => Promise<T> | T;
 };
 
-export function useRegisterWizardStep({
+export type FormWizardContextType<T = any> = {
+  currentStep: number;
+  totalSteps: number;
+  goToStep: (step: number) => void;
+  nextStep: () => void;
+  prevStep: () => void;
+  registeredSteps: RegisterStepType<T>[];
+  registerStep: React.Dispatch<React.SetStateAction<RegisterStepType<T>[]>>;
+  onComplete: (formData: T) => Promise<void> | void;
+  isSubmitting?: boolean;
+  setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const FormWizardContext =
+  React.createContext<FormWizardContextType<any> | null>(null);
+
+export function useFormWizard<T = any>(): FormWizardContextType<T> {
+  const ctx = React.useContext<FormWizardContextType<T> | null>(
+    FormWizardContext
+  );
+  if (!ctx) throw new Error("useFormWizard must be used within a FormWizard");
+  return ctx;
+}
+
+export function useRegisterWizardStep<T>({
   id,
   validate,
   getData,
-}: RegisterStepType) {
-  const { registerStep } = useFormWizard();
+}: RegisterStepType<T>) {
+  const { registerStep } = useFormWizard<T>();
 
   React.useEffect(() => {
     registerStep((prev) => {
@@ -25,25 +49,3 @@ export function useRegisterWizardStep({
     });
   }, [id]);
 }
-
-export type FormWizardContextType = {
-  currentStep: number;
-  totalSteps: number;
-  goToStep: (step: number) => void;
-  nextStep: () => void;
-  prevStep: () => void;
-  registeredSteps: RegisterStepType[];
-  registerStep: React.Dispatch<React.SetStateAction<RegisterStepType[]>>;
-  onComplete: (formData: any) => Promise<void> | void;
-  isSubmitting?: boolean;
-  setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export const FormWizardContext =
-  React.createContext<FormWizardContextType | null>(null);
-
-export const useFormWizard = () => {
-  const ctx = React.useContext(FormWizardContext);
-  if (!ctx) throw new Error("useFormWizard must be used within a FormWizard");
-  return ctx;
-};

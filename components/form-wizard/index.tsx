@@ -15,19 +15,19 @@ import { Button } from "../ui/button";
 import { ArrowLeft, ArrowRight, CirclePlus, Loader2 } from "lucide-react";
 import "./style.css";
 
-type FormWizardProps = {
-  onComplete: () => Promise<void> | void;
+type FormWizardProps<T> = {
+  onComplete: (formData: T) => Promise<void> | void;
   children:
     | React.ReactElement<FormWizardStepProps>
     | React.ReactElement<FormWizardStepProps>[];
 };
 
-export const FormWizard: React.FC<FormWizardProps> = ({
+export const FormWizard = <T,>({
   onComplete,
   children,
-}: FormWizardProps) => {
+}: FormWizardProps<T>) => {
   const [currentStep, setCurrentStep] = React.useState<number>(1);
-  const [registeredSteps, registerStep] = React.useState<RegisterStepType[]>(
+  const [registeredSteps, registerStep] = React.useState<RegisterStepType<T>[]>(
     []
   );
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
@@ -54,7 +54,7 @@ export const FormWizard: React.FC<FormWizardProps> = ({
   const nextStep = () => goToStep(currentStep + 1);
   const prevStep = () => goToStep(currentStep - 1);
 
-  const contextValue: FormWizardContextType = {
+  const contextValue: FormWizardContextType<T> = {
     currentStep,
     totalSteps,
     goToStep,
@@ -152,9 +152,7 @@ export const FormWizardStep: React.FC<FormWizardStepProps> = ({
   return <div className="px-5 sm:px-8 md:px-24 lg:px-52">{children}</div>;
 };
 
-type FormWizardControlsProps = {};
-
-const FormWizardControls: React.FC<FormWizardControlsProps> = () => {
+const FormWizardControls = <T,>() => {
   const {
     totalSteps,
     currentStep,
@@ -164,7 +162,7 @@ const FormWizardControls: React.FC<FormWizardControlsProps> = () => {
     onComplete,
     isSubmitting,
     setIsSubmitting,
-  } = useFormWizard();
+  } = useFormWizard<T>();
   const miscT = useTranslations("Misc");
 
   const submitButtonContent = isSubmitting ? (
@@ -196,10 +194,11 @@ const FormWizardControls: React.FC<FormWizardControlsProps> = () => {
 
       const allData = Object.assign(
         {},
-        ...(await Promise.all(registeredSteps.map((s) => s.getData())))
+        ...(await Promise.all(
+          registeredSteps.map((s) => ({ [s.id]: s.getData() }))
+        ))
       );
 
-      console.log(registeredSteps[0].getData());
       await onComplete(allData);
     } finally {
       setIsSubmitting(false);

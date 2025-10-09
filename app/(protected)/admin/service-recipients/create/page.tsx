@@ -4,27 +4,24 @@ import { Card, CardContent } from "@/components/ui/card";
 import GeneralInfoForm from "./general-info-form";
 import { FormWizard, FormWizardStep } from "@/components/form-wizard";
 
-export default function CreateServiceRecipientPage() {
-  const onSubmit = async (data: any) => {
-    startTransition(async () => {
-      const formData = {
-        ...data,
-        gender,
-        municipalityId: selectedMunicipality,
-        relativeServiceRecipientId: relativeSR,
-        relativeKinshipRelationId: relativeKinship,
-      };
+import { generalInfoSchema } from "./general-info-form";
+import z from "zod";
 
-      // post create service recipient
-    });
+type CreateFormDataType = {
+  generalInfo: z.infer<typeof generalInfoSchema>;
+};
+
+export default function CreateServiceRecipientPage() {
+  const handleSubmit = async (data: CreateFormDataType) => {
+    console.log(data);
   };
 
   return (
     <Card className="max-w-7xl mx-auto">
       <CardContent className="p-0">
         <FormWizard
-          onComplete={() => {
-            setTimeout(() => {}, 3000);
+          onComplete={async (data: CreateFormDataType) => {
+            await handleSubmit(data);
           }}
         >
           <FormWizardStep title="Pagrindinė informacija">
