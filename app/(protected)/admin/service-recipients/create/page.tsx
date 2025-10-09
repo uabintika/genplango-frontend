@@ -1,14 +1,31 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+"use client";
+
+import { Card, CardContent } from "@/components/ui/card";
 import GeneralInfoForm from "./general-info-form";
+import { FormWizard, FormWizardStep } from "@/components/form-wizard";
 
 export default function CreateServiceRecipientPage() {
+  // const onSubmit = async (data: z.infer<typeof generalInfoSchema>) => {
+  //   startTransition(async () => {
+  //     const formData = {
+  //       ...data,
+  //       gender,
+  //       municipalityId: selectedMunicipality,
+  //       relativeServiceRecipientId: relativeSR,
+  //       relativeKinshipRelationId: relativeKinship,
+  //     };
+
+  //     // post create service recipient
+  //   });
+  // };
   return (
     <Card className="max-w-7xl mx-auto">
-      <CardHeader>
-        <CardTitle>Sukurti klientą</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <GeneralInfoForm />
+      <CardContent className="p-0">
+        <FormWizard onComplete={() => {}}>
+          <FormWizardStep title="Pagrindinė informacija">
+            <GeneralInfoForm />
+          </FormWizardStep>
+        </FormWizard>
       </CardContent>
     </Card>
   );

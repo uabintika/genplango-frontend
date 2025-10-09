@@ -1,0 +1,23 @@
+.wizard {
+    display: flex;
+    flex-direction: column;
+}
+
+.wizard>.progress-bar {
+    display: flex;
+    justify-content: space-around;
+}
+
+.wizard>.progress-bar>.step {
+    display: flex;
+    align-items: center;
+}
+
+.wizard>.progress-bar>.step>.title {
+    margin-left: 1rem;
+}
+
+.wizard>.progress-bar>.step.active {
+    color: hsl(var(--success));
+    border-color: hsl(var(--success));
+}
