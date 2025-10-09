@@ -3,57 +3,17 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import {
+  FormWizardContext,
+  FormWizardContextType,
+  RegisterStepType,
+  useFormWizard,
+} from "./context";
 
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { ArrowLeft, ArrowRight, CirclePlus, Loader2 } from "lucide-react";
 import "./style.css";
-
-type RegisterStepType = {
-  id: number | string;
-  validate: () => Promise<boolean> | boolean;
-  getData: () => Promise<any> | any;
-};
-
-export function useRegisterWizardStep({
-  id,
-  validate,
-  getData,
-}: RegisterStepType) {
-  const { registerStep } = useFormWizard();
-
-  React.useEffect(() => {
-    registerStep((prev) => {
-      const exists = prev.some((step) => step.id === id);
-      if (exists) return prev;
-
-      return [...prev, { id, validate, getData }];
-    });
-  }, [id, validate, getData, registerStep]);
-}
-
-type FormWizardContextType = {
-  currentStep: number;
-  totalSteps: number;
-  goToStep: (step: number) => void;
-  nextStep: () => void;
-  prevStep: () => void;
-  registeredSteps: RegisterStepType[];
-  registerStep: React.Dispatch<React.SetStateAction<RegisterStepType[]>>;
-  onComplete: (formData: any) => Promise<void> | void;
-  isLoading?: boolean;
-  isSubmitting?: boolean;
-};
-
-const FormWizardContext = React.createContext<FormWizardContextType | null>(
-  null
-);
-
-export const useFormWizard = () => {
-  const ctx = React.useContext(FormWizardContext);
-  if (!ctx) throw new Error("useFormWizard must be used within a FormWizard");
-  return ctx;
-};
 
 type FormWizardProps = {
   onComplete: () => Promise<void> | void;
@@ -70,6 +30,7 @@ export const FormWizard: React.FC<FormWizardProps> = ({
   const [registeredSteps, registerStep] = React.useState<RegisterStepType[]>(
     []
   );
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
 
   const progressBarElements = React.useMemo(() => {
     return React.Children.map(children, (child, index) => (
@@ -102,6 +63,8 @@ export const FormWizard: React.FC<FormWizardProps> = ({
     registeredSteps,
     registerStep,
     onComplete,
+    isSubmitting,
+    setIsSubmitting,
   };
 
   return (
@@ -123,7 +86,7 @@ export const FormWizard: React.FC<FormWizardProps> = ({
           </motion.div>
 
           {/* buttons(prev, next, submit) */}
-          <FormWizardControls isLoading={false} />
+          <FormWizardControls />
         </div>
       </form>
     </FormWizardContext.Provider>
@@ -189,13 +152,9 @@ export const FormWizardStep: React.FC<FormWizardStepProps> = ({
   return <div className="px-5 sm:px-8 md:px-24 lg:px-52">{children}</div>;
 };
 
-type FormWizardControlsProps = {
-  isLoading: boolean;
-};
+type FormWizardControlsProps = {};
 
-const FormWizardControls: React.FC<FormWizardControlsProps> = ({
-  isLoading,
-}: FormWizardControlsProps) => {
+const FormWizardControls: React.FC<FormWizardControlsProps> = () => {
   const {
     totalSteps,
     currentStep,
@@ -203,13 +162,15 @@ const FormWizardControls: React.FC<FormWizardControlsProps> = ({
     nextStep,
     registeredSteps,
     onComplete,
+    isSubmitting,
+    setIsSubmitting,
   } = useFormWizard();
   const miscT = useTranslations("Misc");
 
-  const submitButtonContent = isLoading ? (
+  const submitButtonContent = isSubmitting ? (
     <>
       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-      {miscT("Misc.loading") + "..."}
+      {miscT("loading") + "..."}
     </>
   ) : (
     <>
@@ -227,33 +188,42 @@ const FormWizardControls: React.FC<FormWizardControlsProps> = ({
   };
 
   const handleSubmit = async () => {
-    for (const step of registeredSteps) {
-      const isValid = await step.validate();
-      if (!isValid) return;
+    try {
+      for (const step of registeredSteps) {
+        const isValid = await step.validate();
+        if (!isValid) return;
+      }
+
+      const allData = Object.assign(
+        {},
+        ...(await Promise.all(registeredSteps.map((s) => s.getData())))
+      );
+
+      console.log(registeredSteps[0].getData());
+      await onComplete(allData);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const allData = Object.assign(
-      {},
-      ...(await Promise.all(registeredSteps.map((s) => s.getData())))
-    );
-
-    await onComplete(allData);
   };
 
   return (
     <div className="flex justify-between my-5 px-5 sm:px-8 md:px-24 lg:px-52">
       {currentStep !== 1 && (
-        <Button color="warning" onClick={() => prevStep()} type="button">
+        <Button
+          color="warning"
+          type="button"
+          disabled={isSubmitting}
+          onClick={() => prevStep()}
+        >
           <ArrowLeft className="w-5 h-5 mr-1" /> Atgal
         </Button>
       )}
       {currentStep !== totalSteps ? (
         <Button
           className="ml-auto"
-          onClick={async () => {
-            await handleNext();
-          }}
           type="button"
+          disabled={isSubmitting}
+          onClick={handleNext}
         >
           Pirmyn <ArrowRight className="w-5 h-5 ml-1" />
         </Button>
@@ -261,8 +231,9 @@ const FormWizardControls: React.FC<FormWizardControlsProps> = ({
         <Button
           color="success"
           type="button"
-          disabled={isLoading}
+          disabled={isSubmitting}
           onClick={async () => {
+            setIsSubmitting(true);
             await handleSubmit();
           }}
         >

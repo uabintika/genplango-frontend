@@ -3,7 +3,7 @@
 import { useGenderOptions } from "@/hooks/use-enum";
 import useSWR from "swr";
 import { API_ROUTES } from "@/routes/api";
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useState } from "react";
 import { useTranslations } from "next-intl";
 import z from "zod";
 import { useForm } from "react-hook-form";
@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ValidationError from "@/components/ui/validation-error";
-import { useRegisterWizardStep } from "@/components/form-wizard";
+import { useRegisterWizardStep } from "@/components/form-wizard/context";
 
 type Municipality = {
   id: number;
@@ -99,8 +99,6 @@ export default function GeneralInfoForm() {
   const [selectedMunicipality, setSelectedMunicipality] = useState<
     string | null
   >(null);
-  const [gender, setGender] = useState<string | null>("");
-  const [relativeKinship, setRelativeKinship] = useState<string | null>("");
   const [relativeSR, setRelativeSR] = useState<string | undefined>("");
 
   const {
@@ -140,7 +138,7 @@ export default function GeneralInfoForm() {
   });
 
   useRegisterWizardStep({
-    id: 1,
+    id: "generalInfo",
     validate: async () => await trigger(),
     getData: () => getValues(),
   });
@@ -204,7 +202,6 @@ export default function GeneralInfoForm() {
         <div className="w-full">
           <Select
             onValueChange={(val) => {
-              setGender(val);
               setValue("gender", val);
               clearErrors("gender");
             }}
@@ -273,7 +270,6 @@ export default function GeneralInfoForm() {
           <Select
             disabled={loadingMunicipalities || validatingMunicipalities}
             onValueChange={(val) => {
-              setSelectedMunicipality(val);
               setValue("municipalityId", val);
               clearErrors("municipalityId");
               setRelativeSR(undefined);
@@ -491,7 +487,6 @@ export default function GeneralInfoForm() {
           <Select
             disabled={loadingKinships || validatingKinships || !relativeSR}
             onValueChange={(val) => {
-              setRelativeKinship(val);
               setValue("relativeKinshipRelationId", val);
               clearErrors("relativeKinshipRelationId");
             }}
