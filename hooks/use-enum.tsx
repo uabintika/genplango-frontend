@@ -1,4 +1,4 @@
-import { Gender } from "@/types/global";
+import { Gender } from "@/types/global-types";
 import { useTranslations } from "next-intl";
 
 export const useGenderOptions = () => {

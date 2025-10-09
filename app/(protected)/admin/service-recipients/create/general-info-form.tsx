@@ -3,14 +3,17 @@
 import { useGenderOptions } from "@/hooks/use-enum";
 import useSWR from "swr";
 import { API_ROUTES } from "@/routes/api";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { cn } from "@/lib/utils";
 
 import Input from "@/components/ui/input";
 import Label from "@/components/ui/label";
 import { InputGroup, InputGroupText } from "@/components/ui/input-group";
-import { Cake, MapPin, MapPinHouse } from "lucide-react";
+import { Cake, Loader2, MapPin, MapPinHouse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -19,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ValidationError from "@/components/ui/validation-error";
 
 type Municipality = {
   id: number;
@@ -35,27 +39,71 @@ type RelativeServiceRecipient = {
   fullName: string;
 };
 
-const schema = z.object({
-  firstName: z.string().min(1, { message: "required" }),
-  lastName: z.string().min(1, { message: "required" }),
-});
+const generalInfoSchema = z
+  .object({
+    firstName: z.string().min(1, { message: "required" }),
+    lastName: z.string().min(1, { message: "required" }),
+    gender: z
+      .string({ error: "required" })
+      .refine((val) => !isNaN(Number(val)), { message: "required" }),
+
+    birthDate: z
+      .string()
+      .min(1, { message: "required" })
+      .regex(/^\d{4}-\d{2}-\d{2}$/, { message: "invalid_date_format" }),
+
+    municipalityId: z
+      .string({ error: "required" })
+      .refine((val) => !isNaN(Number(val)), { message: "required" })
+      .transform((val) => Number(val)),
+
+    address: z.string().min(1, { message: "required" }),
+    houseNr: z.string().optional(),
+    appartmentNr: z.string().optional(),
+
+    coordLat: z
+      .string()
+      .min(1, { message: "required" })
+      .refine((val) => !isNaN(Number(val)), { message: "must_be_a_number" }),
+    coordLng: z
+      .string()
+      .min(1, { message: "required" })
+      .refine((val) => !isNaN(Number(val)), { message: "must_be_a_number" }),
+
+    relativeServiceRecipientId: z
+      .string({ error: "required" })
+      .refine((val) => !isNaN(Number(val)), { message: "required" })
+      .optional(),
+    relativeKinshipRelationId: z
+      .string({ error: "required" })
+      .refine((val) => !isNaN(Number(val)), { message: "required" })
+      .optional(),
+  })
+  .superRefine((val, ctx) => {
+    if (
+      val.relativeServiceRecipientId?.length &&
+      !val.relativeKinshipRelationId?.length
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "required_with",
+        path: ["relativeServiceRecipientId"],
+      });
+    }
+  });
 
 export default function GeneralInfoForm() {
+  const miscT = useTranslations("Misc");
   const t = useTranslations("ServiceRecipients.GeneralInfoForm");
+  const validationsT = useTranslations("Validations");
   const genders = useGenderOptions();
   const [selectedMunicipality, setSelectedMunicipality] = useState<
     string | null
   >(null);
-  const [gender, setGender] = useState<string | null>(null);
-  const [relativeKinship, setRelativeKinship] = useState<string | null>(null);
-  const [relativeSR, setRelativeSR] = useState<string | undefined>();
-  const [inputValues, setInputValues] = useState({});
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setInputValues((prev) => ({ ...prev, [name]: value }));
-  };
+  const [gender, setGender] = useState<string | null>("");
+  const [relativeKinship, setRelativeKinship] = useState<string | null>("");
+  const [relativeSR, setRelativeSR] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
 
   const {
     data: municipalities,
@@ -74,137 +122,265 @@ export default function GeneralInfoForm() {
     isLoading: loadingRelativeSRs,
     isValidating: validatingRelativeSRs,
   } = useSWR<Array<RelativeServiceRecipient>>(
-    API_ROUTES.SERVICE_RECIPIENTS.RELATIVES
+    selectedMunicipality
+      ? `${API_ROUTES.SERVICE_RECIPIENTS.RELATIVES}?municipalityId=${parseInt(
+          selectedMunicipality
+        )}`
+      : API_ROUTES.SERVICE_RECIPIENTS.RELATIVES
   );
 
+  const onSubmit = (data: z.infer<typeof generalInfoSchema>) => {
+    startTransition(async () => {
+      const formData = {
+        ...data,
+        gender,
+        municipalityId: selectedMunicipality,
+        relativeServiceRecipientId: relativeSR,
+        relativeKinshipRelationId: relativeKinship,
+      };
+
+      // post create service recipient
+    });
+  };
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    clearErrors,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(generalInfoSchema),
+    mode: "all",
+  });
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-2 gap-4">
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row gap-2 lg:gap-0">
           <Label htmlFor="firstName" className="lg:min-w-[160px]">
             {t("firstName")}
           </Label>
-          <Input
-            name="firstName"
-            type="text"
-            placeholder={t("firstName")}
-            onChange={handleChange}
-          />
+          <div className="w-full">
+            <InputGroup>
+              <Input
+                disabled={isPending}
+                {...register("firstName")}
+                name="firstName"
+                type="text"
+                placeholder={t("firstName")}
+                className={cn("", {
+                  "border-destructive ": errors.firstName,
+                })}
+              />
+            </InputGroup>
+            <ValidationError
+              validationError={errors.firstName}
+              message={
+                errors?.firstName &&
+                validationsT(`${errors?.firstName.message}`)
+              }
+            />
+          </div>
         </div>
 
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row gap-2 lg:gap-0">
           <Label htmlFor="lastName" className="lg:min-w-[160px]">
             {t("lastName")}
           </Label>
-          <Input
-            name="lastName"
-            type="text"
-            placeholder={t("lastName")}
-            onChange={handleChange}
-          />
+          <div className="w-full">
+            <InputGroup>
+              <Input
+                disabled={isPending}
+                {...register("lastName")}
+                name="lastName"
+                type="text"
+                placeholder={t("lastName")}
+                className={cn("", {
+                  "border-destructive ": errors.lastName,
+                })}
+              />
+            </InputGroup>
+            <ValidationError
+              validationError={errors.lastName}
+              message={
+                errors?.lastName && validationsT(`${errors?.lastName.message}`)
+              }
+            />
+          </div>
         </div>
 
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row gap-2 lg:gap-0">
           <Label htmlFor="gender" className="lg:min-w-[160px]">
             {t("gender")}
           </Label>
-          <Select name="gender" onValueChange={setGender}>
-            <SelectTrigger>
-              <SelectValue placeholder={t("gender")} />
-            </SelectTrigger>
-            <SelectContent>
-              {genders.map((gender) => (
-                <SelectItem value={gender.value} key={gender.value}>
-                  {gender.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="w-full">
+            <Select
+              onValueChange={(val) => {
+                setGender(val);
+                setValue("gender", val);
+                clearErrors("gender");
+              }}
+              disabled={isPending}
+              {...register("gender")}
+            >
+              <SelectTrigger
+                className={cn("", {
+                  "border-destructive ": errors.gender,
+                })}
+              >
+                <SelectValue placeholder={t("gender")} />
+              </SelectTrigger>
+              <SelectContent>
+                {genders.map((gender) => (
+                  <SelectItem value={gender.value} key={gender.value}>
+                    {gender.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <ValidationError
+              validationError={errors.gender}
+              message={
+                errors?.gender && validationsT(`${errors?.gender.message}`)
+              }
+            />
+          </div>
         </div>
 
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row lg:gap-0 gap-2">
           <Label htmlFor="birthDate" className="lg:min-w-[160px]">
             {t("birthDate")}
           </Label>
-          <InputGroup merged>
-            <InputGroupText>
-              <Cake className="w-5 h-5" />
-            </InputGroupText>
-            <Input
-              name="birthDate"
-              type="text"
-              placeholder={t("birthDate")}
-              onChange={handleChange}
+          <div className="w-full">
+            <InputGroup merged>
+              <InputGroupText
+                className={cn("", {
+                  "border-destructive ": errors.birthDate,
+                })}
+              >
+                <Cake className="w-5 h-5" />
+              </InputGroupText>
+              <Input
+                type="text"
+                placeholder={t("birthDate")}
+                disabled={isPending}
+                {...register("birthDate")}
+                className={cn("", {
+                  "border-destructive ": errors.birthDate,
+                })}
+              />
+            </InputGroup>
+            <ValidationError
+              validationError={errors.birthDate}
+              message={
+                errors?.birthDate &&
+                validationsT(`${errors?.birthDate.message}`)
+              }
             />
-          </InputGroup>
+          </div>
         </div>
 
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row gap-2 lg:gap-0">
           <Label htmlFor="municipalityId" className="lg:min-w-[160px]">
             {t("municipalityId")}
           </Label>
-          <Select
-            name="municipalityId"
-            disabled={loadingMunicipalities || validatingMunicipalities}
-            onValueChange={(val) => {
-              setSelectedMunicipality(val);
-              setRelativeSR(undefined);
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue
-                placeholder={
-                  loadingMunicipalities || validatingMunicipalities
-                    ? t("loading_municipalities")
-                    : t("municipalityId")
-                }
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {municipalities?.map((municipality) => (
-                <SelectItem
-                  value={municipality.id.toString()}
-                  key={municipality.id}
-                >
-                  {municipality.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="w-full">
+            <Select
+              disabled={
+                loadingMunicipalities || validatingMunicipalities || isPending
+              }
+              onValueChange={(val) => {
+                setSelectedMunicipality(val);
+                setValue("municipalityId", val);
+                clearErrors("municipalityId");
+                setRelativeSR(undefined);
+              }}
+              {...register("municipalityId")}
+            >
+              <SelectTrigger
+                className={cn("", {
+                  "border-destructive ": errors.municipalityId,
+                })}
+              >
+                <SelectValue
+                  placeholder={
+                    loadingMunicipalities || validatingMunicipalities
+                      ? t("loading_municipalities")
+                      : t("municipalityId")
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {municipalities?.map((municipality) => (
+                  <SelectItem
+                    value={municipality.id.toString()}
+                    key={municipality.id}
+                  >
+                    {municipality.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <ValidationError
+              validationError={errors.municipalityId}
+              message={
+                errors?.municipalityId &&
+                validationsT(`${errors?.municipalityId.message}`)
+              }
+            />
+          </div>
         </div>
 
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row lg:gap-0 gap-2">
           <Label htmlFor="address" className="lg:min-w-[160px]">
             {t("address")}
           </Label>
-          <InputGroup merged className="flex">
-            <InputGroupText>
-              <MapPinHouse className="w-5 h-5" />
-            </InputGroupText>
-            <Input
-              name="address"
-              type="text"
-              placeholder={t("address")}
-              onChange={handleChange}
+          <div className="w-full">
+            <InputGroup merged className="flex">
+              <InputGroupText
+                className={cn("", {
+                  "border-destructive ": errors.address,
+                })}
+              >
+                <MapPinHouse className="w-5 h-5" />
+              </InputGroupText>
+              <Input
+                type="text"
+                placeholder={t("address")}
+                disabled={isPending}
+                {...register("address")}
+                className={cn("", {
+                  "border-destructive ": errors.address,
+                })}
+              />
+            </InputGroup>
+            <ValidationError
+              validationError={errors.address}
+              message={
+                errors?.address && validationsT(`${errors?.address.message}`)
+              }
             />
-          </InputGroup>
+          </div>
         </div>
 
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row lg:gap-0 gap-2">
           <Label htmlFor="houseNr" className="lg:min-w-[160px]">
             {t("houseNr")}
           </Label>
-          <InputGroup merged className="flex">
-            <InputGroupText>
-              <MapPinHouse className="w-5 h-5" />
-            </InputGroupText>
-            <Input
-              name="houseNr"
-              type="text"
-              placeholder={t("houseNr")}
-              onChange={handleChange}
-            />
-          </InputGroup>
+          <div className="w-full">
+            <InputGroup merged className="flex">
+              <InputGroupText>
+                <MapPinHouse className="w-5 h-5" />
+              </InputGroupText>
+              <Input
+                type="text"
+                placeholder={t("houseNr")}
+                disabled={isPending}
+                {...register("houseNr")}
+              />
+            </InputGroup>
+          </div>
         </div>
 
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row lg:gap-0 gap-2">
@@ -216,10 +392,10 @@ export default function GeneralInfoForm() {
               <MapPinHouse className="w-5 h-5" />
             </InputGroupText>
             <Input
-              name="appartmentNr"
               type="text"
               placeholder={t("appartmentNr")}
-              onChange={handleChange}
+              disabled={isPending}
+              {...register("appartmentNr")}
             />
           </InputGroup>
         </div>
@@ -228,34 +404,64 @@ export default function GeneralInfoForm() {
           <Label htmlFor="coordLat" className="lg:min-w-[160px]">
             {t("coordLat")}
           </Label>
-          <InputGroup merged className="flex">
-            <InputGroupText>
-              <MapPin className="w-5 h-5" />
-            </InputGroupText>
-            <Input
-              name="coordLat"
-              type="text"
-              placeholder={t("coordLat")}
-              onChange={handleChange}
+          <div className="w-full">
+            <InputGroup merged className="flex">
+              <InputGroupText
+                className={cn("", {
+                  "border-destructive ": errors.coordLat,
+                })}
+              >
+                <MapPin className="w-5 h-5" />
+              </InputGroupText>
+              <Input
+                type="text"
+                placeholder={t("coordLat")}
+                disabled={isPending}
+                {...register("coordLat")}
+                className={cn("", {
+                  "border-destructive ": errors.coordLat,
+                })}
+              />
+            </InputGroup>
+            <ValidationError
+              validationError={errors.coordLat}
+              message={
+                errors?.coordLat && validationsT(`${errors?.coordLat.message}`)
+              }
             />
-          </InputGroup>
+          </div>
         </div>
 
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row lg:gap-0 gap-2">
           <Label htmlFor="coordLng" className="lg:min-w-[160px]">
             {t("coordLng")}
           </Label>
-          <InputGroup merged className="flex">
-            <InputGroupText>
-              <MapPin className="w-5 h-5" />
-            </InputGroupText>
-            <Input
-              name="coordLng"
-              type="text"
-              placeholder={t("coordLng")}
-              onChange={handleChange}
+          <div className="w-full">
+            <InputGroup merged className="flex">
+              <InputGroupText
+                className={cn("", {
+                  "border-destructive ": errors.coordLng,
+                })}
+              >
+                <MapPin className="w-5 h-5" />
+              </InputGroupText>
+              <Input
+                type="text"
+                placeholder={t("coordLng")}
+                disabled={isPending}
+                {...register("coordLng")}
+                className={cn("", {
+                  "border-destructive ": errors.coordLng,
+                })}
+              />
+            </InputGroup>
+            <ValidationError
+              validationError={errors.coordLng}
+              message={
+                errors?.coordLng && validationsT(`${errors?.coordLng.message}`)
+              }
             />
-          </InputGroup>
+          </div>
         </div>
 
         <div className="col-span-2 flex flex-col lg:items-center lg:flex-row gap-2 lg:gap-0">
@@ -266,10 +472,14 @@ export default function GeneralInfoForm() {
             {t("relativeServiceRecipientId")}
           </Label>
           <Select
-            name="relativeServiceRecipientId"
-            disabled={loadingRelativeSRs || validatingRelativeSRs}
+            disabled={loadingRelativeSRs || validatingRelativeSRs || isPending}
             value={relativeSR}
-            onValueChange={setRelativeSR}
+            onValueChange={(val) => {
+              setRelativeSR(val);
+              setValue("relativeServiceRecipientId", val);
+              clearErrors("relativeServiceRecipientId");
+            }}
+            {...register("relativeServiceRecipientId")}
           >
             <SelectTrigger>
               <SelectValue
@@ -300,35 +510,60 @@ export default function GeneralInfoForm() {
           >
             {t("relativeKinshipRelationId")}
           </Label>
-          <Select
-            name="relativeKinshipRelationId"
-            disabled={loadingKinships || validatingKinships || !relativeSR}
-            onValueChange={setRelativeKinship}
-          >
-            <SelectTrigger>
-              <SelectValue
-                placeholder={
-                  loadingKinships || validatingKinships
-                    ? t("loading_relative_kinship_relations")
-                    : t("relativeKinshipRelationId")
-                }
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {kinshipRelations?.map((kinshipRelation) => (
-                <SelectItem
-                  value={kinshipRelation.id.toString()}
-                  key={kinshipRelation.id}
-                >
-                  {kinshipRelation.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="w-full">
+            <Select
+              disabled={
+                loadingKinships ||
+                validatingKinships ||
+                !relativeSR ||
+                isPending
+              }
+              onValueChange={(val) => {
+                setRelativeKinship(val);
+                setValue("relativeKinshipRelationId", val);
+                clearErrors("relativeKinshipRelationId");
+              }}
+              {...register("relativeKinshipRelationId")}
+            >
+              <SelectTrigger
+                className={cn("", {
+                  "border-destructive ": errors.address,
+                })}
+              >
+                <SelectValue
+                  placeholder={
+                    loadingKinships || validatingKinships
+                      ? t("loading_relative_kinship_relations")
+                      : t("relativeKinshipRelationId")
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {kinshipRelations?.map((kinshipRelation) => (
+                  <SelectItem
+                    value={kinshipRelation.id.toString()}
+                    key={kinshipRelation.id}
+                  >
+                    {kinshipRelation.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <ValidationError
+              validationError={errors?.relativeKinshipRelationId}
+              message={
+                errors?.relativeKinshipRelationId &&
+                validationsT(`${errors?.relativeKinshipRelationId.message}`)
+              }
+            />
+          </div>
         </div>
 
         <div className="col-span-2 ml-auto">
-          <Button type="submit">Sukurti</Button>
+          <Button disabled={isPending}>
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending ? `${miscT("Misc.loading")}...` : "Sukurti"}
+          </Button>
         </div>
       </div>
     </form>

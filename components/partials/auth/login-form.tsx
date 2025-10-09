@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import Label from "@/components/ui/label";
+import ValidationError from "@/components/ui/validation-error";
 import { apiURL } from "@/config";
 import { useAuth } from "@/contexts/auth-context";
 import api from "@/lib/axios";
@@ -85,11 +86,13 @@ export default function LoginForm() {
           })}
         />
       </div>
-      {errors.email && (
-        <div className="text-destructive mt-2 text-sm">
-          {t(`LoginPage.form.validation_messages.${errors.email.message}`)}
-        </div>
-      )}
+      <ValidationError
+        validationError={errors.email}
+        message={
+          errors.email &&
+          t(`LoginPage.form.validation_messages.${errors.email.message}`)
+        }
+      />
 
       <div className="mt-3.5 space-y-2">
         <Label htmlFor="password" className="mb-2 font-medium text-default-600">
@@ -118,11 +121,13 @@ export default function LoginForm() {
           </div>
         </div>
       </div>
-      {errors.password && (
-        <div className="text-destructive mt-2 text-sm">
-          {t(`LoginPage.form.validation_messages.${errors.password.message}`)}
-        </div>
-      )}
+      <ValidationError
+        validationError={errors.password}
+        message={
+          errors.password &&
+          t(`LoginPage.form.validation_messages.${errors.password.message}`)
+        }
+      />
 
       <Button fullWidth={true} disabled={isPending}>
         {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

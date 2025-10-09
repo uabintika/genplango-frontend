@@ -12,6 +12,7 @@ function BaseSWRConfig({ children }: Children) {
             const res = await api(resource, init);
             return res.data;
           },
+          revalidateOnFocus: false,
         }}
       >
         {children}

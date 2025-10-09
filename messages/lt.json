@@ -92,6 +92,12 @@
       "loading_relative_service_recipients": "Kraunami susiję asmenys..."
     }
   },
+  "Validations": {
+    "required": "Šis laukelis yra privalomas",
+    "invalid_date_format": "Neteisingas datos formatas",
+    "must_be_a_number": "Laukelį privalo sudaryti tik skaičiai",
+    "required_with": "lao"
+  },
   "TableActions": {
     "create": "Pridėti",
     "edit": "Redaguoti",
