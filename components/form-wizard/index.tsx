@@ -177,10 +177,12 @@ const FormWizardControls = <T,>() => {
   );
 
   const handleNext = async () => {
-    const step = registeredSteps.find((s) => s.id === currentStep);
+    const step = registeredSteps[currentStep - 1];
     if (step) {
       const isValid = await step.validate();
       if (!isValid) return;
+    } else {
+      return;
     }
     nextStep();
   };

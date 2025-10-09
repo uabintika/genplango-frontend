@@ -270,6 +270,7 @@ export default function GeneralInfoForm() {
           <Select
             disabled={loadingMunicipalities || validatingMunicipalities}
             onValueChange={(val) => {
+              setSelectedMunicipality(val);
               setValue("municipalityId", val);
               clearErrors("municipalityId");
               setRelativeSR(undefined);

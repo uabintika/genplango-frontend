@@ -6,6 +6,7 @@ import { FormWizard, FormWizardStep } from "@/components/form-wizard";
 
 import { generalInfoSchema } from "./general-info-form";
 import z from "zod";
+import ContactInfoForm from "./contact-info-form";
 
 type CreateFormDataType = {
   generalInfo: z.infer<typeof generalInfoSchema>;
@@ -26,6 +27,9 @@ export default function CreateServiceRecipientPage() {
         >
           <FormWizardStep title="Pagrindinė informacija">
             <GeneralInfoForm />
+          </FormWizardStep>
+          <FormWizardStep title="Kontaktinė informacija">
+            <ContactInfoForm />
           </FormWizardStep>
         </FormWizard>
       </CardContent>
