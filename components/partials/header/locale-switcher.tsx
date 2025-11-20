@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Image from "next/image";
-import { usePathname, useRouter } from "@/components/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 export default function LocalSwitcher() {
   const t = useTranslations("HeaderPartial.LocaleSwitcher");

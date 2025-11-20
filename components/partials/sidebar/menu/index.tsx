@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Ellipsis } from "lucide-react";
-import { usePathname } from "@/components/navigation";
+import { usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { getMenuList } from "@/lib/menus";
 import { ScrollArea } from "@/components/ui/scroll-area";
