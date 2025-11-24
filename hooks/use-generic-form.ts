@@ -4,7 +4,7 @@ import type {
   Mode,
   UseGenericFormProps,
   UseGenericFormReturn,
-} from "@/types/UseGenericForm.types";
+} from "@/types/use-generic-form";
 
 import api from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
