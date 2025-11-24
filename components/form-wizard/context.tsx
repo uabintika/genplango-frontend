@@ -1,14 +1,16 @@
 "use client";
 
 import * as React from "react";
+import type { FieldValues, UseFormReturn } from "react-hook-form";
 
-export type RegisterStepType<T = any> = {
+export type RegisterStepType<T = unknown> = {
   id: number | string;
   validate: () => Promise<boolean> | boolean;
   getData: () => Promise<T> | T;
 };
 
-export type FormWizardContextType<T = any> = {
+export type FormWizardContextType<T extends FieldValues> = {
+  form: UseFormReturn<T>;
   currentStep: number;
   totalSteps: number;
   goToStep: (step: number) => void;
@@ -24,7 +26,9 @@ export type FormWizardContextType<T = any> = {
 export const FormWizardContext =
   React.createContext<FormWizardContextType<any> | null>(null);
 
-export function useFormWizard<T = any>(): FormWizardContextType<T> {
+export function useFormWizard<
+  T extends FieldValues
+>(): FormWizardContextType<T> {
   const ctx = React.useContext<FormWizardContextType<T> | null>(
     FormWizardContext
   );
@@ -32,7 +36,7 @@ export function useFormWizard<T = any>(): FormWizardContextType<T> {
   return ctx;
 }
 
-export function useRegisterWizardStep<T>({
+export function useRegisterWizardStep<T extends FieldValues>({
   id,
   validate,
   getData,

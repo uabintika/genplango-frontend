@@ -10,19 +10,23 @@ import {
   useFormWizard,
 } from "./context";
 
+import { Form } from "../ui/form";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { ArrowLeft, ArrowRight, CirclePlus, Loader2 } from "lucide-react";
 import "./style.css";
+import type { FieldValues, UseFormReturn } from "react-hook-form";
 
-type FormWizardProps<T> = {
+type FormWizardProps<T extends FieldValues> = {
+  form: UseFormReturn<T>;
   onComplete: (formData: T) => Promise<void> | void;
   children:
     | React.ReactElement<FormWizardStepProps>
     | React.ReactElement<FormWizardStepProps>[];
 };
 
-export const FormWizard = <T,>({
+export const FormWizard = <T extends FieldValues>({
+  form,
   onComplete,
   children,
 }: FormWizardProps<T>) => {
@@ -55,6 +59,7 @@ export const FormWizard = <T,>({
   const prevStep = () => goToStep(currentStep - 1);
 
   const contextValue: FormWizardContextType<T> = {
+    form,
     currentStep,
     totalSteps,
     goToStep,
@@ -69,26 +74,28 @@ export const FormWizard = <T,>({
 
   return (
     <FormWizardContext.Provider value={contextValue}>
-      <form>
-        <div className="wizard">
-          {/* progress bar */}
-          <FormWizardProgressBar steps={progressBarElements} />
+      <Form {...form}>
+        <form>
+          <div className="wizard">
+            {/* progress bar */}
+            <FormWizardProgressBar steps={progressBarElements} />
 
-          {/* wizard steps */}
-          <motion.div
-            key={currentStep}
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -20, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          >
-            {currentChild}
-          </motion.div>
+            {/* wizard steps */}
+            <motion.div
+              key={currentStep}
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -20, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              {currentChild}
+            </motion.div>
 
-          {/* buttons(prev, next, submit) */}
-          <FormWizardControls />
-        </div>
-      </form>
+            {/* buttons(prev, next, submit) */}
+            <FormWizardControls />
+          </div>
+        </form>
+      </Form>
     </FormWizardContext.Provider>
   );
 };
@@ -152,7 +159,7 @@ export const FormWizardStep: React.FC<FormWizardStepProps> = ({
   return <div className="px-5 sm:px-8 md:px-24 lg:px-52">{children}</div>;
 };
 
-const FormWizardControls = <T,>() => {
+const FormWizardControls = <T extends FieldValues>() => {
   const {
     totalSteps,
     currentStep,
@@ -231,7 +238,7 @@ const FormWizardControls = <T,>() => {
       ) : (
         <Button
           color="success"
-          type="button"
+          type="submit"
           disabled={isSubmitting}
           onClick={async () => {
             setIsSubmitting(true);

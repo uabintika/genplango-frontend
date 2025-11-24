@@ -3,7 +3,7 @@
 import { useGenderOptions } from "@/hooks/use-enum";
 import useSWR from "swr";
 import { API_ROUTES } from "@/routes/api";
-import { useCallback, useState } from "react";
+import * as React from "react";
 import { useTranslations } from "next-intl";
 import z from "zod";
 import { useForm } from "react-hook-form";
@@ -22,7 +22,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ValidationError from "@/components/ui/validation-error";
-import { useRegisterWizardStep } from "@/components/form-wizard/context";
+import {
+  useFormWizard,
+  useRegisterWizardStep,
+} from "@/components/form-wizard/context";
+import useGenericForm from "@/hooks/use-generic-form";
+import { FormFieldWrapper } from "@/components/ui/form";
+import { generalInfoSchema, MasterCreateSRFormSchemaType } from "./page";
 
 type Municipality = {
   id: number;
@@ -39,67 +45,18 @@ type RelativeServiceRecipient = {
   fullName: string;
 };
 
-export const generalInfoSchema = z
-  .object({
-    firstName: z.string().min(1, { message: "required" }),
-    lastName: z.string().min(1, { message: "required" }),
-    gender: z
-      .string({ error: "required" })
-      .refine((val) => !isNaN(Number(val)), { message: "required" }),
+type GeneralInfoFormProps = {
+  schema: typeof generalInfoSchema;
+};
 
-    birthDate: z
-      .string()
-      .min(1, { message: "required" })
-      .regex(/^\d{4}-\d{2}-\d{2}$/, { message: "invalid_date_format" }),
-
-    municipalityId: z
-      .string({ error: "required" })
-      .refine((val) => !isNaN(Number(val)), { message: "required" })
-      .transform((val) => Number(val)),
-
-    address: z.string().min(1, { message: "required" }),
-    houseNr: z.string().optional(),
-    appartmentNr: z.string().optional(),
-
-    coordLat: z
-      .string()
-      .min(1, { message: "required" })
-      .refine((val) => !isNaN(Number(val)), { message: "must_be_a_number" }),
-    coordLng: z
-      .string()
-      .min(1, { message: "required" })
-      .refine((val) => !isNaN(Number(val)), { message: "must_be_a_number" }),
-
-    relativeServiceRecipientId: z
-      .string({ error: "required" })
-      .refine((val) => !isNaN(Number(val)), { message: "required" })
-      .optional(),
-    relativeKinshipRelationId: z
-      .string({ error: "required" })
-      .refine((val) => !isNaN(Number(val)), { message: "required" })
-      .optional(),
-  })
-  .superRefine((val, ctx) => {
-    if (
-      val.relativeServiceRecipientId?.length &&
-      !val.relativeKinshipRelationId?.length
-    ) {
-      ctx.addIssue({
-        code: "custom",
-        message: "required_with",
-        path: ["relativeServiceRecipientId"],
-      });
-    }
-  });
-
-export default function GeneralInfoForm() {
+export default function GeneralInfoForm({ schema }: GeneralInfoFormProps) {
   const t = useTranslations("ServiceRecipients.GeneralInfoForm");
   const validationsT = useTranslations("Validations");
   const genders = useGenderOptions();
-  const [selectedMunicipality, setSelectedMunicipality] = useState<
+  const [selectedMunicipality, setSelectedMunicipality] = React.useState<
     string | null
   >(null);
-  const [relativeSR, setRelativeSR] = useState<string | undefined>("");
+  const [relativeSR, setRelativeSR] = React.useState<string | undefined>("");
 
   const {
     data: municipalities,
@@ -125,143 +82,77 @@ export default function GeneralInfoForm() {
       : API_ROUTES.SERVICE_RECIPIENTS.RELATIVES
   );
 
-  const {
-    register,
-    setValue,
-    clearErrors,
-    formState: { errors },
-    trigger,
-    getValues,
-  } = useForm({
-    resolver: zodResolver(generalInfoSchema),
-    mode: "all",
-  });
+  const { form } = useFormWizard<MasterCreateSRFormSchemaType>();
 
   useRegisterWizardStep({
     id: "generalInfo",
-    validate: async () => await trigger(),
-    getData: () => getValues(),
+    validate: async () => await form.trigger(),
+    getData: () => form.getValues(),
   });
 
   return (
     <div className="grid grid-cols-2 gap-4">
-      <div className="col-span-2 flex flex-col lg:items-center lg:flex-row gap-2 lg:gap-0">
-        <Label htmlFor="firstName" className="lg:min-w-[160px]">
-          {t("firstName")}
-        </Label>
-        <div className="w-full">
-          <InputGroup>
-            <Input
-              {...register("firstName")}
-              name="firstName"
-              type="text"
-              placeholder={t("firstName")}
-              className={cn("", {
-                "border-destructive ": errors.firstName,
-              })}
-            />
-          </InputGroup>
-          <ValidationError
-            validationError={errors.firstName}
-            message={
-              errors?.firstName && validationsT(`${errors?.firstName.message}`)
-            }
-          />
-        </div>
-      </div>
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "generalInfo.firstName",
+          label: "Vardas",
+          render: ({ field }) => (
+            <Input {...field} placeholder={t("firstName")} />
+          ),
+        }}
+      />
 
-      <div className="col-span-2 flex flex-col lg:items-center lg:flex-row gap-2 lg:gap-0">
-        <Label htmlFor="lastName" className="lg:min-w-[160px]">
-          {t("lastName")}
-        </Label>
-        <div className="w-full">
-          <InputGroup>
-            <Input
-              {...register("lastName")}
-              name="lastName"
-              type="text"
-              placeholder={t("lastName")}
-              className={cn("", {
-                "border-destructive ": errors.lastName,
-              })}
-            />
-          </InputGroup>
-          <ValidationError
-            validationError={errors.lastName}
-            message={
-              errors?.lastName && validationsT(`${errors?.lastName.message}`)
-            }
-          />
-        </div>
-      </div>
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "generalInfo.lastName",
+          label: "Pavardė",
+          render: ({ field }) => (
+            <Input {...field} placeholder={t("lastName")} />
+          ),
+        }}
+      />
 
-      <div className="col-span-2 flex flex-col lg:items-center lg:flex-row gap-2 lg:gap-0">
-        <Label htmlFor="gender" className="lg:min-w-[160px]">
-          {t("gender")}
-        </Label>
-        <div className="w-full">
-          <Select
-            onValueChange={(val) => {
-              setValue("gender", val);
-              clearErrors("gender");
-            }}
-            {...register("gender")}
-          >
-            <SelectTrigger
-              className={cn("", {
-                "border-destructive ": errors.gender,
-              })}
-            >
-              <SelectValue placeholder={t("gender")} />
-            </SelectTrigger>
-            <SelectContent>
-              {genders.map((gender) => (
-                <SelectItem value={gender.value} key={gender.value}>
-                  {gender.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <ValidationError
-            validationError={errors.gender}
-            message={
-              errors?.gender && validationsT(`${errors?.gender.message}`)
-            }
-          />
-        </div>
-      </div>
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "generalInfo.gender",
+          label: "Lytis",
+          render: ({ field }) => (
+            <Select {...field}>
+              <SelectTrigger>
+                <SelectValue placeholder={t("gender")} />
+              </SelectTrigger>
+              <SelectContent>
+                {genders.map((gender) => (
+                  <SelectItem value={gender.value} key={gender.value}>
+                    {gender.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ),
+        }}
+      />
 
-      <div className="col-span-2 flex flex-col lg:items-center lg:flex-row lg:gap-0 gap-2">
-        <Label htmlFor="birthDate" className="lg:min-w-[160px]">
-          {t("birthDate")}
-        </Label>
-        <div className="w-full">
-          <InputGroup merged>
-            <InputGroupText
-              className={cn("", {
-                "border-destructive ": errors.birthDate,
-              })}
-            >
-              <Cake className="w-5 h-5" />
-            </InputGroupText>
-            <Input
-              type="text"
-              placeholder={t("birthDate")}
-              {...register("birthDate")}
-              className={cn("", {
-                "border-destructive ": errors.birthDate,
-              })}
-            />
-          </InputGroup>
-          <ValidationError
-            validationError={errors.birthDate}
-            message={
-              errors?.birthDate && validationsT(`${errors?.birthDate.message}`)
-            }
-          />
-        </div>
-      </div>
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "generalInfo.birthDate",
+          label: "Gimimo data",
+          render: ({ field }) => (
+            <InputGroup merged>
+              <InputGroupText>
+                <Cake className="w-5 h-5" />
+              </InputGroupText>
+              <Input {...field} type="text" placeholder={t("birthDate")} />
+            </InputGroup>
+          ),
+        }}
+      />
 
+      {/*
       <div className="col-span-2 flex flex-col lg:items-center lg:flex-row gap-2 lg:gap-0">
         <Label htmlFor="municipalityId" className="lg:min-w-[160px]">
           {t("municipalityId")}
@@ -525,7 +416,7 @@ export default function GeneralInfoForm() {
             }
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
