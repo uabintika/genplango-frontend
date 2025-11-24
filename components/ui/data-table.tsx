@@ -47,7 +47,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   return (
     <>
-      <div className="overflow-hidden rounded-md border">
+      <div className="overflow-hidden">
         <Table ref={tableRef} className={cn(isLoading && "animate-pulse")}>
           <TableHeader className="bg-default-200">
             {table.getHeaderGroups().map((headerGroup) => (
