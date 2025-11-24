@@ -1,8 +1,8 @@
 "use client";
 
 import { useMounted } from "@/hooks/use-mounted";
-import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Loader from "./ui/loader";
 
 type PageLoaderProps = {
   isLoading?: boolean;
@@ -18,7 +18,7 @@ export default function FullPageLoader({ isLoading = true }: PageLoaderProps) {
         <h1 className="text-xl font-semibold text-default-900">GenPlanGo</h1>
       </div>
       <span className="inline-flex gap-1 items-center">
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        <Loader size="md" />
         {t("loading")}...
       </span>
     </div>

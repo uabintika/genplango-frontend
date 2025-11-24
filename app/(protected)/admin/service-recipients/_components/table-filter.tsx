@@ -35,7 +35,7 @@ export default function ServiceRecipientTableFilters({
           name="search"
           placeholder={t("search")}
           disabled={isLoading || isValidating}
-          onChange={(e) => debounceSearch(e)}
+          onChange={onInputChange}
         />
         <InputGroupText>
           <SearchIcon className="w-5 h-5" />
