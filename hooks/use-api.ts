@@ -4,7 +4,7 @@ import * as React from "react";
 type ApiUseState<T> = {
   data: T | null;
   isLoading: boolean;
-  error: AxiosError | string | null;
+  error: AxiosError | null;
 };
 
 interface FetcherType<T, B = unknown> {
@@ -31,15 +31,16 @@ export default function useApi<T, B = unknown>(
         setState({ data: res.data, isLoading: false, error: null });
         return res.data;
       } catch (err) {
-        let error = "Serverio klaida";
-        if (err instanceof AxiosError && err.response?.status === 422) {
-          error = err.response?.data;
+        let axiosError: AxiosError | null = null;
+
+        if (err instanceof AxiosError) {
+          axiosError = err;
         }
 
         setState({
           data: null,
           isLoading: false,
-          error: error,
+          error: axiosError,
         });
 
         return null;

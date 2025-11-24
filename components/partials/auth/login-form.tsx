@@ -1,17 +1,22 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Form, FormFieldWrapper } from "@/components/ui/form";
 import Input from "@/components/ui/input";
-import Label from "@/components/ui/label";
-import ValidationError from "@/components/ui/validation-error";
+import {
+  InputGroup,
+  InputGroupButton,
+  InputGroupText,
+} from "@/components/ui/input-group";
 import { apiURL } from "@/config";
 import { useAuth } from "@/contexts/auth-context";
+import useApi from "@/hooks/use-api";
 import api from "@/lib/axios";
-import { cn } from "@/lib/utils";
 import { ROUTES } from "@/routes";
 import { API_ROUTES } from "@/routes/api";
+import { User } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { ChevronDownCircle, Eye, EyeOff, Icon, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -24,9 +29,17 @@ const schema = z.object({
   password: z.string().min(1, { message: "required" }),
 });
 
+type LoginSchemaType = z.infer<typeof schema>;
+
+const loginFetcher = (url: string, body?: LoginSchemaType) =>
+  api.post(url, body);
+
 export default function LoginForm() {
-  const [isPending, startTransition] = React.useTransition();
   const [passwordType, setPasswordType] = React.useState("password");
+  const { data, isLoading, error, execute } = useApi<User, LoginSchemaType>(
+    apiURL + API_ROUTES.AUTH.LOGIN,
+    loginFetcher
+  );
   const t = useTranslations();
   const router = useRouter();
   const { setUser } = useAuth();
@@ -39,100 +52,91 @@ export default function LoginForm() {
     }
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const form = useForm({
     resolver: zodResolver(schema),
     mode: "all",
   });
 
-  const onSubmit = (data: z.infer<typeof schema>) => {
-    startTransition(async () => {
-      try {
-        const response = await api.post(apiURL + API_ROUTES.AUTH.LOGIN, data);
-
-        if (response?.status === 200) {
-          setUser(response.data.user);
-          router.push(ROUTES.ADMIN.DASHBOARD);
-          toast.success(t("LoginPage.messages.login_success"));
-        }
-      } catch (err: any) {
-        if (err.response?.status === 422) {
-          toast.error(t("LoginPage.messages.invalid_credentials"));
-        } else {
-          toast.error(t("Misc.uncaught_error"));
-        }
-      }
-    });
+  const onSubmit = async (data: LoginSchemaType) => {
+    await execute(data);
   };
 
+  React.useEffect(() => {
+    if (!isLoading && data) {
+      setUser(data);
+      router.push(ROUTES.ADMIN.DASHBOARD);
+      toast.success(t("LoginPage.messages.login_success"));
+    }
+
+    if (!isLoading && error) {
+      if (error?.response?.status === 422) {
+        toast.error(t("LoginPage.messages.invalid_credentials"));
+      } else {
+        toast.error(t("Misc.uncaught_error"));
+      }
+    }
+  }, [isLoading, data, error]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-5 2xl:mt-7 space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="email" className="font-medium text-default-600">
-          {t("LoginPage.form.fields.email") + " "}
-        </Label>
-        <Input
-          size="lg"
-          disabled={isPending}
-          {...register("email")}
-          type="email"
-          id="email"
-          color="primary"
-          className={cn("", {
-            "border-destructive ": errors.email,
-          })}
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mt-5 2xl:mt-7 space-y-4"
+      >
+        <FormFieldWrapper
+          control={form.control}
+          formField={{
+            name: "email",
+            label: t("LoginPage.form.fields.email") + " ",
+            render: ({ field }) => (
+              <Input
+                {...field}
+                size="lg"
+                disabled={isLoading}
+                color="primary"
+              />
+            ),
+          }}
         />
-      </div>
-      <ValidationError
-        validationError={errors.email}
-        message={
-          errors.email &&
-          t(`LoginPage.form.validation_messages.${errors.email.message}`)
-        }
-      />
 
-      <div className="mt-3.5 space-y-2">
-        <Label htmlFor="password" className="mb-2 font-medium text-default-600">
-          {t("LoginPage.form.fields.password") + " "}
-        </Label>
-        <div className="relative">
-          <Input
-            size="lg"
-            disabled={isPending}
-            {...register("password")}
-            type={passwordType}
-            id="password"
-            className="peer"
-            placeholder=" "
-          />
-
-          <div
-            className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 cursor-pointer"
-            onClick={togglePasswordType}
-          >
-            {passwordType === "password" ? (
-              <Eye className="w-5 h-5 text-default-400" />
-            ) : (
-              <EyeOff className="w-5 h-5 text-default-400" />
-            )}
+        <div className="mt-3.5 space-y-2">
+          <div className="relative">
+            <FormFieldWrapper
+              control={form.control}
+              formField={{
+                name: "password",
+                label: t("LoginPage.form.fields.password") + " ",
+                render: ({ field }) => (
+                  <InputGroup className="relative">
+                    <Input
+                      {...field}
+                      size="lg"
+                      disabled={isLoading}
+                      type={passwordType}
+                      className="peer"
+                      placeholder=" "
+                    />
+                    <InputGroupButton
+                      className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 cursor-pointer"
+                      onClick={togglePasswordType}
+                    >
+                      {passwordType === "password" ? (
+                        <Eye className="w-5 h-5 text-default-400" />
+                      ) : (
+                        <EyeOff className="w-5 h-5 text-default-400" />
+                      )}
+                    </InputGroupButton>
+                  </InputGroup>
+                ),
+              }}
+            />
           </div>
         </div>
-      </div>
-      <ValidationError
-        validationError={errors.password}
-        message={
-          errors.password &&
-          t(`LoginPage.form.validation_messages.${errors.password.message}`)
-        }
-      />
 
-      <Button fullWidth={true} disabled={isPending}>
-        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {isPending ? `${t("Misc.loading")}...` : t("LoginPage.button_text")}
-      </Button>
-    </form>
+        <Button fullWidth={true} isLoading={isLoading}>
+          {t("LoginPage.button_text")}
+        </Button>
+      </form>
+    </Form>
   );
 }
