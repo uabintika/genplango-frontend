@@ -10,7 +10,6 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-  InputGroupText,
 } from "@/components/ui/input-group";
 import { Cake, MapPin, MapPinHouse } from "lucide-react";
 import {
@@ -24,7 +23,6 @@ import {
   useFormWizard,
   useRegisterWizardStep,
 } from "@/components/form-wizard/context";
-import useGenericForm from "@/hooks/use-generic-form";
 import { FormFieldWrapper } from "@/components/ui/form";
 import { MasterCreateSRFormSchemaType } from "./page";
 
@@ -153,12 +151,19 @@ export default function GeneralInfoForm() {
               {...field}
               onValueChange={field.onChange}
               value={field.value ?? ""}
+              disabled={loadingMunicipalities || validatingMunicipalities}
             >
               <SelectTrigger
                 className="w-full"
                 aria-invalid={fieldState.invalid}
               >
-                <SelectValue placeholder="Pasirinkite savivaldybę" />
+                <SelectValue
+                  placeholder={
+                    loadingMunicipalities || validatingMunicipalities
+                      ? "Kraunamos savivaldybės..."
+                      : "Pasirinkite savivaldybę"
+                  }
+                />
               </SelectTrigger>
               <SelectContent>
                 {municipalities?.map((municipality) => (
@@ -293,7 +298,11 @@ export default function GeneralInfoForm() {
             render: ({ field, fieldState }) => (
               <Select
                 {...field}
-                disabled={loadingRelativeSRs || validatingRelativeSRs}
+                disabled={
+                  loadingKinships ||
+                  validatingKinships ||
+                  !relativeServiceRecipientId
+                }
                 onValueChange={field.onChange}
                 value={field.value ?? ""}
               >
@@ -303,7 +312,7 @@ export default function GeneralInfoForm() {
                 >
                   <SelectValue
                     placeholder={
-                      loadingRelativeSRs || validatingRelativeSRs
+                      loadingKinships || validatingKinships
                         ? "Kraunami ryšiai..."
                         : "Susijusio asmens ryšys su klientu"
                     }

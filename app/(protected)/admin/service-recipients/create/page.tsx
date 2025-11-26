@@ -43,7 +43,7 @@ export const generalInfoSchema = z
         error: "Laukelio reikšmė privalo būti skaičius",
       }),
     coordLng: z
-      .string()
+      .string({ error: "Šis laukelis yra privalomas" })
       .min(1, { error: "Šis laukelis yra privalomas" })
       .refine((val) => !isNaN(Number(val)), {
         error: "Laukelio reikšmė privalo būti skaičius",
@@ -69,8 +69,8 @@ export const generalInfoSchema = z
     ) {
       ctx.addIssue({
         code: "custom",
-        message: "required_with",
-        path: ["relativeServiceRecipientId"],
+        message: "Pasirinkite ryšį",
+        path: ["relativeKinshipRelationId"],
       });
     }
   });
@@ -88,6 +88,23 @@ type CreateFormDataType = z.infer<typeof createServiceRecipientSchema>;
 export default function CreateServiceRecipientPage() {
   const form = useForm<MasterCreateSRFormSchemaType>({
     resolver: zodResolver(createServiceRecipientSchema),
+    defaultValues: {
+      generalInfo: {
+        firstName: "",
+        lastName: "",
+        gender: "",
+        birthDate: "",
+        municipalityId: "",
+        address: "",
+        houseNr: "",
+        appartmentNr: "",
+        coordLat: "",
+        coordLng: "",
+        relativeServiceRecipientId: "",
+        relativeKinshipRelationId: "",
+      },
+    },
+    mode: "all",
   });
 
   const handleSubmit = async (data: CreateFormDataType) => {
