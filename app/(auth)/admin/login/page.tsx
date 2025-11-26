@@ -32,7 +32,7 @@ export default function LoginPage() {
         <div className="overflow-y-auto flex flex-wrap w-full h-dvh">
           <div className="flex-1 relative">
             <div className="h-full flex flex-col bg-default-50">
-              <div className="max-w-[524px] md:px-[42px] md:py-[44px] p-7 mx-auto w-full text-2xl text-default-900 mb-3 h-full flex flex-col justify-center">
+              <div className="max-w-[524px] md:px-[42px] md:py-11 p-7 mx-auto w-full text-2xl text-default-900 mb-3 h-full flex flex-col justify-center">
                 <div className="flex justify-center items-center text-center mb-6 lg:hidden ">
                   LOGOTIPAS
                 </div>
@@ -43,13 +43,13 @@ export default function LoginPage() {
               </div>
             </div>
           </div>
-          <div className="lg:block hidden flex-1 overflow-hidden text-[40px] leading-[48px] text-default-600 bg-cover bg-no-repeat bg-center bg-green-300">
+          <div className="lg:block hidden flex-1 overflow-hidden text-[40px] leading-12 text-default-600 bg-cover bg-no-repeat bg-center bg-green-300">
             <div className="flex flex-col h-full justify-center">
               <div className="flex-1 flex flex-col justify-center items-center">
                 GPG LOGO
               </div>
               <div>
-                <div className="text-[40px] leading-[48px] text-white max-w-[525px] mx-auto pb-20 text-center">
+                <div className="text-[40px] leading-12 text-white max-w-[525px] mx-auto pb-20 text-center">
                   <span className="text-white font-bold ms-1">
                     {t("project_name")}
                   </span>

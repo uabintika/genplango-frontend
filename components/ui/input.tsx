@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { InputColor } from "@/types/ui-types";
+import { InputColor, size } from "@/types/ui-types";
 
 export const inputVariants = cva(
   "w-full bg-background rounded py-2 px-3 h-9 border text-sm font-normal border border-solid border-default-200 outline-hidden focus:outline-hidden file:border-0 file:bg-transparent file:text-sm file:font-medium read-only:bg-default-200 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300",
@@ -39,29 +39,25 @@ export const inputVariants = cva(
 );
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
+  extends Omit<React.ComponentProps<"input">, "size" | "color">,
     VariantProps<typeof inputVariants> {
   color?: InputColor;
-  size?: any;
-  ref?: React.Ref<HTMLInputElement>;
+  size?: size;
 }
 
 export default function Input({
-  type,
   className,
+  type,
   color,
   size,
-  ref,
-  ...rest
+  ...props
 }: InputProps) {
   return (
-    <div className="flex-1 w-full">
-      <input
-        ref={ref}
-        type={type}
-        className={cn(inputVariants({ color, size }), className)}
-        {...rest}
-      />
-    </div>
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(inputVariants({ color, size }), className)}
+      {...props}
+    />
   );
 }

@@ -3,11 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormFieldWrapper } from "@/components/ui/form";
 import Input from "@/components/ui/input";
-import {
-  InputGroup,
-  InputGroupButton,
-  InputGroupText,
-} from "@/components/ui/input-group";
+import { InputGroup, InputGroupButton } from "@/components/ui/input-group";
 import { apiURL } from "@/config";
 import { useAuth } from "@/contexts/auth-context";
 import useApi from "@/hooks/use-api";
@@ -16,7 +12,7 @@ import { ROUTES } from "@/routes";
 import { API_ROUTES } from "@/routes/api";
 import { User } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDownCircle, Eye, EyeOff, Icon, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -105,7 +101,7 @@ export default function LoginForm() {
               control={form.control}
               formField={{
                 name: "password",
-                label: t("LoginPage.form.fields.password") + " ",
+                label: t("LoginPage.form.fields.password"),
                 render: ({ field }) => (
                   <InputGroup className="relative">
                     <Input
@@ -114,7 +110,6 @@ export default function LoginForm() {
                       disabled={isLoading}
                       type={passwordType}
                       className="peer"
-                      placeholder=" "
                     />
                     <InputGroupButton
                       className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 cursor-pointer"
