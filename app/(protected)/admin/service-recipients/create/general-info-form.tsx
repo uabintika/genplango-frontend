@@ -41,10 +41,8 @@ type RelativeServiceRecipient = {
 export default function GeneralInfoForm() {
   const genders = useGenderOptions();
   const { form } = useFormWizard<MasterCreateSRFormSchemaType>();
-  const selectedMunicipality = form.watch("generalInfo.municipalityId");
-  const relativeServiceRecipientId = form.watch(
-    "generalInfo.relativeServiceRecipientId"
-  );
+  const selectedMunicipality = form.watch("municipalityId");
+  const relativeServiceRecipientId = form.watch("relativeServiceRecipientId");
 
   const {
     data: municipalities,
@@ -75,7 +73,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.firstName",
+          name: "firstName",
           label: "Vardas",
           render: ({ field }) => <Input {...field} placeholder="Vardas" />,
         }}
@@ -84,7 +82,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.lastName",
+          name: "lastName",
           label: "Pavardė",
           render: ({ field }) => <Input {...field} placeholder="Pavardė" />,
         }}
@@ -93,7 +91,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.gender",
+          name: "gender",
           label: "Lytis",
           render: ({ field }) => (
             <Select
@@ -119,7 +117,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.birthDate",
+          name: "birthDate",
           label: "Gimimo data",
           render: ({ field }) => (
             <InputGroup>
@@ -135,7 +133,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.municipalityId",
+          name: "municipalityId",
           label: "Savivaldybė",
           render: ({ field, fieldState }) => (
             <Select
@@ -174,7 +172,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.address",
+          name: "address",
           label: "Adresas",
           render: ({ field }) => <Input {...field} placeholder="Adresas" />,
         }}
@@ -183,7 +181,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.houseNr",
+          name: "houseNr",
           label: "Namo Nr.",
           render: ({ field }) => (
             <InputGroup>
@@ -199,7 +197,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.appartmentNr",
+          name: "appartmentNr",
           label: "Buto Nr.",
           render: ({ field }) => (
             <InputGroup>
@@ -215,7 +213,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.coordLat",
+          name: "coordLat",
           label: "Koordinatės (platuma)",
           render: ({ field }) => (
             <InputGroup>
@@ -231,7 +229,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.coordLng",
+          name: "coordLng",
           label: "Koordinatės (ilguma)",
           render: ({ field }) => (
             <InputGroup>
@@ -247,7 +245,7 @@ export default function GeneralInfoForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "generalInfo.relativeServiceRecipientId",
+          name: "relativeServiceRecipientId",
           label: "Susijęs asmuo",
           render: ({ field, fieldState }) => (
             <Select
@@ -284,7 +282,7 @@ export default function GeneralInfoForm() {
         <FormFieldWrapper
           control={form.control}
           formField={{
-            name: "generalInfo.relativeKinshipRelationId",
+            name: "relativeKinshipRelationId",
             label: "Susijusio asmens ryšys su klientu",
             render: ({ field, fieldState }) => (
               <Select

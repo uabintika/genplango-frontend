@@ -11,7 +11,6 @@ import { API_ROUTES } from "@/routes/api";
 import { toast } from "sonner";
 import { ROUTES } from "@/routes";
 import { useRouter } from "next/navigation";
-import { FieldPath } from "react-hook-form";
 import { withoutKeys } from "@/lib/utils";
 
 export const contactInfoSchema = z.object({
