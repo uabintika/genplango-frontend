@@ -16,14 +16,15 @@ import { toast } from "sonner";
 
 function getModes(mode: Mode) {
   return {
-    isCreating: mode === "Create",
-    isUpdating: mode === "Update",
+    isCreate: mode === "Create",
+    isUpdate: mode === "Update",
   };
 }
 
 export default function useGenericForm<
   TModel extends input<TSchema>,
-  TSchema extends ZodObject<{ [key: string]: z.ZodType }>
+  TSchema extends ZodObject<{ [key: string]: z.ZodType }>,
+  TReturnModel = TModel
 >({
   mode,
   schema,
@@ -35,52 +36,54 @@ export default function useGenericForm<
 }: UseGenericFormProps<TSchema>): UseGenericFormReturn<
   TModel,
   input<TSchema>,
-  output<TSchema>
+  output<TSchema>,
+  TReturnModel
 > {
-  if (mode === "Update" && typeof fetchModelUrl === "undefined") {
+  const modes = React.useMemo(() => getModes(mode), [mode]);
+
+  if (modes.isUpdate && typeof fetchModelUrl === "undefined") {
     throw new Error("'fetchModelUrl' is missing in hook properties");
   }
-
-  const modes = React.useMemo(() => getModes(mode), [mode]);
 
   type InputType = input<TSchema>;
   type OutputType = output<TSchema>;
 
   // initialize fetchers, memoize functions
-  const createFetcher = React.useCallback(
+  const create = React.useCallback(
     (url: string, body?: InputType) => api.post(url, body),
     []
   );
 
-  const updateFetcher = React.useCallback(
+  const update = React.useCallback(
     (url: string, body?: InputType) => api.put(url, body),
     []
   );
 
-  const modelFetcher = React.useCallback(
-    (url: string) => api.get<TModel>(url).then((res) => res.data),
+  const fetchModel = React.useCallback(
+    async (url: string): Promise<TReturnModel> =>
+      api.get(url).then((res) => res.data),
     []
   );
 
   // if editing fetch record
   const {
-    data: model,
-    isLoading: loadingModel,
-    error: modelError,
-  } = useSWR<TModel>(
-    modes.isUpdating ? fetchModelUrl : null,
-    modes.isUpdating ? modelFetcher : null
+    data: fetchedModel,
+    isLoading: isFetchingModel,
+    error: fetchError,
+  } = useSWR<TReturnModel>(
+    modes.isUpdate ? fetchModelUrl : null,
+    modes.isUpdate ? fetchModel : null
   );
 
   const parsedModel = React.useMemo(() => {
-    if (!model) return undefined;
+    if (!fetchedModel) return undefined;
     try {
-      return schema.parse(model) as InputType;
+      return schema.parse(fetchedModel) as InputType;
     } catch (err) {
       console.error("Failed to parse model", err);
-      return model as unknown as InputType;
+      return fetchedModel as unknown as InputType;
     }
-  }, [model, schema]);
+  }, [fetchedModel, schema]);
 
   // here should go types of schema in both Input and Output
   const form = useForm<InputType, unknown, OutputType>({
@@ -89,51 +92,60 @@ export default function useGenericForm<
     ...useFormOptions,
   });
 
-  // model create,edit,delete hook
+  // model create, edit hook
   const {
     execute,
-    isLoading: loadingMutation,
-    data: mutationData,
+    isLoading: isMutating,
+    data: mutatedModel,
     error: mutationError,
-  } = useApi<TModel, InputType>(
+  } = useApi<TReturnModel, InputType>(
     mutateUrl,
-    modes.isUpdating ? updateFetcher : createFetcher
+    modes.isUpdate ? update : create
   );
 
-  const isLoading = React.useMemo(
-    () => loadingModel || loadingMutation,
-    [loadingModel, loadingMutation]
-  );
-
-  // use React.useEffect to trigger rerender if submission was successful or not
+  const isLoading = isFetchingModel || isMutating;
 
   // handle toast for api feedback useEffect #1
   React.useEffect(() => {
+    if (!fetchError && !mutationError) return;
+
     if (onError) {
       onError();
-    } else if (modelError) {
-      toast.error("Could not fetch record. Please try again");
-    } else if (mutationError) {
-      toast.error("Could not mutate record. Please try again");
+      return;
     }
-  }, [onError, modelError, mutationError]);
+
+    if (fetchError) {
+      toast.error("Nepavyko rasti įrašo. Pabandykite dar kartą.");
+    }
+
+    if (mutationError) {
+      toast.error("Nepavyko išsaugoti įrašo. Pabandykite dar kartą.");
+    }
+  }, [fetchError, mutationError, onError]);
 
   // handle form reset logic useEffect #2
   React.useEffect(() => {
-    if (mutationData) {
-      if (modes.isCreating) {
-        form.reset();
-      }
+    if (!mutatedModel) return;
 
-      if (onSuccess) {
-        onSuccess();
-      } else {
-        toast.success(
-          `Record ${modes.isCreating ? "created" : "updated"} successfully`
-        );
-      }
+    if (modes.isCreate) {
+      form.reset();
     }
-  }, [modes, onSuccess, mutationData, form]);
 
-  return { form, model, isLoading, mutationError, submitForm: execute };
+    if (onSuccess) {
+      onSuccess();
+    } else {
+      toast.success(
+        `Įrašas ${modes.isCreate ? "sukurtas" : "atnaujintas"} sėkmingai`
+      );
+    }
+  }, [mutatedModel, modes, onSuccess, form]);
+
+  return {
+    form,
+    createdModel: mutatedModel,
+    fetchedModel,
+    isLoading,
+    mutationError,
+    submitForm: execute,
+  };
 }

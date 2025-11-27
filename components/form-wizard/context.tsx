@@ -3,21 +3,18 @@
 import * as React from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 
-export type RegisterStepType<T = unknown> = {
-  id: number | string;
-  validate: () => Promise<boolean> | boolean;
-  getData: () => Promise<T> | T;
+export type RegisterStepType = {
+  validate?: () => Promise<boolean> | boolean;
 };
 
 export type FormWizardContextType<T extends FieldValues> = {
   form: UseFormReturn<T>;
   currentStep: number;
   totalSteps: number;
+  registeredSteps: RegisterStepType[];
   goToStep: (step: number) => void;
   nextStep: () => void;
   prevStep: () => void;
-  registeredSteps: RegisterStepType<T>[];
-  registerStep: React.Dispatch<React.SetStateAction<RegisterStepType<T>[]>>;
   onComplete: (formData: T) => Promise<void> | void;
   isSubmitting?: boolean;
   setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,22 +31,4 @@ export function useFormWizard<
   );
   if (!ctx) throw new Error("useFormWizard must be used within a FormWizard");
   return ctx;
-}
-
-export function useRegisterWizardStep<T extends FieldValues>({
-  id,
-  validate,
-  getData,
-}: RegisterStepType<T>) {
-  const { registerStep } = useFormWizard<T>();
-
-  React.useEffect(() => {
-    registerStep((prev) => {
-      const exists = prev.some((s) => s.id === id);
-
-      if (exists) return prev;
-
-      return [...prev, { id, validate, getData }];
-    });
-  }, [id]);
 }

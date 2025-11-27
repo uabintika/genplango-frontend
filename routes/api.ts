@@ -8,6 +8,7 @@ export const API_ROUTES = {
   SERVICE_RECIPIENTS: {
     INDEX: "/service-recipients",
     RELATIVES: "/service-recipients/relatives",
+    CREATE: "/service-recipients",
   },
   MUNICIPALITIES: {
     INDEX: "/municipalities",

@@ -19,10 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  useFormWizard,
-  useRegisterWizardStep,
-} from "@/components/form-wizard/context";
+import { useFormWizard } from "@/components/form-wizard/context";
 import { FormFieldWrapper } from "@/components/ui/form";
 import { MasterCreateSRFormSchemaType } from "./page";
 
@@ -48,12 +45,6 @@ export default function GeneralInfoForm() {
   const relativeServiceRecipientId = form.watch(
     "generalInfo.relativeServiceRecipientId"
   );
-
-  useRegisterWizardStep({
-    id: "generalInfo",
-    validate: async () => await form.trigger(),
-    getData: () => form.getValues("generalInfo"),
-  });
 
   const {
     data: municipalities,

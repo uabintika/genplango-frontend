@@ -6,10 +6,27 @@ import { FormWizard, FormWizardStep } from "@/components/form-wizard";
 
 import z from "zod";
 import ContactInfoForm from "./contact-info-form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useGenericForm from "@/hooks/use-generic-form";
+import { API_ROUTES } from "@/routes/api";
+import { toast } from "sonner";
+import { ROUTES } from "@/routes";
+import { useRouter } from "next/navigation";
+import { FieldPath } from "react-hook-form";
+import { withoutKeys } from "@/lib/utils";
 
-export const generalInfoSchema = z
+export const contactInfoSchema = z.object({
+  firstName: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
+  lastName: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
+  kinshipRelationId: z
+    .string({ error: "Šis laukelis yra privalomas" })
+    .refine((val) => !isNaN(Number(val)), {
+      error: "Šis laukelis yra privalomas",
+    }),
+  phoneNumber: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
+  isDefault: z.boolean(),
+});
+
+export const baseFormSchema = z
   .object({
     firstName: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
     lastName: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
@@ -73,28 +90,27 @@ export const generalInfoSchema = z
         path: ["relativeKinshipRelationId"],
       });
     }
+  })
+  .safeExtend({
+    contactInfo: contactInfoSchema,
   });
 
-const createServiceRecipientSchema = z.object({
-  generalInfo: generalInfoSchema,
-});
-
-export type MasterCreateSRFormSchemaType = z.infer<
-  typeof createServiceRecipientSchema
->;
-
-type CreateFormDataType = z.infer<typeof createServiceRecipientSchema>;
+export type MasterCreateSRFormSchemaType = z.infer<typeof baseFormSchema>;
 
 export default function CreateServiceRecipientPage() {
-  const form = useForm<MasterCreateSRFormSchemaType>({
-    resolver: zodResolver(createServiceRecipientSchema),
-    defaultValues: {
-      generalInfo: {
+  const navigate = useRouter();
+  const { form, submitForm, isLoading, createdModel } = useGenericForm<
+    MasterCreateSRFormSchemaType,
+    typeof baseFormSchema
+  >({
+    mode: "Create",
+    schema: baseFormSchema,
+    mutateUrl: API_ROUTES.SERVICE_RECIPIENTS.CREATE,
+    useFormOptions: {
+      defaultValues: {
         firstName: "",
         lastName: "",
-        gender: "",
         birthDate: "",
-        municipalityId: "",
         address: "",
         houseNr: "",
         appartmentNr: "",
@@ -102,13 +118,20 @@ export default function CreateServiceRecipientPage() {
         coordLng: "",
         relativeServiceRecipientId: "",
         relativeKinshipRelationId: "",
+        contactInfo: {
+          kinshipRelationId: "",
+          firstName: "",
+          lastName: "",
+          phoneNumber: "",
+          isDefault: true,
+        },
       },
+      mode: "all",
     },
-    mode: "all",
   });
 
-  const handleSubmit = async (data: CreateFormDataType) => {
-    console.log(data);
+  const handleSubmit = async (data: MasterCreateSRFormSchemaType) => {
+    await submitForm(data);
   };
 
   return (
@@ -116,14 +139,30 @@ export default function CreateServiceRecipientPage() {
       <CardContent className="p-0">
         <FormWizard
           form={form}
-          onComplete={async (data: CreateFormDataType) => {
+          isLoading={isLoading}
+          onComplete={async (data: MasterCreateSRFormSchemaType) => {
             await handleSubmit(data);
+            toast.success("Klientas sukurtas sėkmingai!");
+            navigate.push(ROUTES.ADMIN.SERVICE_RECIPIENTS.INDEX);
           }}
         >
-          <FormWizardStep title="Pagrindinė informacija">
+          <FormWizardStep
+            title="Pagrindinė informacija"
+            onValidate={() =>
+              form.trigger(
+                withoutKeys<MasterCreateSRFormSchemaType>(
+                  baseFormSchema.def.shape,
+                  ["contactInfo"]
+                )
+              )
+            }
+          >
             <GeneralInfoForm />
           </FormWizardStep>
-          <FormWizardStep title="Kontaktinė informacija">
+          <FormWizardStep
+            title="Kontaktinė informacija"
+            onValidate={() => form.trigger("contactInfo")}
+          >
             <ContactInfoForm />
           </FormWizardStep>
         </FormWizard>

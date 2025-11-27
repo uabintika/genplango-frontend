@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
 import {
   FormWizardContext,
   FormWizardContextType,
@@ -13,12 +12,14 @@ import {
 import { Form } from "../ui/form";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
-import { ArrowLeft, ArrowRight, CirclePlus, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, CirclePlus } from "lucide-react";
 import "./style.css";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
+import Loader from "../ui/loader";
 
 type FormWizardProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
+  isLoading?: boolean;
   onComplete: (formData: T) => Promise<void> | void;
   children:
     | React.ReactElement<FormWizardStepProps>
@@ -27,27 +28,38 @@ type FormWizardProps<T extends FieldValues> = {
 
 export const FormWizard = <T extends FieldValues>({
   form,
+  isLoading = false,
   onComplete,
   children,
 }: FormWizardProps<T>) => {
   const [currentStep, setCurrentStep] = React.useState<number>(1);
-  const [registeredSteps, registerStep] = React.useState<RegisterStepType<T>[]>(
-    []
-  );
-  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(isLoading);
 
-  const progressBarElements = React.useMemo(() => {
-    return React.Children.map(children, (child, index) => (
-      <FormWizardProgressBarStep currentStep={index + 1} {...child.props} />
-    ));
-  }, [children, currentStep]);
-
-  const totalSteps = React.useMemo(
-    () => React.Children.count(children),
+  const steps = React.useMemo(
+    () =>
+      React.Children.toArray(
+        children
+      ) as React.ReactElement<FormWizardStepProps>[],
     [children]
   );
 
-  const currentChild = React.Children.toArray(children)[currentStep - 1];
+  const totalSteps = steps.length;
+
+  const registeredSteps = React.useMemo<RegisterStepType[]>(() => {
+    return steps.map((child) => ({
+      validate: child.props.onValidate,
+    }));
+  }, [steps]);
+
+  const progressBarElements = steps.map((child, index) => (
+    <FormWizardProgressBarStep
+      key={index}
+      currentStep={index + 1}
+      {...child.props}
+    />
+  ));
+
+  const currentChild = steps[currentStep - 1];
 
   const goToStep = (step: number) => {
     if (step >= 1 && step <= totalSteps) {
@@ -62,11 +74,10 @@ export const FormWizard = <T extends FieldValues>({
     form,
     currentStep,
     totalSteps,
+    registeredSteps,
     goToStep,
     nextStep,
     prevStep,
-    registeredSteps,
-    registerStep,
     onComplete,
     isSubmitting,
     setIsSubmitting,
@@ -75,7 +86,7 @@ export const FormWizard = <T extends FieldValues>({
   return (
     <FormWizardContext.Provider value={contextValue}>
       <Form {...form}>
-        <form>
+        <form onSubmit={(e) => e.preventDefault()}>
           <div className="wizard">
             {/* progress bar */}
             <FormWizardProgressBar steps={progressBarElements} />
@@ -150,6 +161,7 @@ const FormWizardProgressBar: React.FC<FormWizardProgressBarProps> = ({
 type FormWizardStepProps = {
   title?: string;
   icon?: React.JSX.Element;
+  onValidate?: () => Promise<boolean> | boolean;
   children: React.ReactNode;
 };
 
@@ -161,6 +173,7 @@ export const FormWizardStep: React.FC<FormWizardStepProps> = ({
 
 const FormWizardControls = <T extends FieldValues>() => {
   const {
+    form,
     totalSteps,
     currentStep,
     prevStep,
@@ -170,13 +183,9 @@ const FormWizardControls = <T extends FieldValues>() => {
     isSubmitting,
     setIsSubmitting,
   } = useFormWizard<T>();
-  const miscT = useTranslations("Misc");
 
   const submitButtonContent = isSubmitting ? (
-    <>
-      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-      {miscT("loading") + "..."}
-    </>
+    <Loader className="mr-2" />
   ) : (
     <>
       Sukurti <CirclePlus className="w-5 h-5 ml-1" />
@@ -185,30 +194,27 @@ const FormWizardControls = <T extends FieldValues>() => {
 
   const handleNext = async () => {
     const step = registeredSteps[currentStep - 1];
-    if (step) {
+
+    if (!step) return;
+
+    if (step.validate) {
       const isValid = await step.validate();
       if (!isValid) return;
-    } else {
-      return;
     }
+
     nextStep();
   };
 
   const handleSubmit = async () => {
     try {
       for (const step of registeredSteps) {
+        if (!step.validate) continue;
+
         const isValid = await step.validate();
         if (!isValid) return;
       }
 
-      const allData = Object.assign(
-        {},
-        ...(await Promise.all(
-          registeredSteps.map((s) => ({ [s.id]: s.getData() }))
-        ))
-      );
-
-      await onComplete(allData);
+      await onComplete(form.getValues());
     } finally {
       setIsSubmitting(false);
     }
