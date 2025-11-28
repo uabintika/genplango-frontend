@@ -111,8 +111,6 @@ export default function LoginForm() {
                     disabled={isLoading}
                     type={passwordType}
                     size="lg"
-                    className="flex-1"
-                    // data-slot="input-group-control"
                   />
                   <InputGroupAddon
                     className="cursor-pointer flex"

@@ -1,8 +1,11 @@
 import * as React from "react";
-import Input from "@/components/ui/input";
 import { useTranslations } from "next-intl";
 import { TableFilters } from "./table";
-import { InputGroup, InputGroupText } from "@/components/ui/input-group";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { SearchIcon } from "lucide-react";
 import useDebounce from "@/hooks/use-debounce";
 
@@ -31,15 +34,15 @@ export default function ServiceRecipientTableFilters({
   return (
     <div className="p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
       <InputGroup>
-        <Input
+        <InputGroupInput
           name="search"
           placeholder={t("search")}
           disabled={isLoading || isValidating}
-          onChange={onInputChange}
+          onChange={debounceSearch}
         />
-        <InputGroupText>
-          <SearchIcon className="w-5 h-5" />
-        </InputGroupText>
+        <InputGroupAddon align="inline-end">
+          <SearchIcon />
+        </InputGroupAddon>
       </InputGroup>
     </div>
   );
