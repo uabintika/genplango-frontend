@@ -3,7 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormFieldWrapper } from "@/components/ui/form";
 import Input from "@/components/ui/input";
-import { InputGroup, InputGroupButton } from "@/components/ui/input-group";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { apiURL } from "@/config";
 import { useAuth } from "@/contexts/auth-context";
 import useApi from "@/hooks/use-api";
@@ -51,6 +55,10 @@ export default function LoginForm() {
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "all",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (data: LoginSchemaType) => {
@@ -83,49 +91,44 @@ export default function LoginForm() {
           control={form.control}
           formField={{
             name: "email",
-            label: t("LoginPage.form.fields.email") + " ",
+            label: t("LoginPage.form.fields.email"),
             render: ({ field }) => (
-              <Input
-                {...field}
-                size="lg"
-                disabled={isLoading}
-                color="primary"
-              />
+              <Input {...field} size="lg" disabled={isLoading} />
             ),
           }}
         />
 
-        <div className="mt-3.5 space-y-2">
-          <div className="relative">
-            <FormFieldWrapper
-              control={form.control}
-              formField={{
-                name: "password",
-                label: t("LoginPage.form.fields.password"),
-                render: ({ field }) => (
-                  <InputGroup className="relative">
-                    <Input
-                      {...field}
-                      size="lg"
-                      disabled={isLoading}
-                      type={passwordType}
-                      className="peer"
-                    />
-                    <InputGroupButton
-                      className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 cursor-pointer"
-                      onClick={togglePasswordType}
-                    >
-                      {passwordType === "password" ? (
-                        <Eye className="w-5 h-5 text-default-400" />
-                      ) : (
-                        <EyeOff className="w-5 h-5 text-default-400" />
-                      )}
-                    </InputGroupButton>
-                  </InputGroup>
-                ),
-              }}
-            />
-          </div>
+        <div className="mt-3.5">
+          <FormFieldWrapper
+            control={form.control}
+            formField={{
+              name: "password",
+              label: t("LoginPage.form.fields.password"),
+              render: ({ field }) => (
+                <InputGroup className="h-auto">
+                  <InputGroupInput
+                    {...field}
+                    disabled={isLoading}
+                    type={passwordType}
+                    size="lg"
+                    className="flex-1"
+                    // data-slot="input-group-control"
+                  />
+                  <InputGroupAddon
+                    className="cursor-pointer flex"
+                    align="inline-end"
+                    onClick={togglePasswordType}
+                  >
+                    {passwordType === "password" ? (
+                      <Eye className="peer-focus:text-default-400" />
+                    ) : (
+                      <EyeOff className="text-default-400" />
+                    )}
+                  </InputGroupAddon>
+                </InputGroup>
+              ),
+            }}
+          />{" "}
         </div>
 
         <Button fullWidth={true} isLoading={isLoading}>
