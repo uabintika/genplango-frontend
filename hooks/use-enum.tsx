@@ -10,3 +10,24 @@ export const useGenderOptions = () => {
     value: Gender[label as keyof typeof Gender].toString(),
   }));
 };
+
+export const useServiceRecipientStatusOptions = () => {
+  return [
+    {
+      label: "Teikiama",
+      value: 1,
+    },
+    {
+      label: "Neteikiama",
+      value: 2,
+    },
+    {
+      label: "Sustabdyta",
+      value: 3,
+    },
+    {
+      label: "Laukia eilėje",
+      value: 4,
+    },
+  ];
+};

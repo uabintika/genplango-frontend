@@ -1,6 +1,9 @@
 "use client";
 
-import { useGenderOptions } from "@/hooks/use-enum";
+import {
+  useGenderOptions,
+  useServiceRecipientStatusOptions,
+} from "@/hooks/use-enum";
 import useSWR from "swr";
 import { API_ROUTES } from "@/routes/api";
 import * as React from "react";
@@ -22,6 +25,7 @@ import {
 import { useFormWizard } from "@/components/form-wizard/context";
 import { FormFieldWrapper } from "@/components/ui/form";
 import { MasterCreateSRFormSchemaType } from "./page";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export type Municipality = {
   id: number;
@@ -40,6 +44,7 @@ export type RelativeServiceRecipient = {
 
 export default function GeneralInfoForm() {
   const genders = useGenderOptions();
+  const statuses = useServiceRecipientStatusOptions();
   const { form } = useFormWizard<MasterCreateSRFormSchemaType>();
   const selectedMunicipality = form.watch("municipalityId");
   const relativeServiceRecipientId = form.watch("relativeServiceRecipientId");
@@ -106,6 +111,35 @@ export default function GeneralInfoForm() {
                 {genders.map((gender) => (
                   <SelectItem value={gender.value} key={gender.value}>
                     {gender.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ),
+        }}
+      />
+
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "status",
+          label: "Statusas",
+          render: ({ field }) => (
+            <Select
+              {...field}
+              onValueChange={field.onChange}
+              value={field.value ?? ""}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Statusas" />
+              </SelectTrigger>
+              <SelectContent>
+                {statuses.map((status) => (
+                  <SelectItem
+                    value={status.value.toString()}
+                    key={status.value}
+                  >
+                    {status.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -322,6 +356,20 @@ export default function GeneralInfoForm() {
           }}
         />
       </div>
+
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "receivesAmbulatoryServices",
+          label: "Ar gauna ambulatorines paslaugas?",
+          render: ({ field }) => (
+            <Checkbox
+              checked={!!field.value}
+              onCheckedChange={field.onChange}
+            />
+          ),
+        }}
+      />
     </div>
   );
 }

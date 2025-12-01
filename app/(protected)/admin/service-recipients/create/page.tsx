@@ -22,7 +22,7 @@ export const contactInfoSchema = z.object({
       error: "Šis laukelis yra privalomas",
     }),
   phoneNumber: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
-  isDefault: z.boolean(),
+  isDefault: z.boolean().default(false),
 });
 
 export type ContactInfoSchemaType = z.infer<typeof contactInfoSchema>;
@@ -32,6 +32,12 @@ export const baseFormSchema = z
     firstName: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
     lastName: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
     gender: z
+      .string({ error: "Šis laukelis yra privalomas" })
+      .refine((val) => !isNaN(Number(val)), {
+        error: "Šis laukelis yra privalomas",
+      }),
+
+    status: z
       .string({ error: "Šis laukelis yra privalomas" })
       .refine((val) => !isNaN(Number(val)), {
         error: "Šis laukelis yra privalomas",
@@ -79,6 +85,7 @@ export const baseFormSchema = z
         error: "Šis laukelis yra privalomas",
       })
       .optional(),
+    receivesAmbulatoryServices: z.boolean().default(false),
   })
   .superRefine((val, ctx) => {
     if (
@@ -100,9 +107,9 @@ export type MasterCreateSRFormSchemaType = z.infer<typeof baseFormSchema>;
 
 export default function CreateServiceRecipientPage() {
   const navigate = useRouter();
-  const { form, submitForm, isLoading, createdModel } = useGenericForm<
-    MasterCreateSRFormSchemaType,
-    typeof baseFormSchema
+  const { form, submitForm, isLoading } = useGenericForm<
+    typeof baseFormSchema,
+    MasterCreateSRFormSchemaType
   >({
     mode: "Create",
     schema: baseFormSchema,
@@ -125,10 +132,6 @@ export default function CreateServiceRecipientPage() {
     },
   });
 
-  const handleSubmit = async (data: MasterCreateSRFormSchemaType) => {
-    await submitForm(data);
-  };
-
   return (
     <Card className="max-w-7xl mx-auto">
       <CardContent className="p-0">
@@ -136,9 +139,15 @@ export default function CreateServiceRecipientPage() {
           form={form}
           isLoading={isLoading}
           onComplete={async (data: MasterCreateSRFormSchemaType) => {
-            await handleSubmit(data);
-            toast.success("Klientas sukurtas sėkmingai!");
-            navigate.push(ROUTES.ADMIN.SERVICE_RECIPIENTS.INDEX);
+            try {
+              const res = await submitForm(data);
+              if (res) {
+                toast.success("Klientas sukurtas sėkmingai!");
+                navigate.push(ROUTES.ADMIN.SERVICE_RECIPIENTS.INDEX);
+              }
+            } catch (error) {
+              //
+            }
           }}
         >
           <FormWizardStep

@@ -1,5 +1,4 @@
-import z, { type ZodObject } from "zod";
-import { type input, type output } from "zod/v4/core";
+import z, { ZodObject, type output } from "zod";
 import type {
   Mode,
   UseGenericFormProps,
@@ -8,7 +7,7 @@ import type {
 
 import api from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import useApi from "./use-api";
 import useSWR from "swr";
 import * as React from "react";
@@ -22,9 +21,8 @@ function getModes(mode: Mode) {
 }
 
 export default function useGenericForm<
-  TModel extends input<TSchema>,
   TSchema extends ZodObject<{ [key: string]: z.ZodType }>,
-  TReturnModel = TModel
+  TReturnModel = output<TSchema>
 >({
   mode,
   schema,
@@ -33,29 +31,23 @@ export default function useGenericForm<
   onSuccess,
   onError,
   useFormOptions,
-}: UseGenericFormProps<TSchema>): UseGenericFormReturn<
-  TModel,
-  input<TSchema>,
-  output<TSchema>,
-  TReturnModel
-> {
+}: UseGenericFormProps<TSchema>): UseGenericFormReturn<TSchema, TReturnModel> {
+  type TOutput = output<TSchema>;
+
   const modes = React.useMemo(() => getModes(mode), [mode]);
 
   if (modes.isUpdate && typeof fetchModelUrl === "undefined") {
     throw new Error("'fetchModelUrl' is missing in hook properties");
   }
 
-  type InputType = input<TSchema>;
-  type OutputType = output<TSchema>;
-
   // initialize fetchers, memoize functions
   const create = React.useCallback(
-    (url: string, body?: InputType) => api.post(url, body),
+    (url: string, body?: TOutput) => api.post(url, body),
     []
   );
 
   const update = React.useCallback(
-    (url: string, body?: InputType) => api.put(url, body),
+    (url: string, body?: TOutput) => api.put(url, body),
     []
   );
 
@@ -78,16 +70,16 @@ export default function useGenericForm<
   const parsedModel = React.useMemo(() => {
     if (!fetchedModel) return undefined;
     try {
-      return schema.parse(fetchedModel) as InputType;
+      return schema.parse(fetchedModel) as unknown as TOutput;
     } catch (err) {
       console.error("Failed to parse model", err);
-      return fetchedModel as unknown as InputType;
+      return fetchedModel as unknown as TOutput;
     }
   }, [fetchedModel, schema]);
 
   // here should go types of schema in both Input and Output
-  const form = useForm<InputType, unknown, OutputType>({
-    resolver: zodResolver(schema),
+  const form = useForm<TOutput, unknown, TOutput>({
+    resolver: zodResolver(schema) as unknown as Resolver<TOutput>,
     values: parsedModel,
     ...useFormOptions,
   });
@@ -98,7 +90,7 @@ export default function useGenericForm<
     isLoading: isMutating,
     data: mutatedModel,
     error: mutationError,
-  } = useApi<TReturnModel, InputType>(
+  } = useApi<TReturnModel, TOutput>(
     mutateUrl,
     modes.isUpdate ? update : create
   );
