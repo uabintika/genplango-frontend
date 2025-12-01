@@ -36,7 +36,15 @@ export default function ServiceRecipientTableFilters({
 
   return (
     <>
-      <div className="p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div className="flex justify-end p-5">
+        <Button asChild color="success" size="md">
+          <Link href={ROUTES.ADMIN.SERVICE_RECIPIENTS.CREATE}>
+            <span>Sukurti klientą</span>
+            <PlusCircle className="ms-1" />
+          </Link>
+        </Button>
+      </div>
+      <div className="px-5 pb-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         <InputGroup>
           <InputGroupInput
             name="search"
@@ -48,14 +56,6 @@ export default function ServiceRecipientTableFilters({
             <SearchIcon />
           </InputGroupAddon>
         </InputGroup>
-      </div>
-      <div className="px-5 pb-5">
-        <Button asChild color="success" size="md">
-          <Link href={ROUTES.ADMIN.SERVICE_RECIPIENTS.CREATE}>
-            <span>Sukurti klientą</span>
-            <PlusCircle className="ms-1" />
-          </Link>
-        </Button>
       </div>
     </>
   );

@@ -3,7 +3,6 @@
 import { FormFieldWrapper } from "@/components/ui/form";
 import Input from "@/components/ui/input";
 import * as React from "react";
-import { MasterCreateSRFormSchemaType } from "./page";
 import { useFormWizard } from "@/components/form-wizard/context";
 import { Checkbox } from "@/components/ui/checkbox";
 import useSWR from "swr";
@@ -19,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Plus, UserMinus2Icon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { MasterCreateSRFormSchemaType } from "./schemas";
 
 export default function ContactInfoForm() {
   const { form } = useFormWizard<MasterCreateSRFormSchemaType>();
@@ -46,7 +46,9 @@ export default function ContactInfoForm() {
     data: kinshipRelations,
     isLoading: loadingKinships,
     isValidating: validatingKinships,
-  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.ALLOWED);
+  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.ALLOWED, {
+    revalidateOnMount: false,
+  });
 
   return (
     <div className="flex flex-1 flex-col">

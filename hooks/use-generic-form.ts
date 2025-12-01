@@ -125,10 +125,6 @@ export default function useGenericForm<
 
     if (onSuccess) {
       onSuccess();
-    } else {
-      toast.success(
-        `Įrašas ${modes.isCreate ? "sukurtas" : "atnaujintas"} sėkmingai`
-      );
     }
   }, [mutatedModel, modes, onSuccess, form]);
 

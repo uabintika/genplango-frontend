@@ -24,8 +24,8 @@ import {
 } from "@/components/ui/select";
 import { useFormWizard } from "@/components/form-wizard/context";
 import { FormFieldWrapper } from "@/components/ui/form";
-import { MasterCreateSRFormSchemaType } from "./page";
 import { Checkbox } from "@/components/ui/checkbox";
+import { MasterCreateSRFormSchemaType } from "./schemas";
 
 export type Municipality = {
   id: number;
@@ -53,13 +53,17 @@ export default function GeneralInfoForm() {
     data: municipalities,
     isLoading: loadingMunicipalities,
     isValidating: validatingMunicipalities,
-  } = useSWR<Array<Municipality>>(API_ROUTES.MUNICIPALITIES.ALLOWED);
+  } = useSWR<Array<Municipality>>(API_ROUTES.MUNICIPALITIES.ALLOWED, {
+    revalidateOnMount: false,
+  });
 
   const {
     data: kinshipRelations,
     isLoading: loadingKinships,
     isValidating: validatingKinships,
-  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.ALLOWED);
+  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.ALLOWED, {
+    revalidateOnMount: false,
+  });
 
   const {
     data: relativeServiceRecipients,
@@ -70,7 +74,10 @@ export default function GeneralInfoForm() {
       ? `${API_ROUTES.SERVICE_RECIPIENTS.RELATIVES}?municipalityId=${parseInt(
           selectedMunicipality
         )}`
-      : API_ROUTES.SERVICE_RECIPIENTS.RELATIVES
+      : API_ROUTES.SERVICE_RECIPIENTS.RELATIVES,
+    {
+      revalidateOnMount: false,
+    }
   );
 
   return (
