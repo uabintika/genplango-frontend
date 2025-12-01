@@ -144,13 +144,12 @@ export default function CreateServiceRecipientPage() {
           <FormWizardStep
             title="Pagrindinė informacija"
             onValidate={() =>
-              // form.trigger(
-              //   withoutKeys<MasterCreateSRFormSchemaType>(
-              //     baseFormSchema.def.shape,
-              //     ["contactInfo"]
-              //   )
-              // )
-              true
+              form.trigger(
+                withoutKeys<MasterCreateSRFormSchemaType>(
+                  baseFormSchema.def.shape,
+                  ["contactInfo"]
+                )
+              )
             }
           >
             <GeneralInfoForm />
