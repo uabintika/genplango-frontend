@@ -36,16 +36,14 @@ const checkboxVariants = cva(
 interface CheckboxProps
   extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,
     VariantProps<typeof checkboxVariants> {
-  ref?: React.Ref<HTMLButtonElement>;
   color?: color;
   icon?: React.ReactNode;
 }
 
-const Checkbox = ({ className, color, icon, ref, ...rest }: CheckboxProps) => (
+const Checkbox = ({ className, color, icon, ...rest }: CheckboxProps) => (
   <CheckboxPrimitive.Root
-    ref={ref}
-    className={cn(checkboxVariants({ color }), className)}
     {...rest}
+    className={cn(checkboxVariants({ color }), className)}
   >
     <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
       {icon || <Check className="h-3 w-3" strokeWidth={3} />}

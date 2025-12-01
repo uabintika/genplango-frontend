@@ -23,17 +23,17 @@ import { useFormWizard } from "@/components/form-wizard/context";
 import { FormFieldWrapper } from "@/components/ui/form";
 import { MasterCreateSRFormSchemaType } from "./page";
 
-type Municipality = {
+export type Municipality = {
   id: number;
   name: string;
 };
 
-type KinshipRelation = {
+export type KinshipRelation = {
   id: number;
   name: string;
 };
 
-type RelativeServiceRecipient = {
+export type RelativeServiceRecipient = {
   id: number;
   fullName: string;
 };
@@ -69,7 +69,7 @@ export default function GeneralInfoForm() {
   );
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <FormFieldWrapper
         control={form.control}
         formField={{

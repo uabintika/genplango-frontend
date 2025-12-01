@@ -25,6 +25,8 @@ export const contactInfoSchema = z.object({
   isDefault: z.boolean(),
 });
 
+export type ContactInfoSchemaType = z.infer<typeof contactInfoSchema>;
+
 export const baseFormSchema = z
   .object({
     firstName: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
@@ -91,7 +93,7 @@ export const baseFormSchema = z
     }
   })
   .safeExtend({
-    contactInfo: contactInfoSchema,
+    contactInfo: z.array(contactInfoSchema).optional(),
   });
 
 export type MasterCreateSRFormSchemaType = z.infer<typeof baseFormSchema>;
@@ -117,13 +119,7 @@ export default function CreateServiceRecipientPage() {
         coordLng: "",
         relativeServiceRecipientId: "",
         relativeKinshipRelationId: "",
-        contactInfo: {
-          kinshipRelationId: "",
-          firstName: "",
-          lastName: "",
-          phoneNumber: "",
-          isDefault: true,
-        },
+        contactInfo: [],
       },
       mode: "all",
     },
@@ -148,12 +144,13 @@ export default function CreateServiceRecipientPage() {
           <FormWizardStep
             title="Pagrindinė informacija"
             onValidate={() =>
-              form.trigger(
-                withoutKeys<MasterCreateSRFormSchemaType>(
-                  baseFormSchema.def.shape,
-                  ["contactInfo"]
-                )
-              )
+              // form.trigger(
+              //   withoutKeys<MasterCreateSRFormSchemaType>(
+              //     baseFormSchema.def.shape,
+              //     ["contactInfo"]
+              //   )
+              // )
+              true
             }
           >
             <GeneralInfoForm />
