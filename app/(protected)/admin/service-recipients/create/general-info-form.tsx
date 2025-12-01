@@ -53,7 +53,7 @@ export default function GeneralInfoForm() {
     data: municipalities,
     isLoading: loadingMunicipalities,
     isValidating: validatingMunicipalities,
-  } = useSWR<Array<Municipality>>(API_ROUTES.MUNICIPALITIES.ALLOWED, {
+  } = useSWR<Array<Municipality>>(API_ROUTES.MUNICIPALITIES.FOR_SELECT, {
     revalidateOnMount: false,
   });
 
@@ -61,7 +61,7 @@ export default function GeneralInfoForm() {
     data: kinshipRelations,
     isLoading: loadingKinships,
     isValidating: validatingKinships,
-  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.ALLOWED, {
+  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.FOR_SELECT, {
     revalidateOnMount: false,
   });
 

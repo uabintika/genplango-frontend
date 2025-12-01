@@ -12,7 +12,7 @@ import {
 import { SquarePen, Trash2 } from "lucide-react";
 import { ServiceRecipient } from "./table";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
+import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import Link from "next/link";

@@ -12,6 +12,7 @@ import { ROUTES } from "@/routes";
 import { useRouter } from "next/navigation";
 import { withoutKeys } from "@/lib/utils";
 import { baseFormSchema, MasterCreateSRFormSchemaType } from "./schemas";
+import AssignablesForm from "./assignables-form";
 
 export default function CreateServiceRecipientPage() {
   const navigate = useRouter();
@@ -27,6 +28,7 @@ export default function CreateServiceRecipientPage() {
         firstName: "",
         lastName: "",
         birthDate: "",
+        status: "",
         address: "",
         houseNr: "",
         appartmentNr: "",
@@ -38,6 +40,10 @@ export default function CreateServiceRecipientPage() {
       },
       mode: "all",
     },
+    onSuccess: () => {
+      toast.success("Klientas sukurtas sėkmingai!");
+      navigate.push(ROUTES.ADMIN.SERVICE_RECIPIENTS.INDEX);
+    },
   });
 
   return (
@@ -47,15 +53,7 @@ export default function CreateServiceRecipientPage() {
           form={form}
           isLoading={isLoading}
           onComplete={async (data: MasterCreateSRFormSchemaType) => {
-            try {
-              const res = await submitForm(data);
-              if (res) {
-                toast.success("Klientas sukurtas sėkmingai!");
-                navigate.push(ROUTES.ADMIN.SERVICE_RECIPIENTS.INDEX);
-              }
-            } catch (error) {
-              //
-            }
+            await submitForm(data);
           }}
         >
           <FormWizardStep
@@ -76,6 +74,12 @@ export default function CreateServiceRecipientPage() {
             onValidate={() => form.trigger("contactInfo")}
           >
             <ContactInfoForm />
+          </FormWizardStep>
+          <FormWizardStep
+            title="Darbuotojai"
+            onValidate={() => form.trigger("")}
+          >
+            <AssignablesForm />
           </FormWizardStep>
         </FormWizard>
       </CardContent>

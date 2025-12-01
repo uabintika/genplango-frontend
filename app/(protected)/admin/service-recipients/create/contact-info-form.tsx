@@ -46,7 +46,7 @@ export default function ContactInfoForm() {
     data: kinshipRelations,
     isLoading: loadingKinships,
     isValidating: validatingKinships,
-  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.ALLOWED, {
+  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.FOR_SELECT, {
     revalidateOnMount: false,
   });
 

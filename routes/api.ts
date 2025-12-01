@@ -12,10 +12,16 @@ export const API_ROUTES = {
   },
   MUNICIPALITIES: {
     INDEX: "/municipalities",
-    ALLOWED: "/municipalities/allowed",
+    FOR_SELECT: "/municipalities/allowed",
   },
   KINSHIP_RELATIONS: {
     INDEX: "/kinship-relations",
-    ALLOWED: "/kinship-relations/allowed",
+    FOR_SELECT: "/kinship-relations/allowed",
+  },
+  USERS: {
+    FOR_SELECT: "/users/allowed",
+  },
+  WORKERS: {
+    FOR_SELECT: "/workers/allowed",
   },
 };

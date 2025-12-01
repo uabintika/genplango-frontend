@@ -14,6 +14,11 @@ export const contactInfoSchema = z.object({
 
 export type ContactInfoSchemaType = z.infer<typeof contactInfoSchema>;
 
+export const workersSchema = z.object({
+  coordinators: z.array(z.number()).optional(),
+  workers: z.array(z.number()).optional(),
+});
+
 export const baseFormSchema = z
   .object({
     firstName: z.string().min(1, { error: "Šis laukelis yra privalomas" }),
@@ -88,6 +93,7 @@ export const baseFormSchema = z
   })
   .safeExtend({
     contactInfo: z.array(contactInfoSchema).optional(),
+    workersInfo: workersSchema,
   });
 
 export type MasterCreateSRFormSchemaType = z.infer<typeof baseFormSchema>;
