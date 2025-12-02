@@ -168,6 +168,7 @@ function FormFieldWrapper<T extends FieldValues, N extends Path<T>>({
     render: renderField,
     description,
     fieldLayout = "static",
+    formControlContainerClassName,
   } = formField;
 
   return (
@@ -183,7 +184,13 @@ function FormFieldWrapper<T extends FieldValues, N extends Path<T>>({
           >
             <FormLabel>{label}</FormLabel>
           </div>
-          <div className={cn(fieldLayout === "flex" && "sm:flex-2")}>
+          <div
+            className={cn(
+              "max-w-full",
+              fieldLayout === "flex" && "sm:flex-2",
+              formControlContainerClassName
+            )}
+          >
             <FormControl>
               {renderField({ field, fieldState, formState })}
             </FormControl>

@@ -33,21 +33,22 @@ export default function AssignablesForm() {
     data: workers,
     isLoading: loadingWorkers,
     isValidating: validatingWorkers,
-  } = useSWR<AllowedWorker[]>(API_ROUTES.WORKERS.FOR_SELECT, {});
+  } = useSWR<AllowedWorker[]>(API_ROUTES.WORKERS.FOR_SELECT);
 
   const {
     data: coordinators,
     isLoading: loadingCoordinators,
     isValidating: validatingCoordinators,
-  } = useSWR<AllowedCoordinator[]>(API_ROUTES.USERS.FOR_SELECT, {});
+  } = useSWR<AllowedCoordinator[]>(API_ROUTES.USERS.FOR_SELECT);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="gap-4">
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "workersInfo.coordinators",
+          name: "assignables.coordinators",
           label: "Koordinatoriai",
+          formControlContainerClassName: "overflow-hidden",
           render: ({ field }) => (
             <MultiSelect
               values={field.value?.map(String)}
@@ -56,7 +57,6 @@ export default function AssignablesForm() {
               }
             >
               <MultiSelectTrigger
-                className="w-full"
                 disabled={loadingCoordinators || validatingCoordinators}
               >
                 <MultiSelectValue placeholder="Pasirinkite koordinatoriu..." />
@@ -79,8 +79,9 @@ export default function AssignablesForm() {
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "workersInfo.workers",
-          label: "IPD",
+          name: "assignables.workers",
+          label: "Individualios priežiūros darbuotojas",
+          formControlContainerClassName: "overflow-hidden",
           render: ({ field }) => (
             <MultiSelect
               values={field.value?.map(String)}
@@ -89,7 +90,6 @@ export default function AssignablesForm() {
               }
             >
               <MultiSelectTrigger
-                className="w-full"
                 disabled={loadingWorkers || validatingWorkers}
               >
                 <MultiSelectValue placeholder="Pasirinkite IPD..." />

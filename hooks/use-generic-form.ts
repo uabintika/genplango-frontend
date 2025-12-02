@@ -115,16 +115,17 @@ export default function useGenericForm<
     }
   }, [fetchError, mutationError, onError]);
 
+  const prevModel = React.useRef<TReturnModel | null>(null);
+
   // handle form reset logic useEffect #2
   React.useEffect(() => {
     if (!mutatedModel) return;
 
-    if (modes.isCreate) {
-      form.reset();
-    }
+    if (prevModel.current !== mutatedModel) {
+      prevModel.current = mutatedModel;
 
-    if (onSuccess) {
-      onSuccess();
+      if (modes.isCreate) form.reset();
+      onSuccess?.();
     }
   }, [mutatedModel, modes, onSuccess, form]);
 

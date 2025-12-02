@@ -36,6 +36,7 @@ export default function CreateServiceRecipientPage() {
         coordLng: "",
         relativeServiceRecipientId: "",
         relativeKinshipRelationId: "",
+        receivesAmbulatoryServices: false,
         contactInfo: [],
       },
       mode: "all",
@@ -62,7 +63,7 @@ export default function CreateServiceRecipientPage() {
               form.trigger(
                 withoutKeys<MasterCreateSRFormSchemaType>(
                   baseFormSchema.def.shape,
-                  ["contactInfo"]
+                  ["contactInfo", "assignables"]
                 )
               )
             }
@@ -77,7 +78,7 @@ export default function CreateServiceRecipientPage() {
           </FormWizardStep>
           <FormWizardStep
             title="Darbuotojai"
-            onValidate={() => form.trigger("")}
+            onValidate={() => form.trigger("assignables")}
           >
             <AssignablesForm />
           </FormWizardStep>

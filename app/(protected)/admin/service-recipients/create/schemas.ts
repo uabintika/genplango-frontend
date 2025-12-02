@@ -14,7 +14,7 @@ export const contactInfoSchema = z.object({
 
 export type ContactInfoSchemaType = z.infer<typeof contactInfoSchema>;
 
-export const workersSchema = z.object({
+export const assignablesSchema = z.object({
   coordinators: z.array(z.number()).optional(),
   workers: z.array(z.number()).optional(),
 });
@@ -93,7 +93,7 @@ export const baseFormSchema = z
   })
   .safeExtend({
     contactInfo: z.array(contactInfoSchema).optional(),
-    workersInfo: workersSchema,
+    assignables: assignablesSchema,
   });
 
 export type MasterCreateSRFormSchemaType = z.infer<typeof baseFormSchema>;

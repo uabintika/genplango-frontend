@@ -18,6 +18,7 @@ export interface FormFieldConfig<T extends FieldValues, N extends Path<T>> {
   condition?: (values: T) => boolean;
   description?: string;
   fieldLayout?: "static" | "flex";
+  formControlContainerClassName?: string;
 }
 
 export interface FormFieldWrapperProps<

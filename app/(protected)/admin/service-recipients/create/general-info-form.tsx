@@ -53,17 +53,13 @@ export default function GeneralInfoForm() {
     data: municipalities,
     isLoading: loadingMunicipalities,
     isValidating: validatingMunicipalities,
-  } = useSWR<Array<Municipality>>(API_ROUTES.MUNICIPALITIES.FOR_SELECT, {
-    revalidateOnMount: false,
-  });
+  } = useSWR<Array<Municipality>>(API_ROUTES.MUNICIPALITIES.FOR_SELECT);
 
   const {
     data: kinshipRelations,
     isLoading: loadingKinships,
     isValidating: validatingKinships,
-  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.FOR_SELECT, {
-    revalidateOnMount: false,
-  });
+  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.FOR_SELECT);
 
   const {
     data: relativeServiceRecipients,
@@ -74,10 +70,7 @@ export default function GeneralInfoForm() {
       ? `${API_ROUTES.SERVICE_RECIPIENTS.RELATIVES}?municipalityId=${parseInt(
           selectedMunicipality
         )}`
-      : API_ROUTES.SERVICE_RECIPIENTS.RELATIVES,
-    {
-      revalidateOnMount: false,
-    }
+      : API_ROUTES.SERVICE_RECIPIENTS.RELATIVES
   );
 
   return (
