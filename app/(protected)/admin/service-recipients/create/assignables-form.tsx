@@ -65,7 +65,13 @@ export default function AssignablesForm({
                   loadingCoordinators || validatingCoordinators || isLoading
                 }
               >
-                <MultiSelectValue placeholder="Pasirinkite koordinatoriu..." />
+                <MultiSelectValue
+                  placeholder={
+                    loadingCoordinators || validatingCoordinators
+                      ? "Kraunami koordinatoriai..."
+                      : "Pasirinkite koordinatoriu..."
+                  }
+                />
               </MultiSelectTrigger>
 
               <MultiSelectContent>
@@ -98,7 +104,13 @@ export default function AssignablesForm({
               <MultiSelectTrigger
                 disabled={loadingWorkers || validatingWorkers || isLoading}
               >
-                <MultiSelectValue placeholder="Pasirinkite IPD..." />
+                <MultiSelectValue
+                  placeholder={
+                    loadingCoordinators || validatingCoordinators
+                      ? "Kraunami IPD..."
+                      : "Pasirinkite IPD..."
+                  }
+                />
               </MultiSelectTrigger>
 
               <MultiSelectContent>
