@@ -67,7 +67,7 @@ export default function AssignablesForm({
               >
                 <MultiSelectValue
                   placeholder={
-                    loadingCoordinators || validatingCoordinators
+                    loadingCoordinators || validatingCoordinators || isLoading
                       ? "Kraunami koordinatoriai..."
                       : "Pasirinkite koordinatoriu..."
                   }
@@ -106,7 +106,7 @@ export default function AssignablesForm({
               >
                 <MultiSelectValue
                   placeholder={
-                    loadingCoordinators || validatingCoordinators
+                    loadingCoordinators || validatingCoordinators || isLoading
                       ? "Kraunami IPD..."
                       : "Pasirinkite IPD..."
                   }
