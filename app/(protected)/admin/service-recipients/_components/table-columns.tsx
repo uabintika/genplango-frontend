@@ -101,7 +101,7 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRec
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
-                      href={ROUTES.ADMIN.SERVICE_RECIPIENTS.EDIT(
+                      href={ROUTES.ADMIN.SERVICE_RECIPIENTS.UPDATE(
                         row.original.id
                       )}
                     >

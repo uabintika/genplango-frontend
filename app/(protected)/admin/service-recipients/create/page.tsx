@@ -11,34 +11,20 @@ import { toast } from "sonner";
 import { ROUTES } from "@/routes";
 import { useRouter } from "next/navigation";
 import { withoutKeys } from "@/lib/utils";
-import { baseFormSchema, MasterCreateSRFormSchemaType } from "./schemas";
+import { baseFormSchema, ServiceRecipientFormSchemaType } from "./schemas";
 import AssignablesForm from "./assignables-form";
 
 export default function CreateServiceRecipientPage() {
   const navigate = useRouter();
   const { form, submitForm, isLoading } = useGenericForm<
     typeof baseFormSchema,
-    MasterCreateSRFormSchemaType
+    ServiceRecipientFormSchemaType
   >({
     mode: "Create",
     schema: baseFormSchema,
     mutateUrl: API_ROUTES.SERVICE_RECIPIENTS.CREATE,
     useFormOptions: {
-      defaultValues: {
-        firstName: "",
-        lastName: "",
-        birthDate: "",
-        status: "",
-        address: "",
-        houseNr: "",
-        appartmentNr: "",
-        coordLat: "",
-        coordLng: "",
-        relativeServiceRecipientId: "",
-        relativeKinshipRelationId: "",
-        receivesAmbulatoryServices: false,
-        contactInfo: [],
-      },
+      defaultValues: baseFormSchema.parse({}),
       mode: "all",
     },
     onSuccess: () => {
@@ -53,7 +39,7 @@ export default function CreateServiceRecipientPage() {
         <FormWizard
           form={form}
           isLoading={isLoading}
-          onComplete={async (data: MasterCreateSRFormSchemaType) => {
+          onComplete={async (data: ServiceRecipientFormSchemaType) => {
             await submitForm(data);
           }}
         >
@@ -61,7 +47,7 @@ export default function CreateServiceRecipientPage() {
             title="Pagrindinė informacija"
             onValidate={() =>
               form.trigger(
-                withoutKeys<MasterCreateSRFormSchemaType>(
+                withoutKeys<ServiceRecipientFormSchemaType>(
                   baseFormSchema.def.shape,
                   ["contactInfo", "assignables"]
                 )

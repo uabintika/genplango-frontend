@@ -22,10 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useFormWizard } from "@/components/form-wizard/context";
 import { FormFieldWrapper } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MasterCreateSRFormSchemaType } from "./schemas";
+import { ServiceRecipientFormSchemaType } from "./schemas";
+import { useFormContext } from "react-hook-form";
 
 export type Municipality = {
   id: number;
@@ -42,10 +42,15 @@ export type RelativeServiceRecipient = {
   fullName: string;
 };
 
-export default function GeneralInfoForm() {
+export default function GeneralInfoForm({
+  isLoading,
+}: {
+  isLoading?: boolean;
+}) {
+  const form = useFormContext<ServiceRecipientFormSchemaType>();
+
   const genders = useGenderOptions();
   const statuses = useServiceRecipientStatusOptions();
-  const { form } = useFormWizard<MasterCreateSRFormSchemaType>();
   const selectedMunicipality = form.watch("municipalityId");
   const relativeServiceRecipientId = form.watch("relativeServiceRecipientId");
 
@@ -80,7 +85,9 @@ export default function GeneralInfoForm() {
         formField={{
           name: "firstName",
           label: "Vardas",
-          render: ({ field }) => <Input {...field} placeholder="Vardas" />,
+          render: ({ field }) => (
+            <Input {...field} placeholder="Vardas" disabled={isLoading} />
+          ),
         }}
       />
 
@@ -89,7 +96,9 @@ export default function GeneralInfoForm() {
         formField={{
           name: "lastName",
           label: "Pavardė",
-          render: ({ field }) => <Input {...field} placeholder="Pavardė" />,
+          render: ({ field }) => (
+            <Input {...field} placeholder="Pavardė" disabled={isLoading} />
+          ),
         }}
       />
 
@@ -103,8 +112,9 @@ export default function GeneralInfoForm() {
               {...field}
               onValueChange={field.onChange}
               value={field.value ?? ""}
+              disabled={isLoading}
             >
-              <SelectTrigger>
+              <SelectTrigger disabled={isLoading}>
                 <SelectValue placeholder="Lytis" />
               </SelectTrigger>
               <SelectContent>
@@ -129,8 +139,9 @@ export default function GeneralInfoForm() {
               {...field}
               onValueChange={field.onChange}
               value={field.value ?? ""}
+              disabled={isLoading}
             >
-              <SelectTrigger>
+              <SelectTrigger disabled={isLoading}>
                 <SelectValue placeholder="Statusas" />
               </SelectTrigger>
               <SelectContent>
@@ -154,11 +165,15 @@ export default function GeneralInfoForm() {
           name: "birthDate",
           label: "Gimimo data",
           render: ({ field }) => (
-            <InputGroup>
+            <InputGroup data-disabled={isLoading}>
               <InputGroupAddon>
                 <Cake className="w-5 h-5" />
               </InputGroupAddon>
-              <InputGroupInput {...field} placeholder="Gimimo data" />
+              <InputGroupInput
+                {...field}
+                placeholder="Gimimo data"
+                disabled={isLoading}
+              />
             </InputGroup>
           ),
         }}
@@ -174,11 +189,14 @@ export default function GeneralInfoForm() {
               {...field}
               onValueChange={field.onChange}
               value={field.value ?? ""}
-              disabled={loadingMunicipalities || validatingMunicipalities}
+              disabled={
+                loadingMunicipalities || validatingMunicipalities || isLoading
+              }
             >
               <SelectTrigger
                 className="w-full"
                 aria-invalid={fieldState.invalid}
+                disabled={isLoading}
               >
                 <SelectValue
                   placeholder={
@@ -208,7 +226,9 @@ export default function GeneralInfoForm() {
         formField={{
           name: "address",
           label: "Adresas",
-          render: ({ field }) => <Input {...field} placeholder="Adresas" />,
+          render: ({ field }) => (
+            <Input {...field} placeholder="Adresas" disabled={isLoading} />
+          ),
         }}
       />
 
@@ -222,7 +242,11 @@ export default function GeneralInfoForm() {
               <InputGroupAddon>
                 <MapPinHouse className="w-5 h-5" />
               </InputGroupAddon>
-              <InputGroupInput {...field} placeholder="Namo Nr." />
+              <InputGroupInput
+                {...field}
+                placeholder="Namo Nr."
+                disabled={isLoading}
+              />
             </InputGroup>
           ),
         }}
@@ -234,11 +258,15 @@ export default function GeneralInfoForm() {
           name: "appartmentNr",
           label: "Buto Nr.",
           render: ({ field }) => (
-            <InputGroup>
-              <InputGroupAddon>
+            <InputGroup aria-disabled={isLoading}>
+              <InputGroupAddon aria-disabled={isLoading}>
                 <MapPinHouse className="w-5 h-5" />
               </InputGroupAddon>
-              <InputGroupInput {...field} placeholder="Buto Nr." />
+              <InputGroupInput
+                {...field}
+                placeholder="Buto Nr."
+                disabled={isLoading}
+              />
             </InputGroup>
           ),
         }}
@@ -254,7 +282,11 @@ export default function GeneralInfoForm() {
               <InputGroupAddon>
                 <MapPin className="w-5 h-5" />
               </InputGroupAddon>
-              <InputGroupInput {...field} placeholder="Koordinatės (platuma)" />
+              <InputGroupInput
+                {...field}
+                placeholder="Koordinatės (platuma)"
+                disabled={isLoading}
+              />
             </InputGroup>
           ),
         }}
@@ -270,7 +302,11 @@ export default function GeneralInfoForm() {
               <InputGroupAddon>
                 <MapPin className="w-5 h-5" />
               </InputGroupAddon>
-              <InputGroupInput {...field} placeholder="Koordinatės (ilguma)" />
+              <InputGroupInput
+                {...field}
+                placeholder="Koordinatės (ilguma)"
+                disabled={isLoading}
+              />
             </InputGroup>
           ),
         }}
@@ -284,13 +320,16 @@ export default function GeneralInfoForm() {
           render: ({ field, fieldState }) => (
             <Select
               {...field}
-              disabled={loadingRelativeSRs || validatingRelativeSRs}
+              disabled={
+                loadingRelativeSRs || validatingRelativeSRs || isLoading
+              }
               onValueChange={field.onChange}
               value={field.value ?? ""}
             >
               <SelectTrigger
                 className="w-full"
                 aria-invalid={fieldState.invalid}
+                disabled={isLoading}
               >
                 <SelectValue
                   placeholder={
@@ -324,7 +363,8 @@ export default function GeneralInfoForm() {
                 disabled={
                   loadingKinships ||
                   validatingKinships ||
-                  !relativeServiceRecipientId
+                  !relativeServiceRecipientId ||
+                  isLoading
                 }
                 onValueChange={field.onChange}
                 value={field.value ?? ""}
@@ -332,6 +372,7 @@ export default function GeneralInfoForm() {
                 <SelectTrigger
                   className="w-full"
                   aria-invalid={fieldState.invalid}
+                  disabled={isLoading}
                 >
                   <SelectValue
                     placeholder={
@@ -366,6 +407,7 @@ export default function GeneralInfoForm() {
             <Checkbox
               checked={!!field.value}
               onCheckedChange={field.onChange}
+              disabled={isLoading}
             />
           ),
         }}

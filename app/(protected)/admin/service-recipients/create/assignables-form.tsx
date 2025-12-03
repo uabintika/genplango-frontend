@@ -1,8 +1,7 @@
 "use client";
 
-import { useFormWizard } from "@/components/form-wizard/context";
 import { FormFieldWrapper } from "@/components/ui/form";
-import { MasterCreateSRFormSchemaType } from "./schemas";
+import { ServiceRecipientFormSchemaType } from "./schemas";
 import {
   MultiSelect,
   MultiSelectContent,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/multi-select";
 import { API_ROUTES } from "@/routes/api";
 import useSWR from "swr";
+import { useFormContext } from "react-hook-form";
 
 type AllowedCoordinator = {
   id: number;
@@ -26,8 +26,12 @@ type AllowedWorker = {
   lastName: string;
 };
 
-export default function AssignablesForm() {
-  const { form } = useFormWizard<MasterCreateSRFormSchemaType>();
+export default function AssignablesForm({
+  isLoading,
+}: {
+  isLoading?: boolean;
+}) {
+  const form = useFormContext<ServiceRecipientFormSchemaType>();
 
   const {
     data: workers,
@@ -57,7 +61,9 @@ export default function AssignablesForm() {
               }
             >
               <MultiSelectTrigger
-                disabled={loadingCoordinators || validatingCoordinators}
+                disabled={
+                  loadingCoordinators || validatingCoordinators || isLoading
+                }
               >
                 <MultiSelectValue placeholder="Pasirinkite koordinatoriu..." />
               </MultiSelectTrigger>
@@ -90,7 +96,7 @@ export default function AssignablesForm() {
               }
             >
               <MultiSelectTrigger
-                disabled={loadingWorkers || validatingWorkers}
+                disabled={loadingWorkers || validatingWorkers || isLoading}
               >
                 <MultiSelectValue placeholder="Pasirinkite IPD..." />
               </MultiSelectTrigger>
