@@ -412,6 +412,92 @@ export default function GeneralInfoForm({
           ),
         }}
       />
+
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "agreementNr",
+          label: "Sutarties Nr.",
+          render: ({ field }) => (
+            <Input
+              {...field}
+              placeholder="Sutarties Nr."
+              disabled={isLoading}
+            />
+          ),
+        }}
+      />
+
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "agreementDate",
+          label: "Sutarties data",
+          render: ({ field }) => (
+            <Input
+              {...field}
+              placeholder="Sutarties data"
+              disabled={isLoading}
+            />
+          ),
+        }}
+      />
+
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "decisionNr",
+          label: "Sprendimo Nr.",
+          render: ({ field }) => (
+            <Input
+              {...field}
+              placeholder="Sprendimo Nr."
+              disabled={isLoading}
+            />
+          ),
+        }}
+      />
+
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "decisionDate",
+          label: "Sprendimo data",
+          render: ({ field }) => (
+            <Input
+              {...field}
+              placeholder="Sprendimo data"
+              disabled={isLoading}
+            />
+          ),
+        }}
+      />
+
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "methodologyStartDate",
+          label: "Metodikos darbo pradžia",
+          render: ({ field }) => (
+            <Input
+              {...field}
+              placeholder="Metodikos darbo pradžia"
+              disabled={isLoading}
+            />
+          ),
+        }}
+      />
+
+      <FormFieldWrapper
+        control={form.control}
+        formField={{
+          name: "methodologyUpdatedAt",
+          label: "Paskutinį karta pildyta metodika",
+          render: ({ field }) => (
+            <Input {...field} placeholder="Metodikos darbo pradžia" disabled />
+          ),
+        }}
+      />
     </div>
   );
 }

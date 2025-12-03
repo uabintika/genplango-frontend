@@ -87,6 +87,51 @@ export const baseFormSchema = z
     relativeKinshipRelationId: zId.optional().nullable(),
 
     receivesAmbulatoryServices: z.boolean().default(false),
+
+    methodologyStartDate: z
+      .string()
+      .nullish()
+      .transform((val) => val ?? "")
+      .refine((val) => val === "" || /^\d{4}-\d{2}-\d{2}$/.test(val), {
+        message: "Neteisingas gimimo datos formatas",
+      })
+      .default(""),
+
+    agreementNr: z
+      .string()
+      .nullish()
+      .transform((val) => val ?? "")
+      .default(""),
+
+    agreementDate: z
+      .string()
+      .nullish()
+      .transform((val) => val ?? "")
+      .refine((val) => val === "" || /^\d{4}-\d{2}-\d{2}$/.test(val), {
+        message: "Neteisingas gimimo datos formatas",
+      })
+      .default(""),
+
+    decisionNr: z
+      .string()
+      .nullish()
+      .transform((val) => val ?? "")
+      .default(""),
+
+    decisionDate: z
+      .string()
+      .nullish()
+      .transform((val) => val ?? "")
+      .refine((val) => val === "" || /^\d{4}-\d{2}-\d{2}$/.test(val), {
+        message: "Neteisingas gimimo datos formatas",
+      })
+      .default(""),
+
+    methodologyUpdatedAt: z
+      .string()
+      .nullish()
+      .transform((val) => val ?? "")
+      .default(""),
   })
   .superRefine((val, ctx) => {
     if (val.relativeServiceRecipientId && !val.relativeKinshipRelationId) {
