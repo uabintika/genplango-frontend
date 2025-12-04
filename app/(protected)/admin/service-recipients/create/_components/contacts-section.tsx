@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Plus, UserMinus2Icon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import ContactFormItem from "./contact-item";
-import { contactsSchema } from "../schemas/contacts.schema";
+import ContactFormItem from "./contact-form-item";
+import { contactSchema } from "../schemas/contacts.schema";
 import { CreateServiceRecipientFormSchemaType } from "../schemas/base.schema";
 
 export default function ContactsSection({
@@ -17,7 +17,7 @@ export default function ContactsSection({
   const contacts = form.watch("contacts") ?? [];
 
   const addContact = () => {
-    form.setValue("contacts", [...contacts, contactsSchema.parse({})]);
+    form.setValue("contacts", [...contacts, contactSchema.parse({})]);
   };
 
   const removeContact = (index: number) => {
@@ -37,12 +37,19 @@ export default function ContactsSection({
             onClick={() => removeContact(index)}
             isLoading={isLoading}
             className="mb-2"
+            type="button"
           >
             Šalinti
             <UserMinus2Icon size="18" className="ml-2" />
           </Button>
 
-          <ContactFormItem index={index} isLoading={isLoading} />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <ContactFormItem
+              form={form}
+              namePrefix={`contacts.${index}`}
+              isLoading={isLoading}
+            />
+          </div>
 
           {index < contacts.length - 1 && <Separator className="my-4" />}
         </div>
@@ -54,6 +61,7 @@ export default function ContactsSection({
         size="sm"
         isLoading={isLoading}
         className="mx-auto"
+        type="button"
       >
         Pridėti kontaktą <Plus size="18" />
       </Button>

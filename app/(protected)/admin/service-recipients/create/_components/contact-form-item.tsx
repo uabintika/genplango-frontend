@@ -10,35 +10,44 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useFormContext } from "react-hook-form";
+import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 import useSWR from "swr";
 import { API_ROUTES } from "@/routes/api";
 import { KinshipRelation } from "./general-info-section";
-import { CreateServiceRecipientFormSchemaType } from "../schemas/base.schema";
 
-export default function ContactItem({
-  index,
-  isLoading,
-}: {
-  index: number;
+type ContactFormItemProps<TForm extends FieldValues> = {
+  form: UseFormReturn<TForm>;
+  namePrefix?: string;
   isLoading?: boolean;
-}) {
-  const form = useFormContext<CreateServiceRecipientFormSchemaType>();
+};
+
+export default function ContactFormItem<TForm extends FieldValues>({
+  form,
+  namePrefix,
+  isLoading,
+}: ContactFormItemProps<TForm>) {
+  const getFieldName = (suffix: string): FieldPath<TForm> => {
+    if (namePrefix) {
+      return `${namePrefix}.${suffix}` as FieldPath<TForm>;
+    }
+    return suffix as FieldPath<TForm>;
+  };
 
   const {
     data: kinshipRelations,
     isLoading: loadingKinships,
     isValidating: validatingKinships,
-  } = useSWR<Array<KinshipRelation>>(API_ROUTES.KINSHIP_RELATIONS.FOR_SELECT, {
-    revalidateOnMount: false,
-  });
+  } = useSWR<Array<KinshipRelation>>(
+    API_ROUTES.KINSHIP_RELATIONS.FOR_SELECT,
+    {}
+  );
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+    <>
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: `contacts.${index}.firstName`,
+          name: getFieldName("firstName"),
           label: "Kontaktinio asmens vardas",
           render: ({ field }) => (
             <Input {...field} placeholder="Vardas" disabled={isLoading} />
@@ -49,7 +58,7 @@ export default function ContactItem({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: `contacts.${index}.lastName`,
+          name: getFieldName("lastName"),
           label: "Kontaktinio asmens pavardė",
           render: ({ field }) => (
             <Input {...field} placeholder="Pavardė" disabled={isLoading} />
@@ -60,7 +69,7 @@ export default function ContactItem({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: `contacts.${index}.phoneNumber`,
+          name: getFieldName("phoneNumber"),
           label: "Kontaktinio asmens tel. nr.",
           render: ({ field }) => (
             <Input {...field} placeholder="Tel. nr." disabled={isLoading} />
@@ -71,7 +80,7 @@ export default function ContactItem({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: `contacts.${index}.kinshipRelationId`,
+          name: getFieldName("kinshipRelationId"),
           label: "Ryšys su klientu",
           render: ({ field, fieldState }) => (
             <Select
@@ -100,7 +109,7 @@ export default function ContactItem({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: `contacts.${index}.isDefault`,
+          name: getFieldName("isDefault"),
           label: "Numatytas kontaktas",
           render: ({ field }) => (
             <Checkbox
@@ -111,6 +120,6 @@ export default function ContactItem({
           ),
         }}
       />
-    </div>
+    </>
   );
 }

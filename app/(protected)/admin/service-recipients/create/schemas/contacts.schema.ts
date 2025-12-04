@@ -1,7 +1,7 @@
 import { zId } from "@/lib/base-schemas";
 import z from "zod";
 
-export const contactsSchema = z.object({
+export const contactSchema = z.object({
   firstName: z
     .string()
     .min(1, { message: "Šis laukelis yra privalomas" })
@@ -17,3 +17,5 @@ export const contactsSchema = z.object({
     .default(""),
   isDefault: z.boolean().default(false),
 });
+
+export type ContactSchemaType = z.infer<typeof contactSchema>;

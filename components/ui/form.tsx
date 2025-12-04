@@ -182,7 +182,9 @@ function FormFieldWrapper<T extends FieldValues, N extends Path<T>>({
               fieldLayout === "flex" && "sm:flex sm:justify-end sm:flex-1"
             )}
           >
-            <FormLabel>{label}</FormLabel>
+            <FormLabel data-error={fieldState.error !== undefined}>
+              {label}
+            </FormLabel>
           </div>
           <div
             className={cn(
@@ -196,7 +198,7 @@ function FormFieldWrapper<T extends FieldValues, N extends Path<T>>({
             </FormControl>
 
             {description && <FormDescription>{description}</FormDescription>}
-            <FormMessage />
+            <FormMessage>{fieldState.error?.message}</FormMessage>
           </div>
         </FormItem>
       )}

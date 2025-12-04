@@ -11,6 +11,14 @@ export const API_ROUTES = {
     CREATE: "/service-recipients",
     UPDATE: (id: number) => `/service-recipients/${id}`,
     GET: (id: number) => `/service-recipients/${id}`,
+    CONTACTS: {
+      INDEX: (srID: number) => `/service-recipients/${srID}/contacts`,
+      CREATE: (srID: number) => `/service-recipients/${srID}/contacts`,
+      UPDATE: (srID: number, contactID: number) =>
+        `/service-recipients/${srID}/contacts/${contactID}`,
+      DELETE: (srID: number, contactID: number) =>
+        `/service-recipients/${srID}/contacts/${contactID}`,
+    },
   },
   MUNICIPALITIES: {
     INDEX: "/municipalities",

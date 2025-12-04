@@ -1,6 +1,6 @@
 import { zId } from "@/lib/base-schemas";
 import z from "zod";
-import { contactsSchema } from "./contacts.schema";
+import { contactSchema } from "./contacts.schema";
 import { assignablesSchema } from "./assignables.schema";
 
 export const generalInfoFormSchema = z
@@ -30,8 +30,8 @@ export const generalInfoFormSchema = z
       .string()
       .min(1, { message: "Šis laukelis yra privalomas" })
       .default(""),
-    houseNr: z.string().optional(),
-    appartmentNr: z.string().optional(),
+    houseNr: z.string().optional().default(""),
+    appartmentNr: z.string().optional().default(""),
 
     coordLat: z
       .string()
@@ -112,7 +112,7 @@ export const generalInfoFormSchema = z
 export type GeneralInfoFormSchema = z.infer<typeof generalInfoFormSchema>;
 
 export const baseFormSchema = generalInfoFormSchema.safeExtend({
-  contacts: z.array(contactsSchema).optional(),
+  contacts: z.array(contactSchema).optional(),
   assignables: assignablesSchema,
 });
 

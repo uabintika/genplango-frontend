@@ -15,8 +15,8 @@ import {
   generalInfoFormSchema,
 } from "../../create/schemas/base.schema";
 import GeneralInfoSection from "../../create/_components/general-info-section";
-import ContactsSection from "../../create/_components/contacts-section";
 import AssignablesSection from "../../create/_components/assignables-section";
+import ContactsSection from "./_components/contacts-section";
 
 export default function EditServiceRecipientPage({
   params,
@@ -67,7 +67,10 @@ export default function EditServiceRecipientPage({
                   <GeneralInfoSection isLoading={isLoading} />
                 </TabsContent>
                 <TabsContent value="contactInfo">
-                  <ContactsSection isLoading={isLoading} />
+                  <ContactsSection
+                    isLoading={isLoading}
+                    serviceRecipientId={id}
+                  />
                 </TabsContent>
                 <TabsContent value="assignables">
                   <AssignablesSection isLoading={isLoading} />
@@ -79,7 +82,7 @@ export default function EditServiceRecipientPage({
                     className="space-x-2"
                     isLoading={isLoading}
                   >
-                    <span>Išsaugoti</span> <Save size={18} />
+                    <span>Išsaugoti klientą</span> <Save size={18} />
                   </Button>
                 </div>
               </form>
