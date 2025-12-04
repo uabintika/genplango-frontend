@@ -8,7 +8,7 @@ export const ROUTES = {
     SERVICE_RECIPIENTS: {
       INDEX: "/admin/service-recipients",
       CREATE: "/admin/service-recipients/create",
-      UPDATE: (id: number) => `/admin/service-recipients/${id}`,
+      UPDATE: (id: number) => `/admin/service-recipients/edit/${id}`,
     },
   },
 };

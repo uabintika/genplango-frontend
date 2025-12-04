@@ -1,22 +1,22 @@
 "use client";
 
 import useGenericForm from "@/hooks/use-generic-form";
-import {
-  baseFormSchema,
-  ServiceRecipientFormSchemaType,
-} from "../create/schemas";
 import { API_ROUTES } from "@/routes/api";
 import * as React from "react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Contact, Hammer, Save, UserIcon } from "lucide-react";
-import GeneralInfoForm from "../create/general-info-form";
-import ContactInfoForm from "../create/contact-info-form";
-import AssignablesForm from "../create/assignables-form";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  GeneralInfoFormSchema,
+  generalInfoFormSchema,
+} from "../../create/schemas/base.schema";
+import GeneralInfoSection from "../../create/_components/general-info-section";
+import ContactsSection from "../../create/_components/contacts-section";
+import AssignablesSection from "../../create/_components/assignables-section";
 
 export default function EditServiceRecipientPage({
   params,
@@ -26,16 +26,15 @@ export default function EditServiceRecipientPage({
   const { id } = React.use(params);
 
   const { form, submitForm, isLoading } = useGenericForm<
-    typeof baseFormSchema,
-    ServiceRecipientFormSchemaType
+    typeof generalInfoFormSchema,
+    GeneralInfoFormSchema
   >({
     mode: "Update",
-    schema: baseFormSchema,
+    schema: generalInfoFormSchema,
     mutateUrl: API_ROUTES.SERVICE_RECIPIENTS.UPDATE(id),
     fetchModelUrl: API_ROUTES.SERVICE_RECIPIENTS.GET(id),
     useFormOptions: {
-      defaultValues: baseFormSchema.parse({}),
-      mode: "all",
+      defaultValues: generalInfoFormSchema.parse({}),
     },
     onSuccess: () => {
       toast.success("Klientas atnaujintas sėkmingai!");
@@ -65,13 +64,13 @@ export default function EditServiceRecipientPage({
             <Form {...form}>
               <form onSubmit={form.handleSubmit(submitForm)}>
                 <TabsContent value="generalInfo">
-                  <GeneralInfoForm isLoading={isLoading} />
+                  <GeneralInfoSection isLoading={isLoading} />
                 </TabsContent>
                 <TabsContent value="contactInfo">
-                  <ContactInfoForm isLoading={isLoading} />
+                  <ContactsSection isLoading={isLoading} />
                 </TabsContent>
                 <TabsContent value="assignables">
-                  <AssignablesForm isLoading={isLoading} />
+                  <AssignablesSection isLoading={isLoading} />
                 </TabsContent>
                 <div className="flex justify-end my-5 mr-5">
                   <Button

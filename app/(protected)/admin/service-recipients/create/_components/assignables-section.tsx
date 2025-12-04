@@ -1,7 +1,6 @@
 "use client";
 
 import { FormFieldWrapper } from "@/components/ui/form";
-import { ServiceRecipientFormSchemaType } from "./schemas";
 import {
   MultiSelect,
   MultiSelectContent,
@@ -13,6 +12,7 @@ import {
 import { API_ROUTES } from "@/routes/api";
 import useSWR from "swr";
 import { useFormContext } from "react-hook-form";
+import { CreateServiceRecipientFormSchemaType } from "../schemas/base.schema";
 
 type AllowedCoordinator = {
   id: number;
@@ -26,12 +26,12 @@ type AllowedWorker = {
   lastName: string;
 };
 
-export default function AssignablesForm({
+export default function AssignablesSection({
   isLoading,
 }: {
   isLoading?: boolean;
 }) {
-  const form = useFormContext<ServiceRecipientFormSchemaType>();
+  const form = useFormContext<CreateServiceRecipientFormSchemaType>();
 
   const {
     data: workers,

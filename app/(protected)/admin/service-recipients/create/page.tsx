@@ -1,31 +1,33 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import GeneralInfoForm from "./general-info-form";
+import GeneralInfoForm from "./_components/general-info-section";
 import { FormWizard, FormWizardStep } from "@/components/form-wizard";
 
-import ContactInfoForm from "./contact-info-form";
 import useGenericForm from "@/hooks/use-generic-form";
 import { API_ROUTES } from "@/routes/api";
 import { toast } from "sonner";
 import { ROUTES } from "@/routes";
 import { useRouter } from "next/navigation";
 import { withoutKeys } from "@/lib/utils";
-import { baseFormSchema, ServiceRecipientFormSchemaType } from "./schemas";
-import AssignablesForm from "./assignables-form";
+import AssignablesForm from "./_components/assignables-section";
+import ContactsFormSection from "./_components/contacts-section";
+import {
+  baseFormSchema,
+  CreateServiceRecipientFormSchemaType,
+} from "./schemas/base.schema";
 
 export default function CreateServiceRecipientPage() {
   const navigate = useRouter();
   const { form, submitForm, isLoading } = useGenericForm<
     typeof baseFormSchema,
-    ServiceRecipientFormSchemaType
+    CreateServiceRecipientFormSchemaType
   >({
     mode: "Create",
     schema: baseFormSchema,
     mutateUrl: API_ROUTES.SERVICE_RECIPIENTS.CREATE,
     useFormOptions: {
       defaultValues: baseFormSchema.parse({}),
-      mode: "all",
     },
     onSuccess: () => {
       toast.success("Klientas sukurtas sėkmingai!");
@@ -39,7 +41,7 @@ export default function CreateServiceRecipientPage() {
         <FormWizard
           form={form}
           isLoading={isLoading}
-          onComplete={async (data: ServiceRecipientFormSchemaType) => {
+          onComplete={async (data: CreateServiceRecipientFormSchemaType) => {
             await submitForm(data);
           }}
         >
@@ -47,26 +49,26 @@ export default function CreateServiceRecipientPage() {
             title="Pagrindinė informacija"
             onValidate={() =>
               form.trigger(
-                withoutKeys<ServiceRecipientFormSchemaType>(
+                withoutKeys<CreateServiceRecipientFormSchemaType>(
                   baseFormSchema.def.shape,
                   ["contacts", "assignables"]
                 )
               )
             }
           >
-            <GeneralInfoForm />
+            <GeneralInfoForm isLoading={isLoading} />
           </FormWizardStep>
           <FormWizardStep
             title="Kontaktinė informacija"
             onValidate={() => form.trigger("contacts")}
           >
-            <ContactInfoForm />
+            <ContactsFormSection isLoading={isLoading} />
           </FormWizardStep>
           <FormWizardStep
             title="Darbuotojai"
             onValidate={() => form.trigger("assignables")}
           >
-            <AssignablesForm />
+            <AssignablesForm isLoading={isLoading} />
           </FormWizardStep>
         </FormWizard>
       </CardContent>

@@ -1,43 +1,9 @@
+import { zId } from "@/lib/base-schemas";
 import z from "zod";
+import { contactsSchema } from "./contacts.schema";
+import { assignablesSchema } from "./assignables.schema";
 
-//
-// Helper for ID fields (accepts number or string and converts to string)
-//
-const zId = z
-  .union([z.string(), z.number()])
-  .transform((v) => v.toString())
-  .refine((v) => v.length > 0 && !isNaN(Number(v)), {
-    message: "Šis laukelis yra privalomas",
-  })
-  .default("");
-
-export const contactInfoSchema = z.object({
-  firstName: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
-  lastName: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
-  kinshipRelationId: zId.default(""),
-  phoneNumber: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
-  isDefault: z.boolean().default(false),
-});
-
-export type ContactInfoSchemaType = z.infer<typeof contactInfoSchema>;
-
-export const assignablesSchema = z
-  .object({
-    coordinators: z.array(z.number()).optional(),
-    workers: z.array(z.number()).optional(),
-  })
-  .default({});
-
-export const baseFormSchema = z
+export const generalInfoFormSchema = z
   .object({
     firstName: z
       .string()
@@ -141,10 +107,15 @@ export const baseFormSchema = z
         path: ["relativeKinshipRelationId"],
       });
     }
-  })
-  .safeExtend({
-    contacts: z.array(contactInfoSchema).optional(),
-    assignables: assignablesSchema,
   });
 
-export type ServiceRecipientFormSchemaType = z.infer<typeof baseFormSchema>;
+export type GeneralInfoFormSchema = z.infer<typeof generalInfoFormSchema>;
+
+export const baseFormSchema = generalInfoFormSchema.safeExtend({
+  contacts: z.array(contactsSchema).optional(),
+  assignables: assignablesSchema,
+});
+
+export type CreateServiceRecipientFormSchemaType = z.infer<
+  typeof baseFormSchema
+>;

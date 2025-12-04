@@ -24,8 +24,8 @@ import {
 } from "@/components/ui/select";
 import { FormFieldWrapper } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ServiceRecipientFormSchemaType } from "./schemas";
 import { useFormContext } from "react-hook-form";
+import { CreateServiceRecipientFormSchemaType } from "../schemas/base.schema";
 
 export type Municipality = {
   id: number;
@@ -42,12 +42,12 @@ export type RelativeServiceRecipient = {
   fullName: string;
 };
 
-export default function GeneralInfoForm({
+export default function GeneralInfoSection({
   isLoading,
 }: {
   isLoading?: boolean;
 }) {
-  const form = useFormContext<ServiceRecipientFormSchemaType>();
+  const form = useFormContext<CreateServiceRecipientFormSchemaType>();
 
   const genders = useGenderOptions();
   const statuses = useServiceRecipientStatusOptions();
