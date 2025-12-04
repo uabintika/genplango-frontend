@@ -6,7 +6,7 @@ import * as React from "react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { Contact, Hammer, Save, UserIcon } from "lucide-react";
+import { Contact, Hammer, Notebook, Save, UserIcon } from "lucide-react";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -17,6 +17,7 @@ import {
 import GeneralInfoSection from "../../create/_components/general-info-section";
 import AssignablesSection from "../../create/_components/assignables-section";
 import ContactsSection from "./_components/contacts-section";
+import NotesSection from "./_components/notes-section";
 
 export default function EditServiceRecipientPage({
   params,
@@ -41,23 +42,35 @@ export default function EditServiceRecipientPage({
     },
   });
 
+  const [tab, setTab] = React.useState("generalInfo");
+
+  const onTabChange = (value: string) => {
+    setTab(value);
+  };
+
+  const showSaveButton = ["generalInfo", "assignables"].includes(tab);
+
   return (
     <>
       <Card className="max-w-7xl mx-auto">
         <CardContent className="p-3">
-          <Tabs defaultValue="generalInfo">
+          <Tabs defaultValue="generalInfo" onValueChange={onTabChange}>
             <TabsList className="gap-3 bg-transparent gpg-tabslist">
               <TabsTrigger value="generalInfo">
-                <UserIcon className="size-5" />{" "}
+                <UserIcon className="size-5" />
                 <h1 className="text-xl">Pagrindinė informacija</h1>
               </TabsTrigger>
-              <TabsTrigger value="contactInfo">
+              <TabsTrigger value="contacts">
                 <Contact className="size-5" />
                 <h1 className="text-xl">Kontaktiniai asmenys</h1>
               </TabsTrigger>
               <TabsTrigger value="assignables">
                 <Hammer className="size-5" />
                 <h1 className="text-xl">Darbuotojai</h1>
+              </TabsTrigger>
+              <TabsTrigger value="notes">
+                <Notebook className="size-5" />
+                <h1 className="text-xl">Užrašai</h1>
               </TabsTrigger>
             </TabsList>
             <Separator />
@@ -66,7 +79,7 @@ export default function EditServiceRecipientPage({
                 <TabsContent value="generalInfo">
                   <GeneralInfoSection isLoading={isLoading} />
                 </TabsContent>
-                <TabsContent value="contactInfo">
+                <TabsContent value="contacts">
                   <ContactsSection
                     isLoading={isLoading}
                     serviceRecipientId={id}
@@ -75,7 +88,13 @@ export default function EditServiceRecipientPage({
                 <TabsContent value="assignables">
                   <AssignablesSection isLoading={isLoading} />
                 </TabsContent>
-                <div className="flex justify-end my-5 mr-5">
+                <TabsContent value="notes">
+                  <NotesSection isLoading={isLoading} serviceRecipientId={id} />
+                </TabsContent>
+                <div
+                  hidden={!showSaveButton}
+                  className="flex justify-end my-5 mr-5"
+                >
                   <Button
                     color="success"
                     size="md"

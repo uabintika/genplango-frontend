@@ -19,6 +19,14 @@ export const API_ROUTES = {
       DELETE: (srID: number, contactID: number) =>
         `/service-recipients/${srID}/contacts/${contactID}`,
     },
+    NOTES: {
+      INDEX: (srID: number) => `/service-recipients/${srID}/notes`,
+      CREATE: (srID: number) => `/service-recipients/${srID}/notes`,
+      UPDATE: (srID: number, noteID: number) =>
+        `/service-recipients/${srID}/notes/${noteID}`,
+      DELETE: (srID: number, noteID: number) =>
+        `/service-recipients/${srID}/notes/${noteID}`,
+    },
   },
   MUNICIPALITIES: {
     INDEX: "/municipalities",

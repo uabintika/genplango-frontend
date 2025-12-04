@@ -56,7 +56,7 @@ export default function ContactsSection({
       if (selectedContact) {
         const url = API_ROUTES.SERVICE_RECIPIENTS.CONTACTS.UPDATE(
           serviceRecipientId,
-          Number(selectedContact.id)
+          selectedContact.id
         );
 
         const res = await api.put(url, formData);
@@ -86,14 +86,11 @@ export default function ContactsSection({
     }
   };
 
-  const removeContact = async (id: string) => {
+  const removeContact = async (id: number) => {
     setIsMutating(true);
     try {
       const response = await api.delete(
-        API_ROUTES.SERVICE_RECIPIENTS.CONTACTS.DELETE(
-          serviceRecipientId,
-          Number(id)
-        )
+        API_ROUTES.SERVICE_RECIPIENTS.CONTACTS.DELETE(serviceRecipientId, id)
       );
 
       if (response.status === 200) {
