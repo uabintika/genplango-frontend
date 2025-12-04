@@ -49,7 +49,7 @@ export default function CreateServiceRecipientPage() {
               form.trigger(
                 withoutKeys<ServiceRecipientFormSchemaType>(
                   baseFormSchema.def.shape,
-                  ["contactInfo", "assignables"]
+                  ["contacts", "assignables"]
                 )
               )
             }
@@ -58,7 +58,7 @@ export default function CreateServiceRecipientPage() {
           </FormWizardStep>
           <FormWizardStep
             title="Kontaktinė informacija"
-            onValidate={() => form.trigger("contactInfo")}
+            onValidate={() => form.trigger("contacts")}
           >
             <ContactInfoForm />
           </FormWizardStep>
