@@ -10,14 +10,14 @@ import { Contact, Hammer, Notebook, Save, UserIcon } from "lucide-react";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  GeneralInfoFormSchema,
-  generalInfoFormSchema,
-} from "../../create/schemas/base.schema";
 import GeneralInfoSection from "../../create/_components/general-info-section";
 import AssignablesSection from "../../create/_components/assignables-section";
 import ContactsSection from "./_components/contacts-section";
 import NotesSection from "./_components/notes-section";
+import {
+  editServiceRecipientSchema,
+  EditServiceRecipientSchemaType,
+} from "./schemas/base.schema";
 
 export default function EditServiceRecipientPage({
   params,
@@ -27,15 +27,15 @@ export default function EditServiceRecipientPage({
   const { id } = React.use(params);
 
   const { form, submitForm, isLoading } = useGenericForm<
-    typeof generalInfoFormSchema,
-    GeneralInfoFormSchema
+    typeof editServiceRecipientSchema,
+    EditServiceRecipientSchemaType
   >({
     mode: "Update",
-    schema: generalInfoFormSchema,
+    schema: editServiceRecipientSchema,
     mutateUrl: API_ROUTES.SERVICE_RECIPIENTS.UPDATE(id),
     fetchModelUrl: API_ROUTES.SERVICE_RECIPIENTS.GET(id),
     useFormOptions: {
-      defaultValues: generalInfoFormSchema.parse({}),
+      defaultValues: editServiceRecipientSchema.parse({}),
     },
     onSuccess: () => {
       toast.success("Klientas atnaujintas sėkmingai!");
@@ -79,12 +79,6 @@ export default function EditServiceRecipientPage({
                 <TabsContent value="generalInfo">
                   <GeneralInfoSection isLoading={isLoading} />
                 </TabsContent>
-                <TabsContent value="contacts">
-                  <ContactsSection
-                    isLoading={isLoading}
-                    serviceRecipientId={id}
-                  />
-                </TabsContent>
                 <TabsContent value="assignables">
                   <AssignablesSection isLoading={isLoading} />
                 </TabsContent>
@@ -106,6 +100,9 @@ export default function EditServiceRecipientPage({
                 </div>
               </form>
             </Form>
+            <TabsContent value="contacts">
+              <ContactsSection isLoading={isLoading} serviceRecipientId={id} />
+            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>

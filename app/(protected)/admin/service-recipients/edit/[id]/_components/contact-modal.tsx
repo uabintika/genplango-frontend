@@ -17,6 +17,7 @@ import {
 import ContactFormItem from "../../../create/_components/contact-form-item";
 import { Contact } from "../schemas/contacts.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@/components/ui/form";
 
 type ContactModalProps = {
   isOpen: boolean;
@@ -57,36 +58,36 @@ export default function ContactModal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[425px]" aria-describedby={undefined}>
-        <DialogHeader>
-          <DialogTitle>
-            {initialData ? "Redaguoti kontaktą" : "Pridėti kontaktą"}
-          </DialogTitle>
-        </DialogHeader>
+    <Form {...form}>
+      <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <DialogContent
+          className="sm:max-w-[425px]"
+          aria-describedby={undefined}
+        >
+          <DialogHeader>
+            <DialogTitle>
+              {initialData ? "Redaguoti kontaktą" : "Pridėti kontaktą"}
+            </DialogTitle>
+          </DialogHeader>
 
-        <div className="grid gap-4 py-4">
-          <ContactFormItem form={form} isLoading={isLoading} />
+          <div className="grid gap-4 py-4">
+            <ContactFormItem form={form} isLoading={isLoading} />
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
-              Atšaukti
-            </Button>
-            <Button
-              type="button"
-              isLoading={isLoading}
-              onClick={async () => {
-                const res = await form.trigger();
-                if (res) {
-                  onSubmit(contactSchema.parse(form.getValues()));
-                }
-              }}
-            >
-              {initialData ? "Atnaujinti" : "Pridėti"}
-            </Button>
-          </DialogFooter>
-        </div>
-      </DialogContent>
-    </Dialog>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={onClose}>
+                Atšaukti
+              </Button>
+              <Button
+                type="submit"
+                isLoading={isLoading}
+                onClick={async () => await form.handleSubmit(onSubmit)()}
+              >
+                {initialData ? "Atnaujinti" : "Pridėti"}
+              </Button>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </Form>
   );
 }

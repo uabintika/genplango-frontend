@@ -86,7 +86,7 @@ export default function ContactFormItem<TForm extends FieldValues>({
             <Select
               disabled={loadingKinships || validatingKinships || isLoading}
               onValueChange={field.onChange}
-              value={field.value ?? ""}
+              value={String(field.value ?? "")}
             >
               <SelectTrigger
                 className="w-full"

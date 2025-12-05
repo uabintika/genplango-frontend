@@ -1,16 +1,23 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Edit, Plus, UserMinus2Icon } from "lucide-react";
+import { Edit, Plus, Star, UserMinus2Icon } from "lucide-react";
 import useSWR from "swr";
 import { API_ROUTES } from "@/routes/api";
-import { Contact } from "../schemas/contacts.schema";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Contact, ListContact } from "../schemas/contacts.schema";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import * as React from "react";
 import ContactModal from "./contact-modal";
 import api from "@/lib/axios";
 import { ContactSchemaType } from "../../../create/schemas/contacts.schema";
 import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
+import Loader from "@/components/ui/loader";
 
 type ContactsSectionProps = {
   isLoading?: boolean;
@@ -25,14 +32,13 @@ export default function ContactsSection({
     data: contacts,
     mutate,
     isLoading: loadingContacts,
-  } = useSWR<Contact[]>(
+  } = useSWR<ListContact[]>(
     API_ROUTES.SERVICE_RECIPIENTS.CONTACTS.INDEX(serviceRecipientId)
   );
 
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [selectedContact, setSelectedContact] = React.useState<Contact | null>(
-    null
-  );
+  const [selectedContact, setSelectedContact] =
+    React.useState<ListContact | null>(null);
   const [isMutating, setIsMutating] = React.useState(false);
 
   const handleOpenAdd = () => {
@@ -40,7 +46,7 @@ export default function ContactsSection({
     setIsDialogOpen(true);
   };
 
-  const handleOpenEdit = (contact: Contact) => {
+  const handleOpenEdit = (contact: ListContact) => {
     setSelectedContact(contact);
     setIsDialogOpen(true);
   };
@@ -72,7 +78,7 @@ export default function ContactsSection({
         const url =
           API_ROUTES.SERVICE_RECIPIENTS.CONTACTS.CREATE(serviceRecipientId);
 
-        const { data: newContact } = await api.post<Contact>(url, formData);
+        const { data: newContact } = await api.post<ListContact>(url, formData);
 
         mutate([...(contacts || []), newContact]);
       }
@@ -120,14 +126,37 @@ export default function ContactsSection({
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {contacts?.map((contact) => (
-          <Card key={contact.id}>
-            <CardHeader className="flex flex-row gap-2 justify-end py-5 space-y-0">
+          <Card key={contact.id} className="transition-all hover:scale-[1.02]">
+            <CardHeader className="py-5 flex flex-row justify-between">
+              <div className="text-lg font-semibold m-0">
+                {contact.firstName + " " + contact.lastName}
+              </div>
+              {contact.isDefault && (
+                <Star className="text-yellow-500 fill-yellow-500" />
+              )}
+            </CardHeader>
+            <Separator />
+            <CardContent className="py-5">
+              <div className="text-muted-foreground">
+                Telefono nr:{" "}
+                <span className="font-semibold">{contact.phoneNumber}</span>
+              </div>
+              <div className="text-muted-foreground">
+                Ryšys su klientu:{" "}
+                <span className="font-semibold">
+                  {contact.kinshipRelation.name}
+                </span>
+              </div>
+            </CardContent>
+            <Separator />
+            <CardFooter className="flex flex-row gap-2 justify-end py-5 space-y-0">
               <Button
                 size="sm"
                 color="destructive"
                 onClick={() => removeContact(contact.id)}
                 isLoading={isLoading || isMutating}
                 type="button"
+                className="active:scale-[0.95]"
               >
                 Šalinti
                 <UserMinus2Icon size="18" className="ml-2" />
@@ -138,24 +167,26 @@ export default function ContactsSection({
                 isLoading={isLoading || isMutating}
                 onClick={() => handleOpenEdit(contact)}
                 type="button"
+                className="active:scale-[0.95]"
               >
                 Redaguoti
                 <Edit size="18" className="ml-2" />
               </Button>
-            </CardHeader>
-            <CardContent>
-              <h2 className="text-lg font-semibold">
-                {contact.firstName + " " + contact.lastName}
-              </h2>
-              <div>
-                <span className="text-muted-foreground">
-                  {contact.phoneNumber}
-                </span>
-              </div>
-            </CardContent>
+            </CardFooter>
           </Card>
         ))}
       </div>
+      {(contacts?.length === 0 || loadingContacts) && (
+        <div className="p-10">
+          {loadingContacts ? (
+            <Loader className="mx-auto size-10" />
+          ) : (
+            <h1 className="text-center text-2xl font-semibold text-accent-foreground">
+              Klientas neturi kontaktų
+            </h1>
+          )}
+        </div>
+      )}
 
       <ContactModal
         isOpen={isDialogOpen}
