@@ -13,7 +13,7 @@ import { Check, SquarePen, Trash2 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { ListNote } from "../../schemas/notes.schema";
+import { Authorable, ListNote } from "../../schemas/notes.schema";
 import { NoteType } from "@/types/enum.types";
 import { useNotesOptions } from "@/hooks/use-enum";
 
@@ -56,6 +56,14 @@ export default function useNotesColumns({
         ),
         enableSorting: false,
         enableHiding: false,
+      },
+      {
+        accessorKey: "authorable",
+        header: "Autorius",
+        cell: ({ getValue }) => {
+          const author = getValue<Authorable>();
+          return <p>{author.firstName + " " + author.lastName}</p>;
+        },
       },
       {
         accessorKey: "type",
