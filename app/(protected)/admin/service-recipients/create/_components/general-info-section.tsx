@@ -49,8 +49,8 @@ export default function GeneralInfoSection({
 }) {
   const form = useFormContext<CreateServiceRecipientFormSchemaType>();
 
-  const genders = useGenderOptions();
-  const statuses = useServiceRecipientStatusOptions();
+  const { array: genders } = useGenderOptions();
+  const { array: statuses } = useServiceRecipientStatusOptions();
   const selectedMunicipality = form.watch("municipalityId");
   const relativeServiceRecipientId = form.watch("relativeServiceRecipientId");
 
@@ -119,7 +119,10 @@ export default function GeneralInfoSection({
               </SelectTrigger>
               <SelectContent>
                 {genders.map((gender) => (
-                  <SelectItem value={gender.value} key={gender.value}>
+                  <SelectItem
+                    value={gender.value.toString()}
+                    key={gender.value.toString()}
+                  >
                     {gender.label}
                   </SelectItem>
                 ))}
@@ -148,7 +151,7 @@ export default function GeneralInfoSection({
                 {statuses.map((status) => (
                   <SelectItem
                     value={status.value.toString()}
-                    key={status.value}
+                    key={status.value.toString()}
                   >
                     {status.label}
                   </SelectItem>

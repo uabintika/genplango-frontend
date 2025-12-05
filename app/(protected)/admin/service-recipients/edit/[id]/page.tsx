@@ -12,8 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import GeneralInfoSection from "../../create/_components/general-info-section";
 import AssignablesSection from "../../create/_components/assignables-section";
-import ContactsSection from "./_components/contacts-section";
-import NotesSection from "./_components/notes-section";
+import ContactsSection from "./_components/contacts/contacts-section";
+import NotesSection from "./_components/notes/notes-section";
 import {
   editServiceRecipientSchema,
   EditServiceRecipientSchemaType,
@@ -82,9 +82,6 @@ export default function EditServiceRecipientPage({
                 <TabsContent value="assignables">
                   <AssignablesSection isLoading={isLoading} />
                 </TabsContent>
-                <TabsContent value="notes">
-                  <NotesSection isLoading={isLoading} serviceRecipientId={id} />
-                </TabsContent>
                 <div
                   hidden={!showSaveButton}
                   className="flex justify-end my-5 mr-5"
@@ -102,6 +99,9 @@ export default function EditServiceRecipientPage({
             </Form>
             <TabsContent value="contacts">
               <ContactsSection isLoading={isLoading} serviceRecipientId={id} />
+            </TabsContent>
+            <TabsContent value="notes">
+              <NotesSection isLoading={isLoading} serviceRecipientId={id} />
             </TabsContent>
           </Tabs>
         </CardContent>

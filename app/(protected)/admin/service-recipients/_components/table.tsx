@@ -9,7 +9,7 @@ import { API_ROUTES } from "@/routes/api";
 import useServiceRecipientsTableColumns from "./table-columns";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import ServiceRecipientTableFilters from "./table-filter";
-import { Gender, ServiceRecipientStatus } from "@/types/global-types";
+import { Gender, ServiceRecipientStatus } from "@/types/enum.types";
 import { DataTable } from "@/components/ui/data-table";
 
 export type ServiceRecipient = {

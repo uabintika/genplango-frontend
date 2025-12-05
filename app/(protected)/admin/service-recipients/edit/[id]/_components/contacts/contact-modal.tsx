@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import {
   contactSchema,
   ContactSchemaType,
-} from "../../../create/schemas/contacts.schema";
+} from "../../../../create/schemas/contacts.schema";
 import {
   Dialog,
   DialogContent,
@@ -14,8 +14,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import ContactFormItem from "../../../create/_components/contact-form-item";
-import { Contact } from "../schemas/contacts.schema";
+import ContactFormItem from "../../../../create/_components/contact-form-item";
+import { Contact } from "../../schemas/contacts.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 

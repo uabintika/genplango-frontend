@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Edit, Plus, Star, UserMinus2Icon } from "lucide-react";
 import useSWR from "swr";
 import { API_ROUTES } from "@/routes/api";
-import { Contact, ListContact } from "../schemas/contacts.schema";
+import { ListContact } from "../../schemas/contacts.schema";
 import {
   Card,
   CardContent,
@@ -14,10 +14,11 @@ import {
 import * as React from "react";
 import ContactModal from "./contact-modal";
 import api from "@/lib/axios";
-import { ContactSchemaType } from "../../../create/schemas/contacts.schema";
+import { ContactSchemaType } from "../../../../create/schemas/contacts.schema";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import Loader from "@/components/ui/loader";
+import { useModalController } from "@/hooks/use-modal-controller";
 
 type ContactsSectionProps = {
   isLoading?: boolean;
@@ -36,25 +37,15 @@ export default function ContactsSection({
     API_ROUTES.SERVICE_RECIPIENTS.CONTACTS.INDEX(serviceRecipientId)
   );
 
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [selectedContact, setSelectedContact] =
-    React.useState<ListContact | null>(null);
-  const [isMutating, setIsMutating] = React.useState(false);
-
-  const handleOpenAdd = () => {
-    setSelectedContact(null);
-    setIsDialogOpen(true);
-  };
-
-  const handleOpenEdit = (contact: ListContact) => {
-    setSelectedContact(contact);
-    setIsDialogOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsDialogOpen(false);
-    setSelectedContact(null);
-  };
+  const {
+    isDialogOpen,
+    selectedItem: selectedContact,
+    isMutating,
+    setIsMutating,
+    handleOpenAdd,
+    handleOpenEdit,
+    handleModalClose,
+  } = useModalController<ListContact>();
 
   const handleSaveContact = async (formData: ContactSchemaType) => {
     setIsMutating(true);

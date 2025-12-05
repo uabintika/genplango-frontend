@@ -10,3 +10,9 @@ export enum ServiceRecipientStatus {
   Suspended = 3,
   Pending = 4,
 }
+
+export enum NoteType {
+  AmbulatoryCare = "ambulatory_care",
+  Municipality = "municipality",
+  OTHER = "other",
+}

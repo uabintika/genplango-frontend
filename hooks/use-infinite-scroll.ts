@@ -12,7 +12,7 @@ import { TableFilters } from "@/app/(protected)/admin/service-recipients/_compon
 export default function useInfiniteScroll<T>(
   apiRoute: string,
   tableContainerRef: React.RefObject<HTMLTableElement | null>,
-  fetcher: (url: string) => Promise<any>,
+  fetcher: (url: string) => Promise<InfinityScrollData<T>>,
   columns: ColumnDef<T>[],
   filters: TableFilters | null = null,
   swrConfig: SWRInfiniteConfiguration = {},
@@ -37,12 +37,11 @@ export default function useInfiniteScroll<T>(
     [filters]
   );
 
-  const { data, isLoading, isValidating, size, setSize } = useSWRInfinite<
-    InfinityScrollData<T>
-  >(getKey, fetcher, {
-    revalidateFirstPage: false,
-    ...swrConfig,
-  });
+  const { data, isLoading, isValidating, size, setSize, mutate } =
+    useSWRInfinite<InfinityScrollData<T>>(getKey, fetcher, {
+      revalidateFirstPage: false,
+      ...swrConfig,
+    });
 
   const flatData = React.useMemo(
     () => data?.flatMap((page) => page.data) ?? [],
@@ -96,5 +95,5 @@ export default function useInfiniteScroll<T>(
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLoading, isValidating, isReachingEnd, isEmpty, tableContainerRef]);
 
-  return { table, isLoading, isValidating, isReachingEnd };
+  return { table, isLoading, isValidating, isReachingEnd, mutate };
 }
