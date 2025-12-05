@@ -16,3 +16,8 @@ export enum NoteType {
   Municipality = "municipality",
   OTHER = "other",
 }
+
+export enum WorkerStatus {
+  Working = 1,
+  NotWorking = 2,
+}

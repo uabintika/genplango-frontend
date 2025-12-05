@@ -22,6 +22,11 @@ declare global {
     links: ListLinks;
     meta: ListMeta;
   };
+
+  type Municipality = {
+    id: number;
+    name: string;
+  };
 }
 
 export {};

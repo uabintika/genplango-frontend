@@ -27,11 +27,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useFormContext } from "react-hook-form";
 import { CreateServiceRecipientFormSchemaType } from "../schemas/base.schema";
 
-export type Municipality = {
-  id: number;
-  name: string;
-};
-
 export type KinshipRelation = {
   id: number;
   name: string;
@@ -258,7 +253,7 @@ export default function GeneralInfoSection({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "appartmentNr",
+          name: "apartmentNr",
           label: "Buto Nr.",
           render: ({ field }) => (
             <InputGroup aria-disabled={isLoading}>

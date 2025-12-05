@@ -11,6 +11,7 @@ export const API_ROUTES = {
     CREATE: "/service-recipients",
     UPDATE: (id: number) => `/service-recipients/${id}`,
     GET: (id: number) => `/service-recipients/${id}`,
+    FOR_SELECT: "/service-recipients/allowed",
     CONTACTS: {
       INDEX: (srID: number) => `/service-recipients/${srID}/contacts`,
       CREATE: (srID: number) => `/service-recipients/${srID}/contacts`,
@@ -40,6 +41,10 @@ export const API_ROUTES = {
     FOR_SELECT: "/users/allowed",
   },
   WORKERS: {
+    INDEX: "/workers",
+    CREATE: "/workers",
+    UPDATE: (id: number) => `/workers/${id}`,
+    GET: (id: number) => `/workers/${id}`,
     FOR_SELECT: "/workers/allowed",
   },
 };

@@ -12,7 +12,7 @@ import {
 import { API_ROUTES } from "@/routes/api";
 import useSWR from "swr";
 import { useFormContext } from "react-hook-form";
-import { CreateServiceRecipientFormSchemaType } from "../schemas/base.schema";
+import { CreateWorkerBaseSchemaType } from "../schemas/base.schema";
 
 type AllowedCoordinator = {
   id: number;
@@ -20,7 +20,7 @@ type AllowedCoordinator = {
   lastName: string;
 };
 
-type AllowedWorker = {
+type AllowedServiceRecipient = {
   id: number;
   firstName: string;
   lastName: string;
@@ -31,13 +31,15 @@ export default function AssignablesSection({
 }: {
   isLoading?: boolean;
 }) {
-  const form = useFormContext<CreateServiceRecipientFormSchemaType>();
+  const form = useFormContext<CreateWorkerBaseSchemaType>();
 
   const {
-    data: workers,
-    isLoading: loadingWorkers,
-    isValidating: validatingWorkers,
-  } = useSWR<AllowedWorker[]>(API_ROUTES.WORKERS.FOR_SELECT);
+    data: serviceRecipients,
+    isLoading: loadingServiceRecipients,
+    isValidating: validatingServiceRecipients,
+  } = useSWR<AllowedServiceRecipient[]>(
+    API_ROUTES.SERVICE_RECIPIENTS.FOR_SELECT
+  );
 
   const {
     data: coordinators,
@@ -91,8 +93,8 @@ export default function AssignablesSection({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "assignables.workers",
-          label: "Individualios priežiūros darbuotojai",
+          name: "assignables.serviceRecipients",
+          label: "Klientai",
           formControlContainerClassName: "overflow-hidden",
           render: ({ field }) => (
             <MultiSelect
@@ -102,22 +104,26 @@ export default function AssignablesSection({
               }
             >
               <MultiSelectTrigger
-                disabled={loadingWorkers || validatingWorkers || isLoading}
+                disabled={
+                  loadingServiceRecipients ||
+                  validatingServiceRecipients ||
+                  isLoading
+                }
               >
                 <MultiSelectValue
                   placeholder={
                     loadingCoordinators || validatingCoordinators || isLoading
-                      ? "Kraunami IPD..."
-                      : "Pasirinkite IPD..."
+                      ? "Kraunami klientai..."
+                      : "Pasirinkite klientą..."
                   }
                 />
               </MultiSelectTrigger>
 
               <MultiSelectContent>
                 <MultiSelectGroup>
-                  {workers?.map((c) => (
-                    <MultiSelectItem value={c.id.toString()} key={c.id}>
-                      {c.firstName + " " + c.lastName}
+                  {serviceRecipients?.map((sr) => (
+                    <MultiSelectItem value={sr.id.toString()} key={sr.id}>
+                      {sr.firstName + " " + sr.lastName}
                     </MultiSelectItem>
                   ))}
                 </MultiSelectGroup>

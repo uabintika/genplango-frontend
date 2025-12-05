@@ -10,5 +10,10 @@ export const ROUTES = {
       CREATE: "/admin/service-recipients/create",
       UPDATE: (id: number) => `/admin/service-recipients/edit/${id}`,
     },
+    WORKERS: {
+      INDEX: "/admin/workers",
+      CREATE: "/admin/workers/create",
+      UPDATE: (id: number) => `/admin/workers/edit/${id}`,
+    },
   },
 };

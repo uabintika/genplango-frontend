@@ -10,21 +10,20 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { SquarePen, Trash2 } from "lucide-react";
-import { ServiceRecipient } from "./table";
+import { Worker } from "./table";
 import { ColumnDef } from "@tanstack/react-table";
 import Badge from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { ROUTES } from "@/routes";
-import { ServiceRecipientStatus } from "@/types/enum.types";
+import { useGenderOptions, useWorkerStatusOptions } from "@/hooks/use-enum";
+import { WorkerStatus } from "@/types/enum.types";
 
-export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRecipient>[] {
-  const t = useTranslations("ServiceRecipients.Table.Header");
-  const actionsT = useTranslations("TableActions");
-  const enumsT = useTranslations("Enums");
+export default function useWorkersTableColumns(): ColumnDef<Worker>[] {
+  const { map: genders } = useGenderOptions();
+  const { map: workerStatuses } = useWorkerStatusOptions();
 
-  return React.useMemo<ColumnDef<ServiceRecipient>[]>(
+  return React.useMemo<ColumnDef<Worker>[]>(
     () => [
       {
         id: "select",
@@ -53,48 +52,49 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRec
         enableHiding: false,
       },
       {
-        header: t("fullName"),
+        header: "Pilnas vardas",
         cell: ({ row }) => (
           <span>{`${row.original.firstName} ${row.original.lastName}`}</span>
         ),
       },
       {
-        accessorKey: "birthDate",
-        header: t("birthDate"),
-        cell: ({ row }) => {
-          return <span>{row.getValue("birthDate")}</span>;
+        accessorKey: "gender",
+        header: "Lytis",
+        cell: ({ getValue }) => {
+          return <span>{genders[getValue<number>()]}</span>;
         },
       },
       {
-        accessorKey: "gender",
-        header: t("gender"),
+        header: "Kontaktai",
         cell: ({ row }) => {
-          return <span>{enumsT(`Gender.${row.getValue("gender")}`)}</span>;
+          return (
+            <div className="flex flex-col">
+              <span className="font-semibold">{row.original.email}</span>
+              <span className="font-semibold">{row.original.phoneNumber}</span>
+            </div>
+          );
         },
       },
       {
         accessorKey: "status",
-        header: t("status"),
+        header: "Statusas",
         cell: ({ row }) => {
           const statusColors: Record<number, string> = {
-            [ServiceRecipientStatus.Active]: "bg-success/20 text-success",
-            [ServiceRecipientStatus.Inactive]:
-              "bg-destructive/20 text-destructive",
-            [ServiceRecipientStatus.Suspended]: "bg-default/20 text-default",
-            [ServiceRecipientStatus.Pending]: "bg-warning/20 text-warning",
+            [WorkerStatus.Working]: "bg-success/20 text-success",
+            [WorkerStatus.NotWorking]: "bg-destructive/20 text-destructive",
           };
           const status = row.getValue<number>("status");
-          const statusStyles = statusColors[status] || "default";
+          const statusStyles = statusColors[status];
           return (
             <Badge className={cn("rounded-full px-5", statusStyles)}>
-              {enumsT(`ServiceRecipientStatus.${status}`)}
+              {workerStatuses[status]}
             </Badge>
           );
         },
       },
       {
         id: "actions",
-        header: t("actions"),
+        header: "Veiksmai",
         enableHiding: false,
         cell: ({ row }) => {
           return (
@@ -102,11 +102,7 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRec
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link
-                      href={ROUTES.ADMIN.SERVICE_RECIPIENTS.UPDATE(
-                        row.original.id
-                      )}
-                    >
+                    <Link href={ROUTES.ADMIN.WORKERS.UPDATE(row.original.id)}>
                       <Button
                         variant="outline"
                         size="icon"
@@ -118,7 +114,7 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRec
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="top">
-                    <p>{actionsT("edit")}</p>
+                    <p>Redaguoti</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -138,7 +134,7 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<ServiceRec
                     side="top"
                     className="bg-destructive text-destructive-foreground"
                   >
-                    <p>{actionsT("delete")}</p>
+                    <p>Šalinti</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

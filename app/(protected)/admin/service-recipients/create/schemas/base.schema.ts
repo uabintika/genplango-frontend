@@ -30,8 +30,8 @@ export const generalInfoFormSchema = z
       .string()
       .min(1, { message: "Šis laukelis yra privalomas" })
       .default(""),
-    houseNr: z.string().optional().default(""),
-    appartmentNr: z.string().optional().default(""),
+    houseNr: z.string().default(""),
+    apartmentNr: z.string().optional().default(""),
 
     coordLat: z
       .string()

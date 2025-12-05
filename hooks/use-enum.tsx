@@ -1,4 +1,9 @@
-import { Gender, NoteType, ServiceRecipientStatus } from "@/types/enum.types";
+import {
+  Gender,
+  NoteType,
+  ServiceRecipientStatus,
+  WorkerStatus,
+} from "@/types/enum.types";
 
 interface SelectOption<T> {
   value: T;
@@ -73,6 +78,17 @@ export const useNotesOptions = () => {
         return "Iš Savivaldybės";
       case NoteType.OTHER:
         return "Kita";
+    }
+  });
+};
+
+export const useWorkerStatusOptions = () => {
+  return enumToArrayAndMap<WorkerStatus>(WorkerStatus, (key, value) => {
+    switch (value) {
+      case WorkerStatus.Working:
+        return "Dirba";
+      case WorkerStatus.NotWorking:
+        return "Nedirba";
     }
   });
 };
