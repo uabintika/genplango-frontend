@@ -1,6 +1,7 @@
 import { zId } from "@/lib/base-schemas";
 import z from "zod";
 import { assignablesSchema } from "./assignables.schema";
+import { loginInfoSchema } from "./login.schema";
 
 export const generalInfoSchema = z.object({
   firstName: z
@@ -15,7 +16,10 @@ export const generalInfoSchema = z.object({
   gender: zId,
   status: zId,
 
-  municipalities: z.array(zId).default([]),
+  municipalities: z
+    .array(zId)
+    .nonempty("Šis laukelis yra privalomas")
+    .default([]),
 
   workStartDate: z
     .string()
@@ -29,7 +33,10 @@ export const generalInfoSchema = z.object({
     .string()
     .min(1, { message: "Šis laukelis yra privalomas" })
     .default(""),
-  houseNr: z.string().default(""),
+  houseNr: z
+    .string()
+    .min(1, { message: "Šis laukelis yra privalomas" })
+    .default(""),
   apartmentNr: z.string().optional().default(""),
 
   phoneNumber: z
@@ -58,6 +65,7 @@ export type WorkerGeneralInfoSchemaType = z.infer<typeof generalInfoSchema>;
 
 export const baseSchema = generalInfoSchema.safeExtend({
   assignables: assignablesSchema,
+  loginData: loginInfoSchema,
 });
 
 export type CreateWorkerBaseSchemaType = z.infer<typeof baseSchema>;

@@ -11,7 +11,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { MapPin, MapPinHouse } from "lucide-react";
+import { HouseIcon, MapPin, MapPinHouse, Phone } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -148,7 +148,13 @@ export default function GeneralInfoSection({
                   loadingMunicipalities || validatingMunicipalities || isLoading
                 }
               >
-                <MultiSelectValue placeholder="Pasirinkite savivaldybę" />
+                <MultiSelectValue
+                  placeholder={
+                    loadingMunicipalities || validatingMunicipalities
+                      ? "Kraunamos savivaldybės..."
+                      : "Pasirinkite savivaldybę"
+                  }
+                />
               </MultiSelectTrigger>
 
               <MultiSelectContent>
@@ -171,7 +177,16 @@ export default function GeneralInfoSection({
           name: "phoneNumber",
           label: "Telefono Nr.",
           render: ({ field }) => (
-            <Input {...field} placeholder="Telefono Nr." disabled={isLoading} />
+            <InputGroup>
+              <InputGroupAddon>
+                <Phone className="w-5 h-5" />
+              </InputGroupAddon>
+              <InputGroupInput
+                {...field}
+                placeholder="Telefono Nr."
+                disabled={isLoading}
+              />
+            </InputGroup>
           ),
         }}
       />
@@ -182,7 +197,16 @@ export default function GeneralInfoSection({
           name: "address",
           label: "Adresas",
           render: ({ field }) => (
-            <Input {...field} placeholder="Adresas" disabled={isLoading} />
+            <InputGroup>
+              <InputGroupAddon>
+                <HouseIcon className="w-5 h-5" />
+              </InputGroupAddon>
+              <InputGroupInput
+                {...field}
+                placeholder="Adresas"
+                disabled={isLoading}
+              />
+            </InputGroup>
           ),
         }}
       />

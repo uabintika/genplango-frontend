@@ -112,6 +112,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
 
   return (
     <Slot
+      {...props}
       data-slot="form-control"
       id={formItemId}
       aria-describedby={
@@ -120,7 +121,6 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
           : `${formDescriptionId} ${formMessageId}`
       }
       aria-invalid={!!error}
-      {...props}
     />
   );
 }
@@ -182,9 +182,7 @@ function FormFieldWrapper<T extends FieldValues, N extends Path<T>>({
               fieldLayout === "flex" && "sm:flex sm:justify-end sm:flex-1"
             )}
           >
-            <FormLabel data-error={fieldState.error !== undefined}>
-              {label}
-            </FormLabel>
+            <FormLabel data-error={!!fieldState.error}>{label}</FormLabel>
           </div>
           <div
             className={cn(

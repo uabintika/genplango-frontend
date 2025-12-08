@@ -13,6 +13,7 @@ import { API_ROUTES } from "@/routes/api";
 import useSWR from "swr";
 import { useFormContext } from "react-hook-form";
 import { CreateWorkerBaseSchemaType } from "../schemas/base.schema";
+import { apiURL, baseURL } from "@/config";
 
 type AllowedCoordinator = {
   id: number;
@@ -22,8 +23,15 @@ type AllowedCoordinator = {
 
 type AllowedServiceRecipient = {
   id: number;
-  firstName: string;
-  lastName: string;
+  fullName: string;
+};
+
+const buildUrl = (url: string, municipalities: string[]) => {
+  const urlBuilder = new URL(baseURL + url);
+  municipalities.forEach((val) => {
+    urlBuilder.searchParams.append("municipalities[]", val);
+  });
+  return urlBuilder.toString();
 };
 
 export default function AssignablesSection({
@@ -32,20 +40,23 @@ export default function AssignablesSection({
   isLoading?: boolean;
 }) {
   const form = useFormContext<CreateWorkerBaseSchemaType>();
+  const municipalities = form.watch("municipalities");
 
   const {
     data: serviceRecipients,
     isLoading: loadingServiceRecipients,
     isValidating: validatingServiceRecipients,
   } = useSWR<AllowedServiceRecipient[]>(
-    API_ROUTES.SERVICE_RECIPIENTS.FOR_SELECT
+    buildUrl(API_ROUTES.SERVICE_RECIPIENTS.FOR_SELECT, municipalities)
   );
 
   const {
     data: coordinators,
     isLoading: loadingCoordinators,
     isValidating: validatingCoordinators,
-  } = useSWR<AllowedCoordinator[]>(API_ROUTES.USERS.FOR_SELECT);
+  } = useSWR<AllowedCoordinator[]>(
+    buildUrl(API_ROUTES.USERS.FOR_SELECT, municipalities)
+  );
 
   return (
     <div className="gap-4">
@@ -123,7 +134,7 @@ export default function AssignablesSection({
                 <MultiSelectGroup>
                   {serviceRecipients?.map((sr) => (
                     <MultiSelectItem value={sr.id.toString()} key={sr.id}>
-                      {sr.firstName + " " + sr.lastName}
+                      {sr.fullName}
                     </MultiSelectItem>
                   ))}
                 </MultiSelectGroup>

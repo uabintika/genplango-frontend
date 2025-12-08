@@ -14,26 +14,22 @@ export function enumToArrayAndMap<T>(
   enumType: { [key: string]: string | number },
   customLabels?: (key: string, value: T) => string
 ) {
-  const isNumericEnum = typeof Object.values(enumType)[0] === "number";
-
-  const keys = Object.keys(enumType);
-
-  const enumKeys = isNumericEnum
-    ? keys.filter((key) => isNaN(Number(key)))
-    : keys;
+  const values = Object.values(enumType);
+  const numOfItems = values.length / 2;
 
   const array: SelectOption<T>[] = [];
   const map: Record<string | number, string> = {};
 
-  enumKeys.forEach((key) => {
-    const value = enumType[key] as T;
+  for (let i = 0; i < numOfItems; i++) {
+    const key = values[i] as string;
+    const value = values[numOfItems + i] as T;
     const label = customLabels
       ? customLabels(key, value)
       : key.replace(/([A-Z])/g, " $1").trim();
 
     array.push({ value, label });
     map[value as string | number] = label;
-  });
+  }
 
   return { array, map };
 }

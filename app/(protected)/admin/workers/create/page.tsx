@@ -12,6 +12,7 @@ import { withoutKeys } from "@/lib/utils";
 import { baseSchema, CreateWorkerBaseSchemaType } from "./schemas/base.schema";
 import GeneralInfoSection from "./_components/general-info-section";
 import AssignablesSection from "./_components/assignables-section";
+import LoginInfoSection from "./_components/login-info-section";
 
 export default function CreateWorkerPage() {
   const navigate = useRouter();
@@ -47,11 +48,18 @@ export default function CreateWorkerPage() {
               form.trigger(
                 withoutKeys<CreateWorkerBaseSchemaType>(baseSchema.def.shape, [
                   "assignables",
+                  "loginData",
                 ])
               )
             }
           >
             <GeneralInfoSection isLoading={isLoading} />
+          </FormWizardStep>
+          <FormWizardStep
+            title="Prisijungimo informacija"
+            onValidate={() => form.trigger("loginData")}
+          >
+            <LoginInfoSection isLoading={isLoading} />
           </FormWizardStep>
           <FormWizardStep
             title="Priskyrimai"
