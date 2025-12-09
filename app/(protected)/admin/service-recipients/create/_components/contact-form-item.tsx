@@ -10,10 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 import useSWR from "swr";
 import { API_ROUTES } from "@/routes/api";
 import { KinshipRelation } from "./general-info-section";
+import { useFieldPrefix } from "@/hooks/use-field-prefix";
 
 type ContactFormItemProps<TForm extends FieldValues> = {
   form: UseFormReturn<TForm>;
@@ -26,12 +27,7 @@ export default function ContactFormItem<TForm extends FieldValues>({
   namePrefix,
   isLoading,
 }: ContactFormItemProps<TForm>) {
-  const getFieldName = (suffix: string): FieldPath<TForm> => {
-    if (namePrefix) {
-      return `${namePrefix}.${suffix}` as FieldPath<TForm>;
-    }
-    return suffix as FieldPath<TForm>;
-  };
+  const { prefixed } = useFieldPrefix<TForm>(namePrefix);
 
   const {
     data: kinshipRelations,
@@ -47,7 +43,7 @@ export default function ContactFormItem<TForm extends FieldValues>({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: getFieldName("firstName"),
+          name: prefixed("firstName"),
           label: "Kontaktinio asmens vardas",
           render: ({ field }) => (
             <Input {...field} placeholder="Vardas" disabled={isLoading} />
@@ -58,7 +54,7 @@ export default function ContactFormItem<TForm extends FieldValues>({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: getFieldName("lastName"),
+          name: prefixed("lastName"),
           label: "Kontaktinio asmens pavardė",
           render: ({ field }) => (
             <Input {...field} placeholder="Pavardė" disabled={isLoading} />
@@ -69,7 +65,7 @@ export default function ContactFormItem<TForm extends FieldValues>({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: getFieldName("phoneNumber"),
+          name: prefixed("phoneNumber"),
           label: "Kontaktinio asmens tel. nr.",
           render: ({ field }) => (
             <Input {...field} placeholder="Tel. nr." disabled={isLoading} />
@@ -80,7 +76,7 @@ export default function ContactFormItem<TForm extends FieldValues>({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: getFieldName("kinshipRelationId"),
+          name: prefixed("kinshipRelationId"),
           label: "Ryšys su klientu",
           render: ({ field, fieldState }) => (
             <Select
@@ -109,7 +105,7 @@ export default function ContactFormItem<TForm extends FieldValues>({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: getFieldName("isDefault"),
+          name: prefixed("isDefault"),
           label: "Numatytas kontaktas",
           render: ({ field }) => (
             <Checkbox

@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/multi-select";
 import { API_ROUTES } from "@/routes/api";
 import useSWR from "swr";
-import { useFormContext } from "react-hook-form";
+import { FieldValues, useFormContext, UseFormReturn } from "react-hook-form";
 import { CreateWorkerBaseSchemaType } from "../schemas/base.schema";
-import { apiURL, baseURL } from "@/config";
+import { baseURL } from "@/config";
 
 type AllowedCoordinator = {
   id: number;
@@ -24,6 +24,11 @@ type AllowedCoordinator = {
 type AllowedServiceRecipient = {
   id: number;
   fullName: string;
+};
+
+type AssignablesSectionProps<TForm extends FieldValues> = {
+  form: UseFormReturn<TForm>;
+  isLoading?: boolean;
 };
 
 const buildUrl = (url: string, municipalities: string[]) => {

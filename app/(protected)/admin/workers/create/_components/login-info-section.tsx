@@ -1,8 +1,7 @@
 "use client";
 
 import { FormFieldWrapper } from "@/components/ui/form";
-import { useFormContext } from "react-hook-form";
-import { CreateWorkerBaseSchemaType } from "../schemas/base.schema";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 import { Eye, EyeOff, Mail } from "lucide-react";
 import {
   InputGroup,
@@ -10,13 +9,21 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import * as React from "react";
+import { useFieldPrefix } from "@/hooks/use-field-prefix";
 
-export default function LoginInfoSection({
-  isLoading,
-}: {
+type LoginInfoSectionProps<TForm extends FieldValues> = {
+  form: UseFormReturn<TForm>;
   isLoading?: boolean;
-}) {
-  const form = useFormContext<CreateWorkerBaseSchemaType>();
+  formNamePrefix: string;
+};
+
+export default function LoginInfoSection<TForm extends FieldValues>({
+  form,
+  isLoading,
+  formNamePrefix,
+}: LoginInfoSectionProps<TForm>) {
+  const { prefixed } = useFieldPrefix<TForm>(formNamePrefix);
+
   const [passwordType, setPasswordType] = React.useState("password");
 
   const togglePasswordType = () => {
@@ -32,7 +39,7 @@ export default function LoginInfoSection({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "loginData.workerEmail",
+          name: prefixed("workerEmail"),
           label: "El. Paštas",
           render: ({ field }) => (
             <InputGroup>
@@ -53,7 +60,7 @@ export default function LoginInfoSection({
       <FormFieldWrapper
         control={form.control}
         formField={{
-          name: "loginData.workerPassword",
+          name: prefixed("workerPassword"),
           label: "Slaptažodis",
           render: ({ field }) => (
             <InputGroup>

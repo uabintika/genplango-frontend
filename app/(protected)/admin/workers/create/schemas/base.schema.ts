@@ -37,7 +37,10 @@ export const generalInfoSchema = z.object({
     .string()
     .min(1, { message: "Šis laukelis yra privalomas" })
     .default(""),
-  apartmentNr: z.string().optional().default(""),
+  apartmentNr: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? ""),
 
   phoneNumber: z
     .string()
@@ -50,7 +53,8 @@ export const generalInfoSchema = z.object({
     .refine((val) => !isNaN(Number(val)), {
       message: "Laukelio reikšmė privalo būti skaičius",
     })
-    .default(""),
+    .nullish()
+    .transform((v) => v ?? ""),
 
   coordLng: z
     .string()
@@ -58,7 +62,8 @@ export const generalInfoSchema = z.object({
     .refine((val) => !isNaN(Number(val)), {
       message: "Laukelio reikšmė privalo būti skaičius",
     })
-    .default(""),
+    .nullish()
+    .transform((v) => v ?? ""),
 });
 
 export type WorkerGeneralInfoSchemaType = z.infer<typeof generalInfoSchema>;

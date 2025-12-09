@@ -59,7 +59,11 @@ export default function CreateWorkerPage() {
             title="Prisijungimo informacija"
             onValidate={() => form.trigger("loginData")}
           >
-            <LoginInfoSection isLoading={isLoading} />
+            <LoginInfoSection
+              form={form}
+              isLoading={isLoading}
+              formNamePrefix="loginData"
+            />
           </FormWizardStep>
           <FormWizardStep
             title="Priskyrimai"
