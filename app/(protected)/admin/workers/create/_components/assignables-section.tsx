@@ -11,25 +11,9 @@ import {
 } from "@/components/ui/multi-select";
 import { API_ROUTES } from "@/routes/api";
 import useSWR from "swr";
-import { FieldValues, useFormContext, UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { CreateWorkerBaseSchemaType } from "../schemas/base.schema";
 import { baseURL } from "@/config";
-
-type AllowedCoordinator = {
-  id: number;
-  firstName: string;
-  lastName: string;
-};
-
-type AllowedServiceRecipient = {
-  id: number;
-  fullName: string;
-};
-
-type AssignablesSectionProps<TForm extends FieldValues> = {
-  form: UseFormReturn<TForm>;
-  isLoading?: boolean;
-};
 
 const buildUrl = (url: string, municipalities: string[]) => {
   const urlBuilder = new URL(baseURL + url);

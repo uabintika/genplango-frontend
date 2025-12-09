@@ -181,6 +181,7 @@ function FormFieldWrapper<T extends FieldValues, N extends Path<T>>({
             className={cn(
               fieldLayout === "flex" && "sm:flex sm:justify-end sm:flex-1"
             )}
+            hidden={!label}
           >
             <FormLabel data-error={!!fieldState.error}>{label}</FormLabel>
           </div>

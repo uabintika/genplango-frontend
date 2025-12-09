@@ -9,7 +9,7 @@ import type {
 
 export interface FormFieldConfig<T extends FieldValues, N extends Path<T>> {
   name: N;
-  label: string;
+  label?: string;
   render: (props: {
     field: ControllerRenderProps<T, N>;
     fieldState: ControllerFieldState;
@@ -27,4 +27,5 @@ export interface FormFieldWrapperProps<
 > {
   formField: FormFieldConfig<T, N>;
   control: Control<T>;
+  hidden?: boolean;
 }

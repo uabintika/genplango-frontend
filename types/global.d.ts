@@ -27,6 +27,28 @@ declare global {
     id: number;
     name: string;
   };
+
+  type AllowedCoordinator = {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
+
+  type AllowedWorker = {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
+
+  type AllowedServiceRecipient = {
+    id: number;
+    fullName: string;
+  };
+
+  type Role = {
+    id: number;
+    name: string;
+  };
 }
 
 export {};

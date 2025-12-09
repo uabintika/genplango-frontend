@@ -32,6 +32,7 @@ export const API_ROUTES = {
   MUNICIPALITIES: {
     INDEX: "/municipalities",
     FOR_SELECT: "/municipalities/allowed",
+    PERMISSIONS: "/municipalities/permissions",
   },
   KINSHIP_RELATIONS: {
     INDEX: "/kinship-relations",
@@ -43,6 +44,7 @@ export const API_ROUTES = {
     UPDATE: (id: number) => `/users/${id}`,
     GET: (id: number) => `/users/${id}`,
     FOR_SELECT: "/users/allowed",
+    ROLES: "/users/roles",
   },
   WORKERS: {
     INDEX: "/workers",

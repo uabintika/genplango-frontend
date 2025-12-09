@@ -14,18 +14,6 @@ import useSWR from "swr";
 import { useFormContext } from "react-hook-form";
 import { CreateServiceRecipientFormSchemaType } from "../schemas/base.schema";
 
-type AllowedCoordinator = {
-  id: number;
-  firstName: string;
-  lastName: string;
-};
-
-type AllowedWorker = {
-  id: number;
-  firstName: string;
-  lastName: string;
-};
-
 export default function AssignablesSection({
   isLoading,
 }: {
