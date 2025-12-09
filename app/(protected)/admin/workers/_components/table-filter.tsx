@@ -37,7 +37,7 @@ export default function WorkerTableFilters({
   return (
     <>
       <div className="flex justify-end p-5">
-        <Button asChild color="success" size="md">
+        <Button asChild color="primary" size="md">
           <Link href={ROUTES.ADMIN.WORKERS.CREATE}>
             <span>Sukurti darbuotoją</span>
             <PlusCircle className="ms-1" />

@@ -243,7 +243,7 @@ const FormWizardControls = <T extends FieldValues>() => {
         </Button>
       ) : (
         <Button
-          color="success"
+          color="primary"
           type="submit"
           disabled={isSubmitting}
           onClick={async () => {

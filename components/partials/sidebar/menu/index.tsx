@@ -105,7 +105,7 @@ export function Menu({}) {
                               </div>
                             </TooltipTrigger>
                             {collapsed && (
-                              <TooltipContent side="right">
+                              <TooltipContent side="right" color="primary">
                                 {label}
                               </TooltipContent>
                             )}

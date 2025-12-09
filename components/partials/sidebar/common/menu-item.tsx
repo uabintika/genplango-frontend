@@ -36,7 +36,7 @@ const MenuItem = ({
       }
       variant={active ? "default" : "ghost"}
       fullWidth
-      color={active ? "default" : "secondary"}
+      color={active ? "primary" : "secondary"}
       className={cn("hover:ring-transparent hover:ring-offset-0", {
         "justify-start text-sm font-medium capitalize h-auto py-3 md:px-3 px-3":
           !collapsed || hovered,
@@ -50,7 +50,7 @@ const MenuItem = ({
             className: cn("h-5 w-5 ", {
               "me-2": !collapsed || hovered,
             }),
-          })} 
+          })}
         {(!collapsed || hovered) && (
           <p className={cn("max-w-[200px] truncate")}>{label}</p>
         )}

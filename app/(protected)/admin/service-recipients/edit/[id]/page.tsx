@@ -87,7 +87,7 @@ export default function EditServiceRecipientPage({
                   className="flex justify-end my-5 mr-5"
                 >
                   <Button
-                    color="success"
+                    color="primary"
                     size="md"
                     className="space-x-2"
                     isLoading={isLoading}

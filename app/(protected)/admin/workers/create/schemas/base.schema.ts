@@ -70,7 +70,10 @@ export type WorkerGeneralInfoSchemaType = z.infer<typeof generalInfoSchema>;
 
 export const baseSchema = generalInfoSchema.safeExtend({
   assignables: assignablesSchema,
-  loginData: loginInfoSchema,
+  loginData: loginInfoSchema.default({
+    workerEmail: "",
+    workerPassword: "",
+  }),
 });
 
 export type CreateWorkerBaseSchemaType = z.infer<typeof baseSchema>;

@@ -31,7 +31,10 @@ export const generalInfoFormSchema = z
       .min(1, { message: "Šis laukelis yra privalomas" })
       .default(""),
     houseNr: z.string().default(""),
-    apartmentNr: z.string().optional().default(""),
+    apartmentNr: z
+      .string()
+      .nullish()
+      .transform((v) => v ?? ""),
 
     coordLat: z
       .string()
@@ -66,8 +69,7 @@ export const generalInfoFormSchema = z
     agreementNr: z
       .string()
       .nullish()
-      .transform((val) => val ?? "")
-      .default(""),
+      .transform((val) => val ?? ""),
 
     agreementDate: z
       .string()
@@ -75,14 +77,12 @@ export const generalInfoFormSchema = z
       .transform((val) => val ?? "")
       .refine((val) => val === "" || /^\d{4}-\d{2}-\d{2}$/.test(val), {
         message: "Neteisingas gimimo datos formatas",
-      })
-      .default(""),
+      }),
 
     decisionNr: z
       .string()
       .nullish()
-      .transform((val) => val ?? "")
-      .default(""),
+      .transform((val) => val ?? ""),
 
     decisionDate: z
       .string()
@@ -90,14 +90,12 @@ export const generalInfoFormSchema = z
       .transform((val) => val ?? "")
       .refine((val) => val === "" || /^\d{4}-\d{2}-\d{2}$/.test(val), {
         message: "Neteisingas gimimo datos formatas",
-      })
-      .default(""),
+      }),
 
     methodologyUpdatedAt: z
       .string()
       .nullish()
-      .transform((val) => val ?? "")
-      .default(""),
+      .transform((val) => val ?? ""),
   })
   .superRefine((val, ctx) => {
     if (val.relativeServiceRecipientId && !val.relativeKinshipRelationId) {

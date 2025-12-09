@@ -6,8 +6,7 @@ import { editWorkerSchema, EditWorkerSchemaType } from "./schemas/base.schema";
 import { API_ROUTES } from "@/routes/api";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs } from "@radix-ui/react-tabs";
-import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Contact, Save, UserIcon, UsersRound } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Form } from "@/components/ui/form";
@@ -74,14 +73,16 @@ export default function EditWorkerPage({
                 <TabsContent value="assignables">
                   <AssignablesSection isLoading={isLoading} />
                 </TabsContent>
-                <Button
-                  color="success"
-                  size="md"
-                  className="space-x-2"
-                  isLoading={isLoading}
-                >
-                  <span>Išsaugoti darbuotoją</span> <Save size={18} />
-                </Button>
+                <div className="flex justify-end my-5 mr-5">
+                  <Button
+                    color="primary"
+                    size="md"
+                    className="space-x-2"
+                    isLoading={isLoading}
+                  >
+                    <span>Išsaugoti darbuotoją</span> <Save size={18} />
+                  </Button>
+                </div>
               </form>
             </Form>
           </Tabs>

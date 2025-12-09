@@ -73,7 +73,7 @@ export function CollapseMenuButton({
         <div className="peer flex items-center group [&[data-state=open]>button>div>div>svg]:rotate-180">
           <Button
             variant={active ? "default" : "ghost"}
-            color="secondary"
+            color="primary"
             className="justify-start capitalize group h-auto py-3 md:px-3 px-3 ring-offset-sidebar group-data-[state=open]:bg-secondary hover:ring-transparent"
             fullWidth
           >

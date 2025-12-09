@@ -37,7 +37,7 @@ export default function ServiceRecipientTableFilters({
   return (
     <>
       <div className="flex justify-end p-5">
-        <Button asChild color="success" size="md">
+        <Button asChild color="primary" size="md">
           <Link href={ROUTES.ADMIN.SERVICE_RECIPIENTS.CREATE}>
             <span>Sukurti klientą</span>
             <PlusCircle className="ms-1" />

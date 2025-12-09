@@ -1,11 +1,14 @@
 import z from "zod";
 import { generalInfoSchema } from "../../../create/schemas/base.schema";
 import { assignablesSchema } from "../../../create/schemas/assignables.schema";
-import { loginInfoSchema } from "../../../create/schemas/login.schema";
+import { editWorkerLoginSchema } from "./login.schema";
 
 export const editWorkerSchema = generalInfoSchema.safeExtend({
-  loginData: loginInfoSchema,
   assignables: assignablesSchema,
+  loginData: editWorkerLoginSchema.default({
+    workerEmail: "",
+    workerPassword: "",
+  }),
 });
 
 export type EditWorkerSchemaType = z.infer<typeof editWorkerSchema>;
