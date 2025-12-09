@@ -38,6 +38,10 @@ export const API_ROUTES = {
     FOR_SELECT: "/kinship-relations/allowed",
   },
   USERS: {
+    INDEX: "/users",
+    CREATE: "/users",
+    UPDATE: (id: number) => `/users/${id}`,
+    GET: (id: number) => `/users/${id}`,
     FOR_SELECT: "/users/allowed",
   },
   WORKERS: {

@@ -1,5 +1,5 @@
 import { ROUTES } from "@/routes";
-import { UserLock, Users } from "lucide-react";
+import { UserLock, Users, UserStar } from "lucide-react";
 
 export type SubChildren = {
   href: string;
@@ -57,6 +57,20 @@ export function getMenuList(pathname: string, t: any): Group[] {
           label: "Darbuotojai",
           active: pathname.includes(ROUTES.ADMIN.WORKERS.INDEX),
           icon: <UserLock />,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: "",
+      id: "users",
+      menus: [
+        {
+          id: "users",
+          href: ROUTES.ADMIN.USERS.INDEX,
+          label: "Naudotojai",
+          active: pathname.includes(ROUTES.ADMIN.USERS.INDEX),
+          icon: <UserStar />,
           submenus: [],
         },
       ],

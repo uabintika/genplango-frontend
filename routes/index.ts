@@ -15,5 +15,10 @@ export const ROUTES = {
       CREATE: "/admin/workers/create",
       UPDATE: (id: number) => `/admin/workers/edit/${id}`,
     },
+    USERS: {
+      INDEX: "/admin/users",
+      CREATE: "/admin/users/create",
+      UPDATE: (id: number) => `/admin/users/edit/${id}`,
+    },
   },
 };
