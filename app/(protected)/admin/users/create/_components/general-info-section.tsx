@@ -19,21 +19,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import useSWR from "swr";
-import { API_ROUTES } from "@/routes/api";
+import { useUserRoleOptions } from "@/hooks/use-enum";
 
 export default function GeneralInfoSection({
   isLoading,
 }: {
   isLoading?: boolean;
 }) {
+  const { array: roleOptions } = useUserRoleOptions();
   const form = useFormContext<CreateUserSchemaType>();
-
-  const {
-    data: roles,
-    isLoading: loadingRoles,
-    isValidating: validatingRoles,
-  } = useSWR<Array<Role>>(API_ROUTES.USERS.ROLES);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -109,26 +103,15 @@ export default function GeneralInfoSection({
               {...field}
               onValueChange={field.onChange}
               value={field.value ?? ""}
-              disabled={loadingRoles || validatingRoles || isLoading}
+              disabled={isLoading}
             >
-              <SelectTrigger
-                disabled={loadingRoles || validatingRoles || isLoading}
-              >
-                <SelectValue
-                  placeholder={
-                    loadingRoles || validatingRoles || isLoading
-                      ? "Kraunamos rolės..."
-                      : "Pasirinkite rolę"
-                  }
-                />
+              <SelectTrigger disabled={isLoading}>
+                <SelectValue placeholder="Pasirinkite rolę" />
               </SelectTrigger>
               <SelectContent>
-                {roles?.map((roles) => (
-                  <SelectItem
-                    value={roles.id.toString()}
-                    key={roles.id.toString()}
-                  >
-                    {roles.name}
+                {roleOptions?.map((role) => (
+                  <SelectItem value={role.value} key={role.value}>
+                    {role.label}
                   </SelectItem>
                 ))}
               </SelectContent>

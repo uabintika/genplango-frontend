@@ -2,6 +2,7 @@ import {
   Gender,
   NoteType,
   ServiceRecipientStatus,
+  UserRole,
   WorkerStatus,
 } from "@/types/enum.types";
 
@@ -15,14 +16,15 @@ export function enumToArrayAndMap<T>(
   customLabels?: (key: string, value: T) => string
 ) {
   const values = Object.values(enumType);
-  const numOfItems = values.length / 2;
+  const isNumeric = typeof values[values.length - 1] !== "string";
+  const numOfItems = isNumeric ? values.length / 2 : values.length;
 
   const array: SelectOption<T>[] = [];
   const map: Record<string | number, string> = {};
 
   for (let i = 0; i < numOfItems; i++) {
     const key = values[i] as string;
-    const value = values[numOfItems + i] as T;
+    const value = values[isNumeric ? numOfItems + i : i] as T;
     const label = customLabels
       ? customLabels(key, value)
       : key.replace(/([A-Z])/g, " $1").trim();
@@ -85,6 +87,17 @@ export const useWorkerStatusOptions = () => {
         return "Dirba";
       case WorkerStatus.NotWorking:
         return "Nedirba";
+    }
+  });
+};
+
+export const useUserRoleOptions = () => {
+  return enumToArrayAndMap<UserRole>(UserRole, (key, value) => {
+    switch (value) {
+      case UserRole.Administrator:
+        return "Administratorius";
+      case UserRole.Coordinator:
+        return "Koordinatorius";
     }
   });
 };

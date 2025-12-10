@@ -11,7 +11,13 @@ import {
 } from "@/components/ui/multi-select";
 import { API_ROUTES } from "@/routes/api";
 import useSWR from "swr";
-import { FieldValue, FieldValues, Path, UseFormReturn } from "react-hook-form";
+import {
+  FieldPath,
+  FieldValue,
+  FieldValues,
+  Path,
+  UseFormReturn,
+} from "react-hook-form";
 import { useFieldPrefix } from "@/hooks/use-field-prefix";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
@@ -20,6 +26,7 @@ import { cn } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
 import { motion } from "framer-motion";
 import Input from "@/components/ui/input";
+import { UserRole } from "@/types/enum.types";
 
 type MunicipalityForPermissions = {
   id: number;
@@ -39,6 +46,7 @@ export default function AssignablesSection<TForm extends FieldValues>({
   isLoading,
   formNamePrefix,
 }: AssignablesSectionProps<TForm>) {
+  const selectedRole = form.watch("role" as Path<TForm>) as FieldValue<TForm>;
   const { prefixed } = useFieldPrefix<TForm>(formNamePrefix);
   const [selectedMunicipality, setSelectedMunicipality] = React.useState<
     number | null
@@ -57,6 +65,16 @@ export default function AssignablesSection<TForm extends FieldValues>({
       setSelectedMunicipality(municipalities[0].id);
     }
   }, [municipalities, selectedMunicipality]);
+
+  if (selectedRole === UserRole.Administrator) {
+    return (
+      <div className="text-center">
+        <h3 className="text-2xl font-semibold mb-5">
+          Administratoriui prieiga nėra nustatoma
+        </h3>
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -12,13 +12,15 @@ import {
 import { SquarePen, Trash2 } from "lucide-react";
 import { User } from "./table";
 import { ColumnDef } from "@tanstack/react-table";
-import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { ROUTES } from "@/routes";
+import { cn } from "@/lib/utils";
+import Badge from "@/components/ui/badge";
+import { UserRole } from "@/types/enum.types";
+import { useUserRoleOptions } from "@/hooks/use-enum";
 
-export default function useServiceRecipientsTableColumns(): ColumnDef<User>[] {
-  const t = useTranslations("ServiceRecipients.Table.Header");
-  const actionsT = useTranslations("TableActions");
+export default function useUserTableColumns(): ColumnDef<User>[] {
+  const { map: userRoles } = useUserRoleOptions();
 
   return React.useMemo<ColumnDef<User>[]>(
     () => [
@@ -49,6 +51,23 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<User>[] {
         enableHiding: false,
       },
       {
+        header: "Rolė",
+        accessorKey: "roles",
+        cell: ({ getValue }) => {
+          const statusColors: Record<string, string> = {
+            [UserRole.Administrator]: "bg-success/20 text-success",
+            [UserRole.Coordinator]: "bg-default/20 text-default",
+          };
+          const role = getValue<Role[]>()[0];
+          const colors = statusColors[role?.name];
+          return (
+            <Badge className={cn("rounded-full px-5", colors)}>
+              {userRoles[role?.name] ?? "Nenurodyta"}
+            </Badge>
+          );
+        },
+      },
+      {
         header: "Naudotojas",
         cell: ({ row }) => (
           <div className="flex flex-col">
@@ -60,8 +79,7 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<User>[] {
         ),
       },
       {
-        accessorKey: "status",
-        header: t("status"),
+        header: "Kontaktai",
         cell: ({ row }) => {
           return (
             <div className="flex flex-col">
@@ -75,7 +93,7 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<User>[] {
       },
       {
         id: "actions",
-        header: t("actions"),
+        header: "Veiksmai",
         enableHiding: false,
         cell: ({ row }) => {
           return (
@@ -95,7 +113,7 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<User>[] {
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="top">
-                    <p>{actionsT("edit")}</p>
+                    <p>Redaguoti</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -115,7 +133,7 @@ export default function useServiceRecipientsTableColumns(): ColumnDef<User>[] {
                     side="top"
                     className="bg-destructive text-destructive-foreground"
                   >
-                    <p>{actionsT("delete")}</p>
+                    <p>Šalinti</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

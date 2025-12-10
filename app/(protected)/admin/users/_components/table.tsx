@@ -6,10 +6,16 @@ import api from "@/lib/axios";
 import { API_ROUTES } from "@/routes/api";
 
 // UI Components
-import useServiceRecipientsTableColumns from "./table-columns";
+import useUserTableColumns from "./table-columns";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import UserTableFilters from "./table-filter";
 import { DataTable } from "@/components/ui/data-table";
+import { UserRole } from "@/types/enum.types";
+
+export type Role = {
+  id: number;
+  name: UserRole;
+};
 
 export type User = {
   id: number;
@@ -18,6 +24,7 @@ export type User = {
   email: string;
   phoneNumber?: string;
   duty: string;
+  roles: Role[];
 };
 
 export type TableFilters = {
@@ -34,7 +41,7 @@ const usersFetcher = async (url: string) => {
 };
 
 export default function UsersTable() {
-  const columns = useServiceRecipientsTableColumns();
+  const columns = useUserTableColumns();
   const tableContainerRef = React.useRef<HTMLTableElement>(null);
   const [filters, setFilters] = React.useState<TableFilters>({ search: null });
   const { table, isLoading, isValidating } = useInfiniteScroll<User>(

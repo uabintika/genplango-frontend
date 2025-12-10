@@ -24,7 +24,10 @@ export const baseInfoSchema = z.object({
     .nullish()
     .transform((v) => v ?? ""),
 
-  role: zId,
+  role: z
+    .string()
+    .min(1, { message: "Šis laukelis yra privalomas" })
+    .default(""),
 });
 
 export type CreateUserBaseInfoSchemaType = z.infer<typeof baseInfoSchema>;

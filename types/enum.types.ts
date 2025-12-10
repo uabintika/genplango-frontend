@@ -21,3 +21,8 @@ export enum WorkerStatus {
   Working = 1,
   NotWorking = 2,
 }
+
+export enum UserRole {
+  Administrator = "admin",
+  Coordinator = "coordinator",
+}
