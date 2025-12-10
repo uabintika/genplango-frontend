@@ -44,6 +44,10 @@ export const API_ROUTES = {
     UPDATE: (id: number) => `/users/${id}`,
     GET: (id: number) => `/users/${id}`,
     FOR_SELECT: "/users/allowed",
+    PERMISSIONS: {
+      GET: (id: number) => `/users/${id}/permissions`,
+      UPDATE: (id: number) => `/users/${id}/permissions`,
+    },
   },
   WORKERS: {
     INDEX: "/workers",

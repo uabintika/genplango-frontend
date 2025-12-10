@@ -1,9 +1,8 @@
 import z from "zod";
 import { loginInfoSchema } from "./login.schema";
 import { assignablesSchema } from "./assignables.schema";
-import { zId } from "@/lib/base-schemas";
 
-export const baseInfoSchema = z.object({
+export const generalInfoSchema = z.object({
   firstName: z
     .string()
     .min(1, { message: "Šis laukelis yra privalomas" })
@@ -30,9 +29,9 @@ export const baseInfoSchema = z.object({
     .default(""),
 });
 
-export type CreateUserBaseInfoSchemaType = z.infer<typeof baseInfoSchema>;
+export type CreateUserGeneralInfoSchemaType = z.infer<typeof generalInfoSchema>;
 
-export const createUserSchema = baseInfoSchema.safeExtend({
+export const createUserSchema = generalInfoSchema.safeExtend({
   assignables: assignablesSchema,
   loginData: loginInfoSchema.default({
     userEmail: "",

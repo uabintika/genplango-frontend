@@ -52,17 +52,17 @@ export default function useUserTableColumns(): ColumnDef<User>[] {
       },
       {
         header: "Rolė",
-        accessorKey: "roles",
+        accessorKey: "role",
         cell: ({ getValue }) => {
           const statusColors: Record<string, string> = {
             [UserRole.Administrator]: "bg-success/20 text-success",
             [UserRole.Coordinator]: "bg-default/20 text-default",
           };
-          const role = getValue<Role[]>()[0];
-          const colors = statusColors[role?.name];
+          const role = getValue<Role | undefined>();
+          const colors = statusColors[role?.name ?? ""];
           return (
             <Badge className={cn("rounded-full px-5", colors)}>
-              {userRoles[role?.name] ?? "Nenurodyta"}
+              {userRoles[role?.name ?? ""] ?? "Nenurodyta"}
             </Badge>
           );
         },

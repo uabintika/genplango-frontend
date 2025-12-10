@@ -12,11 +12,6 @@ import UserTableFilters from "./table-filter";
 import { DataTable } from "@/components/ui/data-table";
 import { UserRole } from "@/types/enum.types";
 
-export type Role = {
-  id: number;
-  name: UserRole;
-};
-
 export type User = {
   id: number;
   firstName: string;
@@ -24,7 +19,7 @@ export type User = {
   email: string;
   phoneNumber?: string;
   duty: string;
-  roles: Role[];
+  role?: UserRole;
 };
 
 export type TableFilters = {

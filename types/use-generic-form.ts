@@ -1,5 +1,6 @@
 import type { AxiosError } from "axios";
 import type { UseFormProps, UseFormReturn } from "react-hook-form";
+import { KeyedMutator } from "swr";
 import type { output, z, ZodObject } from "zod";
 
 export interface UseGenericFormReturn<
@@ -12,6 +13,7 @@ export interface UseGenericFormReturn<
   isLoading: boolean;
   mutationError: AxiosError | string | null;
   submitForm: (body?: output<TSchema>) => Promise<TModel | null>;
+  mutateFetchedModel: KeyedMutator<TModel>;
 }
 
 export type Mode = "Create" | "Update";

@@ -18,7 +18,7 @@ type TableFiltersProps = {
   setFilters: React.Dispatch<React.SetStateAction<TableFilters>>;
 };
 
-export default function ServiceRecipientTableFilters({
+export default function UserTableFilters({
   isLoading,
   isValidating,
   setFilters,

@@ -10,3 +10,5 @@ const baseAssignablesSchema = z
   .default({});
 
 export const assignablesSchema = z.array(baseAssignablesSchema).optional();
+
+export type AssignablesSchemaType = z.infer<typeof assignablesSchema>;

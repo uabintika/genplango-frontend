@@ -62,6 +62,7 @@ export default function useGenericForm<
     data: fetchedModel,
     isLoading: isFetchingModel,
     error: fetchError,
+    mutate: mutateFetchedModel,
   } = useSWR<TReturnModel>(
     modes.isUpdate ? fetchModelUrl : null,
     modes.isUpdate ? fetchModel : null
@@ -136,5 +137,6 @@ export default function useGenericForm<
     isLoading,
     mutationError,
     submitForm: execute,
+    mutateFetchedModel,
   };
 }
