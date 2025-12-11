@@ -34,9 +34,9 @@ export default function EditServiceRecipientPage({
     schema: editServiceRecipientSchema,
     mutateUrl: API_ROUTES.SERVICE_RECIPIENTS.UPDATE(id),
     fetchModelUrl: API_ROUTES.SERVICE_RECIPIENTS.GET(id),
-    useFormOptions: {
-      defaultValues: editServiceRecipientSchema.parse({}),
-    },
+    // useFormOptions: {
+    //   defaultValues: editServiceRecipientSchema.parse({}),
+    // },
     onSuccess: () => {
       toast.success("Klientas atnaujintas sėkmingai!");
     },

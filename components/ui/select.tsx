@@ -8,11 +8,23 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { InputColor, size } from "@/types/ui-types";
 
-const Select = SelectPrimitive.Root;
+function Select({
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Root>) {
+  return <SelectPrimitive.Root data-slot="select" {...props} />;
+}
 
-const SelectGroup = SelectPrimitive.Group;
+function SelectGroup({
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Group>) {
+  return <SelectPrimitive.Group data-slot="select-group" {...props} />;
+}
 
-const SelectValue = SelectPrimitive.Value;
+function SelectValue({
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Value>) {
+  return <SelectPrimitive.Value data-slot="select-value" {...props} />;
+}
 
 const selectVariants = cva(
   "w-full px-3 h-10 text-sm flex [&>svg]:h-5 [&>svg]:w-5 rounded-md border border-input justify-between items-center read-only:bg-background disabled:cursor-not-allowed disabled:opacity-50 transition duration-300",
@@ -49,118 +61,59 @@ const selectVariants = cva(
   }
 );
 
-interface SelectTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>,
-    VariantProps<typeof selectVariants> {
-  size?: size;
-  color?: InputColor;
-  ref?: React.Ref<HTMLButtonElement>;
-}
-
-const SelectTrigger = ({
+function SelectTrigger({
   className,
   children,
   color,
   size,
-  ref,
-  ...rest
-}: SelectTriggerProps) => {
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Trigger> &
+  VariantProps<typeof selectVariants> & {
+    size?: size;
+    color?: InputColor;
+  }) {
   return (
     <SelectPrimitive.Trigger
-      ref={ref}
+      data-slot="select-trigger"
+      data-size={size}
       className={cn(selectVariants({ color, size }), className)}
-      {...rest}
+      {...props}
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDown className="h-4 w-4 " />
+        <ChevronDown className="size-4 opacity-50" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
-};
-
-interface SelectScrollUpButtonProps
-  extends React.ComponentPropsWithoutRef<
-    typeof SelectPrimitive.ScrollUpButton
-  > {
-  ref?: React.Ref<HTMLDivElement>;
 }
 
-const SelectScrollUpButton = ({
-  className,
-  ref,
-  ...rest
-}: SelectScrollUpButtonProps) => {
-  return (
-    <SelectPrimitive.ScrollUpButton
-      ref={ref}
-      className={cn(
-        "flex cursor-default items-center justify-center py-1",
-        className
-      )}
-      {...rest}
-    >
-      <ChevronUp className="h-4 w-4" />
-    </SelectPrimitive.ScrollUpButton>
-  );
-};
-
-interface SelectScrollDownButtonProps
-  extends React.ComponentPropsWithoutRef<
-    typeof SelectPrimitive.ScrollDownButton
-  > {
-  ref?: React.Ref<HTMLDivElement>;
-}
-const SelectScrollDownButton = ({
-  className,
-  ref,
-  ...rest
-}: SelectScrollDownButtonProps) => {
-  return (
-    <SelectPrimitive.ScrollDownButton
-      ref={ref}
-      className={cn(
-        "flex cursor-default items-center justify-center py-1",
-        className
-      )}
-      {...rest}
-    >
-      <ChevronDown className="h-4 w-4 " />
-    </SelectPrimitive.ScrollDownButton>
-  );
-};
-
-interface SelectContentProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> {
-  ref?: React.Ref<HTMLDivElement>;
-}
-
-const SelectContent = ({
+function SelectContent({
   className,
   children,
-  ref,
   position = "popper",
-  ...rest
-}: SelectContentProps) => {
+  align = "center",
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Content>) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
-        ref={ref}
+        data-slot="select-content"
         className={cn(
-          "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          "relative z-50 max-h-96 min-w-32 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
           className
         )}
         position={position}
-        {...rest}
+        align={align}
+        {...props}
       >
         <SelectScrollUpButton />
         <SelectPrimitive.Viewport
           className={cn(
             "p-1",
             position === "popper" &&
-              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
+              "h-(--radix-select-trigger-height) w-full min-w-(--radix-select-trigger-width)"
           )}
         >
           {children}
@@ -169,62 +122,93 @@ const SelectContent = ({
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   );
-};
-
-interface SelectLabelProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label> {
-  ref?: React.Ref<HTMLDivElement>;
 }
 
-const SelectLabel = ({ className, ref, ...rest }: SelectLabelProps) => {
+function SelectLabel({
+  className,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Label>) {
   return (
     <SelectPrimitive.Label
-      ref={ref}
+      data-slot="select-label"
       className={cn("py-1.5 ps-4 pr-2 text-sm font-semibold", className)}
-      {...rest}
+      {...props}
     />
   );
-};
-
-interface SelectItemProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> {
-  ref?: React.Ref<HTMLDivElement>;
 }
 
-const SelectItem = ({ className, children, ref, ...rest }: SelectItemProps) => {
+function SelectItem({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Item>) {
   return (
     <SelectPrimitive.Item
-      ref={ref}
+      data-slot="select-item"
       className={cn(
         "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 ps-4 pe-2 text-sm outline-hidden focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
         className
       )}
-      {...rest}
+      {...props}
     >
       <span className="absolute end-2 flex h-3.5 w-3.5 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
-          <Check className="h-4 w-4" />
+          <Check className="size-4" />
         </SelectPrimitive.ItemIndicator>
       </span>
-
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
   );
-};
-
-interface SelectSeparatorProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator> {
-  ref?: React.Ref<HTMLDivElement>;
 }
-const SelectSeparator = ({ className, ref, ...rest }: SelectSeparatorProps) => {
+
+function SelectSeparator({
+  className,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.Separator>) {
   return (
     <SelectPrimitive.Separator
-      ref={ref}
+      data-slot="select-separator"
       className={cn("-mx-1 my-1 h-px bg-muted", className)}
-      {...rest}
+      {...props}
     />
   );
-};
+}
+
+function SelectScrollUpButton({
+  className,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {
+  return (
+    <SelectPrimitive.ScrollUpButton
+      data-slot="select-scroll-up-button"
+      className={cn(
+        "flex cursor-default items-center justify-center py-1",
+        className
+      )}
+      {...props}
+    >
+      <ChevronUp className="size-4" />
+    </SelectPrimitive.ScrollUpButton>
+  );
+}
+
+function SelectScrollDownButton({
+  className,
+  ...props
+}: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {
+  return (
+    <SelectPrimitive.ScrollDownButton
+      data-slot="select-scroll-down-button"
+      className={cn(
+        "flex cursor-default items-center justify-center py-1",
+        className
+      )}
+      {...props}
+    >
+      <ChevronDown className="size-4" />
+    </SelectPrimitive.ScrollDownButton>
+  );
+}
 
 export {
   Select,

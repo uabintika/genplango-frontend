@@ -7,7 +7,7 @@ import type {
 
 import api from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type Resolver } from "react-hook-form";
+import { DefaultValues, useForm, type Resolver } from "react-hook-form";
 import useApi from "./use-api";
 import useSWR from "swr";
 import * as React from "react";
@@ -63,27 +63,24 @@ export default function useGenericForm<
     isLoading: isFetchingModel,
     error: fetchError,
     mutate: mutateFetchedModel,
+    isValidating,
   } = useSWR<TReturnModel>(
     modes.isUpdate ? fetchModelUrl : null,
     modes.isUpdate ? fetchModel : null
   );
 
-  const parsedModel = React.useMemo(() => {
-    if (!fetchedModel) return undefined;
-    try {
-      return schema.parse(fetchedModel) as unknown as TOutput;
-    } catch (err) {
-      console.error("Failed to parse model", err);
-      return fetchedModel as unknown as TOutput;
-    }
-  }, [fetchedModel, schema]);
-
   // here should go types of schema in both Input and Output
   const form = useForm<TOutput, unknown, TOutput>({
     resolver: zodResolver(schema) as unknown as Resolver<TOutput>,
-    values: parsedModel,
+    defaultValues: schema.parse({}) as DefaultValues<TOutput>,
     ...useFormOptions,
   });
+
+  React.useEffect(() => {
+    if (!fetchedModel || isValidating || isFetchingModel) return;
+
+    form.reset(schema.parse(fetchedModel));
+  }, [fetchedModel, isValidating, isFetchingModel]);
 
   // model create, edit hook
   const {
@@ -96,7 +93,7 @@ export default function useGenericForm<
     modes.isUpdate ? update : create
   );
 
-  const isLoading = isFetchingModel || isMutating;
+  const isLoading = isFetchingModel || isMutating || isValidating;
 
   // handle toast for api feedback useEffect #1
   React.useEffect(() => {

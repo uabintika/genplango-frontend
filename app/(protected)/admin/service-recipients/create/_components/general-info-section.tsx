@@ -102,14 +102,17 @@ export default function GeneralInfoSection({
         formField={{
           name: "gender",
           label: "Lytis",
-          render: ({ field }) => (
+          render: ({ field, fieldState }) => (
             <Select
-              {...field}
               onValueChange={field.onChange}
               value={field.value ?? ""}
               disabled={isLoading}
+              name={field.name}
             >
-              <SelectTrigger disabled={isLoading}>
+              <SelectTrigger
+                disabled={isLoading}
+                aria-invalid={fieldState.invalid}
+              >
                 <SelectValue placeholder="Lytis" />
               </SelectTrigger>
               <SelectContent>

@@ -137,7 +137,7 @@ export default function AssignablesSection<TForm extends FieldValues>({
                         formControlContainerClassName: "overflow-hidden",
                         render: ({ field }) => (
                           <MultiSelect
-                            values={field.value?.map(String)}
+                            values={field.value?.map(Number)}
                             onValuesChange={(values) => {
                               const numericValues = values.map(Number);
                               field.onChange(numericValues);
@@ -191,7 +191,7 @@ export default function AssignablesSection<TForm extends FieldValues>({
                         formControlContainerClassName: "overflow-hidden",
                         render: ({ field }) => (
                           <MultiSelect
-                            values={field.value?.map(String)}
+                            values={field.value?.map(Number)}
                             onValuesChange={(values) => {
                               const numericValues = values.map(Number);
                               field.onChange(numericValues);

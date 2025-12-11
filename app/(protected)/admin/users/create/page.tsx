@@ -54,7 +54,7 @@ export default function CreateWorkerPage() {
               )
             }
           >
-            <GeneralInfoSection isLoading={isLoading} />
+            <GeneralInfoSection form={form} isLoading={isLoading} />
           </FormWizardStep>
           <FormWizardStep
             title="Prisijungimo informacija"
