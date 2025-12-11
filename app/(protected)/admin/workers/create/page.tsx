@@ -23,9 +23,6 @@ export default function CreateWorkerPage() {
     mode: "Create",
     schema: baseSchema,
     mutateUrl: API_ROUTES.WORKERS.CREATE,
-    useFormOptions: {
-      defaultValues: baseSchema.parse({}),
-    },
     onSuccess: () => {
       toast.success("Darbuotojas sukurtas sėkmingai!");
       navigate.push(ROUTES.ADMIN.WORKERS.INDEX);

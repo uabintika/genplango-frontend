@@ -185,6 +185,7 @@ export default function GeneralInfoSection({
                 {...field}
                 placeholder="Telefono Nr."
                 disabled={isLoading}
+                value={field.value ?? ""}
               />
             </InputGroup>
           ),
@@ -205,6 +206,7 @@ export default function GeneralInfoSection({
                 {...field}
                 placeholder="Adresas"
                 disabled={isLoading}
+                value={field.value ?? ""}
               />
             </InputGroup>
           ),
@@ -225,6 +227,7 @@ export default function GeneralInfoSection({
                 {...field}
                 placeholder="Namo Nr."
                 disabled={isLoading}
+                value={field.value ?? ""}
               />
             </InputGroup>
           ),
@@ -245,6 +248,7 @@ export default function GeneralInfoSection({
                 {...field}
                 placeholder="Buto Nr."
                 disabled={isLoading}
+                value={field.value ?? ""}
               />
             </InputGroup>
           ),
@@ -265,6 +269,7 @@ export default function GeneralInfoSection({
                 {...field}
                 placeholder="Koordinatės (platuma)"
                 disabled={isLoading}
+                value={field.value ?? ""}
               />
             </InputGroup>
           ),
@@ -285,6 +290,7 @@ export default function GeneralInfoSection({
                 {...field}
                 placeholder="Koordinatės (ilguma)"
                 disabled={isLoading}
+                value={field.value ?? ""}
               />
             </InputGroup>
           ),
@@ -301,6 +307,7 @@ export default function GeneralInfoSection({
               {...field}
               placeholder="Darbo pradžios data"
               disabled={isLoading}
+              value={field.value ?? ""}
             />
           ),
         }}

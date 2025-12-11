@@ -118,7 +118,6 @@ export default function AssignablesSection<TForm extends FieldValues>({
                       control={form.control}
                       formField={{
                         name: path("municipalityId"),
-                        formControlContainerClassName: "overflow-hidden",
                         render: ({ field }) => (
                           <Input
                             {...field}
@@ -137,19 +136,15 @@ export default function AssignablesSection<TForm extends FieldValues>({
                         formControlContainerClassName: "overflow-hidden",
                         render: ({ field }) => (
                           <MultiSelect
-                            values={field.value?.map(Number)}
+                            values={field.value?.map(String)}
                             onValuesChange={(values) => {
-                              const numericValues = values.map(Number);
-                              field.onChange(numericValues);
+                              field.onChange();
 
                               const currentSRs =
                                 form.getValues(path("serviceRecipients")) || [];
 
                               // Only clear municipality if BOTH are empty
-                              if (
-                                numericValues.length > 0 ||
-                                currentSRs.length > 0
-                              ) {
+                              if (values.length > 0 || currentSRs.length > 0) {
                                 form.setValue(
                                   path("municipalityId"),
                                   m.id as FieldValue<TForm>
@@ -191,16 +186,15 @@ export default function AssignablesSection<TForm extends FieldValues>({
                         formControlContainerClassName: "overflow-hidden",
                         render: ({ field }) => (
                           <MultiSelect
-                            values={field.value?.map(Number)}
+                            values={field.value?.map(String)}
                             onValuesChange={(values) => {
-                              const numericValues = values.map(Number);
-                              field.onChange(numericValues);
+                              field.onChange();
 
                               const currentWorkers =
                                 form.getValues(path("workers")) || [];
 
                               if (
-                                numericValues.length > 0 ||
+                                values.length > 0 ||
                                 currentWorkers.length > 0
                               ) {
                                 form.setValue(

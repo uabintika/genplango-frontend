@@ -26,9 +26,6 @@ export default function CreateServiceRecipientPage() {
     mode: "Create",
     schema: baseFormSchema,
     mutateUrl: API_ROUTES.SERVICE_RECIPIENTS.CREATE,
-    useFormOptions: {
-      defaultValues: baseFormSchema.parse({}),
-    },
     onSuccess: () => {
       toast.success("Klientas sukurtas sėkmingai!");
       navigate.push(ROUTES.ADMIN.SERVICE_RECIPIENTS.INDEX);

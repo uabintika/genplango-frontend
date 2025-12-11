@@ -11,6 +11,7 @@ import useGenericForm from "@/hooks/use-generic-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { UserLock } from "lucide-react";
+import React from "react";
 
 type AssignablesFormSectionProps = {
   userId: number;
@@ -31,7 +32,6 @@ export default function AssignablesFormSection({
     mutateUrl: API_ROUTES.USERS.PERMISSIONS.UPDATE(userId),
     fetchModelUrl: API_ROUTES.USERS.PERMISSIONS.GET(userId),
     useFormOptions: {
-      defaultValues: assignablesFormSchema.parse({}),
       mode: "all",
     },
     onSuccess: () => {

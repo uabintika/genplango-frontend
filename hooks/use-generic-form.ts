@@ -79,7 +79,7 @@ export default function useGenericForm<
   React.useEffect(() => {
     if (!fetchedModel || isValidating || isFetchingModel) return;
 
-    form.reset(schema.parse(fetchedModel));
+    form.reset(fetchedModel as TOutput);
   }, [fetchedModel, isValidating, isFetchingModel]);
 
   // model create, edit hook

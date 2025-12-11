@@ -24,7 +24,6 @@ export default function CreateWorkerPage() {
     schema: createUserSchema,
     mutateUrl: API_ROUTES.USERS.CREATE,
     useFormOptions: {
-      defaultValues: createUserSchema.parse({}),
       mode: "all",
     },
     onSuccess: () => {

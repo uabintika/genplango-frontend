@@ -29,9 +29,6 @@ export default function EditWorkerPage({
       schema: editUserSchema,
       mutateUrl: API_ROUTES.USERS.UPDATE(id),
       fetchModelUrl: API_ROUTES.USERS.GET(id),
-      useFormOptions: {
-        defaultValues: editUserSchema.parse({}),
-      },
       onSuccess: () => {
         toast.success("Naudotojas atnaujintas sėkmingai!");
       },

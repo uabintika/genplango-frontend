@@ -30,9 +30,6 @@ export default function EditWorkerPage({
     schema: editWorkerSchema,
     mutateUrl: API_ROUTES.WORKERS.UPDATE(id),
     fetchModelUrl: API_ROUTES.WORKERS.GET(id),
-    useFormOptions: {
-      defaultValues: editWorkerSchema.parse({}),
-    },
     onSuccess: () => {
       toast.success("Klientas atnaujintas sėkmingai!");
     },

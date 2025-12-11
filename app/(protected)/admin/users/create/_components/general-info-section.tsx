@@ -67,6 +67,7 @@ export default function GeneralInfoSection({
                 {...field}
                 placeholder="Telefono Nr."
                 disabled={isLoading}
+                value={field.value ?? ""}
               />
             </InputGroup>
           ),
