@@ -1,20 +1,11 @@
-import { zId } from "@/lib/base-schemas";
+import { zRequiredString, zId } from "@/lib/base-schemas";
 import z from "zod";
 
 export const contactSchema = z.object({
-  firstName: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
-  lastName: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
+  firstName: zRequiredString,
+  lastName: zRequiredString,
   kinshipRelationId: zId.default(""),
-  phoneNumber: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
+  phoneNumber: zRequiredString,
   isDefault: z.boolean().default(false),
 });
 

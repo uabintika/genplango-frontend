@@ -13,7 +13,7 @@ import useSWR from "swr";
 import * as React from "react";
 import { toast } from "sonner";
 
-function getModes(mode: Mode) {
+export function getModes(mode: Mode) {
   return {
     isCreate: mode === "Create",
     isUpdate: mode === "Update",

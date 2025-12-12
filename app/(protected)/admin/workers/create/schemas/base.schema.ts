@@ -1,17 +1,11 @@
-import { zId } from "@/lib/base-schemas";
+import { zId, zRequiredString } from "@/lib/base-schemas";
 import z from "zod";
 import { assignablesSchema } from "./assignables.schema";
 import { loginInfoSchema } from "./login.schema";
 
 export const generalInfoSchema = z.object({
-  firstName: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
-  lastName: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
+  firstName: zRequiredString,
+  lastName: zRequiredString,
 
   gender: zId,
   status: zId,
@@ -29,23 +23,14 @@ export const generalInfoSchema = z.object({
     })
     .default(""),
 
-  address: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
-  houseNr: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
+  address: zRequiredString,
+  houseNr: zRequiredString,
   apartmentNr: z
     .string()
     .nullish()
     .transform((v) => v ?? ""),
 
-  phoneNumber: z
-    .string()
-    .min(1, { message: "Šis laukelis yra privalomas" })
-    .default(""),
+  phoneNumber: zRequiredString,
 
   coordLat: z
     .string()

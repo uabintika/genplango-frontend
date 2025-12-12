@@ -1,11 +1,9 @@
+import { zRequiredString } from "@/lib/base-schemas";
 import z from "zod";
 
 export const noteSchema = z.object({
-  description: z
-    .string()
-    .min(1, { error: "Šis laukelis yra privalomas" })
-    .default(""),
-  type: z.string().min(1, { error: "Šis laukelis yra privalomas" }).default(""),
+  description: zRequiredString,
+  type: zRequiredString,
   useForAi: z.boolean().default(false),
 });
 

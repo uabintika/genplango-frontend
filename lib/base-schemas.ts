@@ -7,3 +7,8 @@ export const zId = z
     message: "Šis laukelis yra privalomas",
   })
   .default("");
+
+export const zRequiredString = z
+  .string()
+  .min(1, { error: "Šis laukelis yra privalomas" })
+  .default("");

@@ -12,6 +12,7 @@ import { apiURL } from "@/config";
 import { useAuth } from "@/contexts/auth-context";
 import useApi from "@/hooks/use-api";
 import api from "@/lib/axios";
+import { zRequiredString } from "@/lib/base-schemas";
 import { ROUTES } from "@/routes";
 import { API_ROUTES } from "@/routes/api";
 import { User } from "@/types/auth";
@@ -26,7 +27,7 @@ import z from "zod";
 
 const schema = z.object({
   email: z.email({ message: "invalid_email" }),
-  password: z.string().min(1, { message: "required" }),
+  password: zRequiredString,
 });
 
 type LoginSchemaType = z.infer<typeof schema>;

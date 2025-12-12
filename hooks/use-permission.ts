@@ -1,6 +1,15 @@
 import { useAuth } from "../contexts/auth-context";
 
-export function usePermission() {
+export type CanFunctionReturnType = (
+  resource: string,
+  action: string
+) => boolean;
+
+type UsePermissionReturnType = {
+  can: CanFunctionReturnType;
+};
+
+export function usePermission(): UsePermissionReturnType {
   const { user } = useAuth();
 
   const can = (resource: string, action: string): boolean => {

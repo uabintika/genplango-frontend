@@ -20,5 +20,16 @@ export const ROUTES = {
       CREATE: "/admin/users/create",
       UPDATE: (id: number) => `/admin/users/edit/${id}`,
     },
+    MUNICIPALITIES: {
+      INDEX: "/admin/municipalities",
+      CREATE: "/admin/municipalities/create",
+      UPDATE: (id: number) => `/admin/municipalities/edit/${id}`,
+    },
+    KINSHIP_RELATIONS: {
+      INDEX: "/admin/kinship-relations",
+    },
+    METHODOLOGY_AREAS: {
+      INDEX: "/admin/methodology-areas",
+    },
   },
 };

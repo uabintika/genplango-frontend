@@ -1,18 +1,12 @@
-import { zId } from "@/lib/base-schemas";
+import { zRequiredString, zId } from "@/lib/base-schemas";
 import z from "zod";
 import { contactSchema } from "./contacts.schema";
 import { assignablesSchema } from "./assignables.schema";
 
 export const generalInfoFormSchema = z
   .object({
-    firstName: z
-      .string()
-      .min(1, { message: "Šis laukelis yra privalomas" })
-      .default(""),
-    lastName: z
-      .string()
-      .min(1, { message: "Šis laukelis yra privalomas" })
-      .default(""),
+    firstName: zRequiredString,
+    lastName: zRequiredString,
 
     gender: zId,
     status: zId,
@@ -26,35 +20,21 @@ export const generalInfoFormSchema = z
       })
       .default(""),
 
-    address: z
-      .string()
-      .min(1, { message: "Šis laukelis yra privalomas" })
-      .default(""),
-    houseNr: z
-      .string()
-      .min(1, { message: "Šis laukelis yra privalomas" })
-      .default(""),
+    address: zRequiredString,
+    houseNr: zRequiredString,
     apartmentNr: z
       .string()
       .nullish()
       .transform((v) => v ?? "")
       .default(""),
 
-    coordLat: z
-      .string()
-      .min(1, { message: "Šis laukelis yra privalomas" })
-      .refine((val) => !isNaN(Number(val)), {
-        message: "Laukelio reikšmė privalo būti skaičius",
-      })
-      .default(""),
+    coordLat: zRequiredString.refine((val) => !isNaN(Number(val)), {
+      message: "Laukelio reikšmė privalo būti skaičius",
+    }),
 
-    coordLng: z
-      .string()
-      .min(1, { message: "Šis laukelis yra privalomas" })
-      .refine((val) => !isNaN(Number(val)), {
-        message: "Laukelio reikšmė privalo būti skaičius",
-      })
-      .default(""),
+    coordLng: zRequiredString.refine((val) => !isNaN(Number(val)), {
+      message: "Laukelio reikšmė privalo būti skaičius",
+    }),
 
     relativeServiceRecipientId: zId.optional().nullable(),
     relativeKinshipRelationId: zId.optional().nullable(),

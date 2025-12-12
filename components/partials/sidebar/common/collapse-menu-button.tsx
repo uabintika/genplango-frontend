@@ -38,7 +38,7 @@ import { useMenuHoverConfig } from "@/hooks/use-menu-hover";
 import { usePathname } from "next/navigation";
 
 interface CollapseMenuButtonProps {
-  icon: string;
+  icon: React.JSX.Element;
   label: string;
   active: boolean;
   submenus: Submenu[];

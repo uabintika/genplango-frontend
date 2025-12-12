@@ -33,10 +33,22 @@ export const API_ROUTES = {
     INDEX: "/municipalities",
     FOR_SELECT: "/municipalities/allowed",
     PERMISSIONS: "/municipalities/permissions",
+    CREATE: "/municipalities",
+    UPDATE: (id: number) => `/municipalities/${id}`,
+    GET: (id: number) => `/municipalities/${id}`,
   },
   KINSHIP_RELATIONS: {
     INDEX: "/kinship-relations",
     FOR_SELECT: "/kinship-relations/allowed",
+    CREATE: "/kinship-relations",
+    UPDATE: (id: number) => `/kinship-relations/${id}`,
+    GET: (id: number) => `/kinship-relations/${id}`,
+  },
+  METHODOLOGY_AREAS: {
+    INDEX: "/methodology-areas",
+    CREATE: "/methodology-areas",
+    UPDATE: (id: number) => `/methodology-areas/${id}`,
+    GET: (id: number) => `/methodology-areas/${id}`,
   },
   USERS: {
     INDEX: "/users",
