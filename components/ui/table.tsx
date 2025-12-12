@@ -94,7 +94,7 @@ const TableCell = ({ className, ref, ...rest }: TableCellProps) => (
   <td
     ref={ref}
     className={cn(
-      "px-6 h-14 text-default-600 text-sm font-normal capitalize align-middle [&:has([role=checkbox])]:pe-0",
+      "px-6 h-14 text-default-600 text-sm font-normal align-middle [&:has([role=checkbox])]:pe-0",
       className
     )}
     {...rest}

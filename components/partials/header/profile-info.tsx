@@ -22,7 +22,7 @@ const ProfileInfo = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <div className="flex items-center gap-3 text-default-800">
-            <div className="text-sm font-medium capitalize lg:block hidden">
+            <div className="text-sm font-medium lg:block hidden">
               {user?.firstName + " " + user?.lastName}
             </div>
             <span className="text-base me-2.5 lg:inline-block hidden">
@@ -33,7 +33,7 @@ const ProfileInfo = () => {
         <DropdownMenuContent className="w-56 p-0" align="end">
           <DropdownMenuLabel className="flex gap-2 items-center mb-1 p-3">
             <div>
-              <div className="text-sm font-medium text-default-800 capitalize ">
+              <div className="text-sm font-medium text-default-800">
                 {user?.firstName + " " + user?.lastName}
               </div>
               <div className="text-xs text-default-600 hover:text-primary">
@@ -54,7 +54,7 @@ const ProfileInfo = () => {
                 key={`info-menu-${index}`}
                 className="cursor-pointer"
               >
-                <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize px-3 py-1.5 cursor-pointer">
+                <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-default-600 px-3 py-1.5 cursor-pointer">
                   {/* <Icon icon={item.icon} className="w-4 h-4" /> */}
                   {item.name}
                 </DropdownMenuItem>
@@ -62,7 +62,7 @@ const ProfileInfo = () => {
             ))}
           </DropdownMenuGroup>
           <DropdownMenuSeparator className="mb-0 dark:bg-background" />
-          <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize my-1 px-3 cursor-pointer">
+          <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-default-600 my-1 px-3 cursor-pointer">
             <div>
               <form
                 action={async () => {

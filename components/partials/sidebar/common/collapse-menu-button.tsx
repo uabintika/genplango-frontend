@@ -74,7 +74,7 @@ export function CollapseMenuButton({
           <Button
             variant={active ? "default" : "ghost"}
             color="primary"
-            className="justify-start capitalize group h-auto py-3 md:px-3 px-3 ring-offset-sidebar group-data-[state=open]:bg-secondary hover:ring-transparent"
+            className="justify-start group h-auto py-3 md:px-3 px-3 ring-offset-sidebar group-data-[state=open]:bg-secondary hover:ring-transparent"
             fullWidth
           >
             <div className="w-full items-center flex justify-between">
@@ -124,7 +124,7 @@ export function CollapseMenuButton({
               color="secondary"
               variant="ghost"
               className={cn(
-                "w-full  justify-start h-auto hover:bg-transparent hover:ring-offset-0 capitalize text-sm font-normal mb-2 last:mb-0 first:mt-3 md:px-5 px-5",
+                "w-full  justify-start h-auto hover:bg-transparent hover:ring-offset-0 text-sm font-normal mb-2 last:mb-0 first:mt-3 md:px-5 px-5",
                 {
                   "font-medium": active,
                   "dark:opacity-80": !active,
