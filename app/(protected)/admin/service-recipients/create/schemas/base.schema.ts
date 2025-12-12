@@ -30,11 +30,15 @@ export const generalInfoFormSchema = z
       .string()
       .min(1, { message: "Šis laukelis yra privalomas" })
       .default(""),
-    houseNr: z.string().default(""),
+    houseNr: z
+      .string()
+      .min(1, { message: "Šis laukelis yra privalomas" })
+      .default(""),
     apartmentNr: z
       .string()
       .nullish()
-      .transform((v) => v ?? ""),
+      .transform((v) => v ?? "")
+      .default(""),
 
     coordLat: z
       .string()

@@ -138,7 +138,7 @@ export default function AssignablesSection<TForm extends FieldValues>({
                           <MultiSelect
                             values={field.value?.map(String)}
                             onValuesChange={(values) => {
-                              field.onChange();
+                              field.onChange(values);
 
                               const currentSRs =
                                 form.getValues(path("serviceRecipients")) || [];
@@ -158,7 +158,7 @@ export default function AssignablesSection<TForm extends FieldValues>({
                             }}
                           >
                             <MultiSelectTrigger disabled={isLoading}>
-                              <MultiSelectValue placeholder="Pasirinkite koordinatoriu..." />
+                              <MultiSelectValue placeholder="Pasirinkite darbuotoją..." />
                             </MultiSelectTrigger>
 
                             <MultiSelectContent>
@@ -188,7 +188,7 @@ export default function AssignablesSection<TForm extends FieldValues>({
                           <MultiSelect
                             values={field.value?.map(String)}
                             onValuesChange={(values) => {
-                              field.onChange();
+                              field.onChange(values);
 
                               const currentWorkers =
                                 form.getValues(path("workers")) || [];
