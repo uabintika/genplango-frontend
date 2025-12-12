@@ -39,7 +39,6 @@ export default function useInfiniteScroll<T>(
 
   const { data, isLoading, isValidating, size, setSize, mutate } =
     useSWRInfinite<InfinityScrollData<T>>(getKey, fetcher, {
-      revalidateFirstPage: false,
       ...swrConfig,
     });
 

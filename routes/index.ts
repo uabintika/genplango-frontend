@@ -27,9 +27,13 @@ export const ROUTES = {
     },
     KINSHIP_RELATIONS: {
       INDEX: "/admin/kinship-relations",
+      CREATE: "/admin/kinship-relations/create",
+      UPDATE: (id: number) => `/admin/kinship-relations/edit/${id}`,
     },
     METHODOLOGY_AREAS: {
       INDEX: "/admin/methodology-areas",
+      CREATE: "/admin/methodology-areas/create",
+      UPDATE: (id: number) => `/admin/methodology-areas/edit/${id}`,
     },
   },
 };

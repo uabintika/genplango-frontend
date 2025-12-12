@@ -38,7 +38,7 @@ const MenuItem = ({
       fullWidth
       color={active ? "primary" : "secondary"}
       className={cn("hover:ring-transparent hover:ring-offset-0", {
-        "justify-start text-sm font-medium capitalize h-auto py-3 md:px-3 px-3":
+        "justify-start text-sm font-medium h-auto py-3 md:px-3 px-3":
           !collapsed || hovered,
       })}
       asChild
