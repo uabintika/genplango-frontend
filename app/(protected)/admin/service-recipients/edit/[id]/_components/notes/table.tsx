@@ -9,7 +9,6 @@ import { API_ROUTES } from "@/routes/api";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import { DataTable } from "@/components/ui/data-table";
 import { ListNote } from "../../schemas/notes.schema";
-import NotesFilters from "./table-filter";
 import useNotesColumns from "./table-columns";
 
 export type TableFilters = {
@@ -48,7 +47,7 @@ export default function NotesTable({
   });
 
   const tableContainerRef = React.useRef<HTMLTableElement>(null);
-  const [filters, setFilters] = React.useState<TableFilters>({ search: null });
+  const [filters] = React.useState<TableFilters>({ search: null });
   const { table, isLoading, isValidating, mutate } =
     useInfiniteScroll<ListNote>(
       API_ROUTES.SERVICE_RECIPIENTS.NOTES.INDEX(serviceRecipientId),

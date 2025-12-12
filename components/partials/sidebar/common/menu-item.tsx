@@ -2,7 +2,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Home } from "lucide-react";
 import { useMobileMenuConfig } from "@/hooks/use-mobile-menu";
 import { useMenuHoverConfig } from "@/hooks/use-menu-hover";
 import Link from "next/link";

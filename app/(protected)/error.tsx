@@ -5,13 +5,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
+interface ErrorProps extends Error {
+  digest?: string;
   reset: () => void;
-}) {
+}
+
+export default function Error({ reset }: ErrorProps) {
   const t = useTranslations("ErrorPage");
 
   return (

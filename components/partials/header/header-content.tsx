@@ -5,7 +5,7 @@ import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
 
 const HeaderContent = ({ children }: Children) => {
-  const [config, setConfig] = useConfig();
+  const [config] = useConfig();
 
   return (
     <header

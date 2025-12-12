@@ -84,7 +84,9 @@ export const FormWizard = <T extends FieldValues>({
   };
 
   return (
-    <FormWizardContext.Provider value={contextValue}>
+    <FormWizardContext.Provider
+      value={contextValue as FormWizardContextType<FieldValues>}
+    >
       <Form {...form}>
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="wizard">

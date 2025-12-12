@@ -10,8 +10,8 @@ import { useMenuHoverConfig } from "@/hooks/use-menu-hover";
 
 const Logo = () => {
   const t = useTranslations("Misc");
-  const [config, setConfig] = useConfig();
-  const [hoverConfig, setHoverConfig] = useMenuHoverConfig();
+  const [config] = useConfig();
+  const [hoverConfig] = useMenuHoverConfig();
 
   return (
     <>

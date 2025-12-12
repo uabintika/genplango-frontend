@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useConfig } from "@/hooks/use-config";
 
 const SidebarHoverToggle = () => {
-  const [hoverConfig, setHoverConfig] = useMenuHoverConfig();
+  const [hoverConfig] = useMenuHoverConfig();
   const [config, setConfig] = useConfig();
 
   return !config.collapsed || hoverConfig.hovered ? (

@@ -31,8 +31,9 @@ const Tooltip = TooltipPrimitive.Root;
 const TooltipTrigger = TooltipPrimitive.Trigger;
 const TooltipArrow = TooltipPrimitive.Arrow;
 
-interface ToolTipProviderProps
-  extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider> {}
+type ToolTipProviderProps = React.ComponentPropsWithoutRef<
+  typeof TooltipPrimitive.Provider
+>;
 
 const TooltipProvider = ({
   delayDuration = 0,

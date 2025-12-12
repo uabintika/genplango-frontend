@@ -21,14 +21,14 @@ export type FormWizardContextType<T extends FieldValues> = {
 };
 
 export const FormWizardContext =
-  React.createContext<FormWizardContextType<any> | null>(null);
+  React.createContext<FormWizardContextType<FieldValues> | null>(null);
 
 export function useFormWizard<
   T extends FieldValues
 >(): FormWizardContextType<T> {
-  const ctx = React.useContext<FormWizardContextType<T> | null>(
-    FormWizardContext
-  );
+  const ctx = React.useContext(FormWizardContext);
+
   if (!ctx) throw new Error("useFormWizard must be used within a FormWizard");
-  return ctx;
+
+  return ctx as FormWizardContextType<T>;
 }

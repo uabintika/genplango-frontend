@@ -47,12 +47,10 @@ interface CollapseMenuButtonProps {
 }
 
 export function CollapseMenuButton({
-  icon,
   label,
   active,
   submenus,
   collapsed,
-  id,
 }: CollapseMenuButtonProps) {
   const pathname = usePathname();
   const isSubmenuActive = submenus.some(
@@ -219,7 +217,7 @@ export function CollapseMenuButton({
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
                     <ScrollArea className="h-[200px]">
-                      {children?.map(({ href, label, active }, index) => (
+                      {children?.map(({ href, label }, index) => (
                         <DropdownMenuItem key={`nested-index-${index}`}>
                           <Link href={href}>{label}</Link>
                         </DropdownMenuItem>

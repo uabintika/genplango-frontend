@@ -31,13 +31,13 @@ export function Menu({}) {
   const { can } = usePermission();
 
   const menuList = getMenuList(pathname, t, can);
-  const [config, setConfig] = useConfig();
+  const [config] = useConfig();
   const collapsed = config.collapsed;
   const [hoverConfig] = useMenuHoverConfig();
   const { hovered } = hoverConfig;
 
   const scrollableNodeRef = React.useRef<HTMLDivElement>(null);
-  const [scroll, setScroll] = React.useState(false);
+  const [, setScroll] = React.useState(false);
 
   React.useEffect(() => {
     const handleScroll = () => {

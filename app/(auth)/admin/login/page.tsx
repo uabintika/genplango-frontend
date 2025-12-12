@@ -20,11 +20,10 @@ export default function LoginPage() {
     redirect(ROUTES.ADMIN.DASHBOARD);
   }
 
-  const { error, mutate } = useSWR(
-    apiURL + API_ROUTES.AUTH.CSRF,
-    csrfCookieFetcher,
-    { shouldRetryOnError: false, revalidateOnFocus: false }
-  );
+  useSWR(apiURL + API_ROUTES.AUTH.CSRF, csrfCookieFetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+  });
 
   return (
     <>
